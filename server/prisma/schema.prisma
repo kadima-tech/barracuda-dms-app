@@ -1,11 +1,97 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" 
   url      = env("DATABASE_URL")
+}
+
+model Device {
+  id              String        @id @default(uuid()) // Unique ID for each device
+  deviceId        String        @unique // Unique identifier assigned to each device
+  name            String        // Device name for easier identification
+  lastHeartbeat   DateTime?     // Last time device communicated with the server
+  status          DeviceStatus  @default(ACTIVE) // Device status (e.g., active, offline)
+  storageLimit    Int          @default(10240) // Storage limit in MB (10GB default)
+  currentStorage  Int          @default(0) // Current used storage in MB
+  schedules       Schedule[]    // One-to-many relationship with Schedule
+  cachedContent   CachedContent[] // New relation for tracking cached content
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Schedule {
+  id              String        @id @default(uuid()) // Unique ID for each schedule entry
+  startTime       DateTime      // Scheduled start time for content playback
+  endTime         DateTime      // Scheduled end time for content playback
+  priority        Int          @default(1) // Priority level for scheduling conflicts
+  recurring       Boolean       @default(false) // Whether schedule repeats
+  recurringPattern String?      // Optional pattern for recurring schedules (e.g., "daily", "weekly")
+  content         Content       @relation(fields: [contentId], references: [id])
+  contentId       String        // Foreign key for associated content
+  device          Device        @relation(fields: [deviceId], references: [id])
+  deviceId        String        // Foreign key for associated device
+  status          ScheduleStatus @default(PENDING) // Track schedule status
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Content {
+  id              String        @id @default(uuid()) // Unique ID for each content item
+  title           String        // Title or description of the content
+  contentType     ContentType   // Type of content (URL, PHOTO, VIDEO)
+  url             String        // URL for content, could be a photo, video, or a web page URL
+  duration        Int?          // Duration in seconds, used if the content is a video or requires specific timing
+  cacheDuration   Int?          // Optional: Time (in minutes) to keep the content cached on the device
+  size            Int          @default(0) // Size in MB
+  schedules       Schedule[]    // One-to-many relationship with Schedule
+  cachedOn        CachedContent[] // New relation for tracking where content is cached
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum DeviceStatus {
+  ACTIVE
+  OFFLINE
+  MAINTENANCE
+}
+
+enum ContentType {
+  URL
+  PHOTO
+  VIDEO
+}
+
+enum ScheduleStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum CacheStatus {
+  PENDING
+  CACHED
+  FAILED
+  EXPIRED
+  DELETED
+}
+
+// New model for tracking cached content on devices
+model CachedContent {
+  id              String        @id @default(uuid())
+  device          Device        @relation(fields: [deviceId], references: [id])
+  deviceId        String
+  content         Content       @relation(fields: [contentId], references: [id])
+  contentId       String
+  cachedAt        DateTime      @default(now())
+  lastAccessed    DateTime      @default(now())
+  size            Int          // Size in MB
+  status          CacheStatus   @default(PENDING)
+  expiresAt       DateTime?     // When this cached content should expire
+
+  @@unique([deviceId, contentId]) // Prevent duplicate cache entries
 }

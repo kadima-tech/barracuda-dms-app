@@ -1,4 +1,4 @@
-project: PROJECT_NAME-production
+project: barracuda-dms-production
 
-host: PROJECT_DOMAIN_NAME
+host: barracuda-dms-production.kadima-tech.com
 

@@ -1,30 +1,33 @@
 #################
 #  Build Image  #
 #################
-FROM --platform=linux/amd64 node:16-alpine AS build-env
+FROM --platform=linux/amd64 node:18-alpine AS build-env
 
+ARG SRC_DIR
 ARG AUTH_TOKEN
-
-WORKDIR /app
 
 RUN npm config set @kadima-tech:registry https://npm.pkg.github.com
 RUN npm config set //npm.pkg.github.com/:_authToken $AUTH_TOKEN
 
-COPY package.json yarn.lock ./
-COPY prisma /app/prisma
-RUN yarn install --immutable --immutable-cache --check-cache
+WORKDIR /app
 
-# Run prisma generate only if prisma is installed
-RUN if [ -f /app/prisma/schema.prisma ]; then npx prisma generate; fi
+COPY $SRC_DIR/package.json $SRC_DIR/yarn.lock ./
+RUN yarn
 
 #################
 # Runtime Image #
 #################
-FROM --platform=linux/amd64 node:16-alpine AS runtime
+FROM --platform=linux/amd64 node:18-alpine AS runtime
+
+ARG SRC_DIR
 
 WORKDIR /app
 
-COPY --from=build-env /app/node_modules ./node_modules
-COPY . /app
+# Expose port 8081 for Socket.IO server
+EXPOSE 8081
 
-CMD yarn start
+COPY --from=build-env /app/node_modules ./node_modules
+COPY $SRC_DIR /app
+COPY $SRC_DIR/docker/entrypoint.sh /app
+
+CMD ./entrypoint.sh

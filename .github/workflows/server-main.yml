@@ -15,7 +15,7 @@ jobs:
     uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
 
     with:
-      project: <PROJECT_NAME>
+      project: <barracuda-dms>
       baseDir: server
       stage: development
       tag: latest

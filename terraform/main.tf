@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket = "kadima-terraform"
-    prefix = "PROJECT_NAME/workspaces"
+    prefix = "barracuda-dms/workspaces"
   }
 }
 
@@ -82,6 +82,12 @@ module "server" {
 
   env = [
     { key = "NODE_ENV", value = terraform.workspace },
+    { key = "EXCHANGE_TENANT_ID", secret = google_secret_manager_secret.secret["EXCHANGE_TENANT_ID"].id },
+    { key = "EXCHANGE_CLIENT_ID", secret = google_secret_manager_secret.secret["EXCHANGE_CLIENT_ID"].id },
+    { key = "EXCHANGE_CLIENT_SECRET", secret = google_secret_manager_secret.secret["EXCHANGE_CLIENT_SECRET"].id },
+    { key = "SPOTIFY_CLIENT_ID", secret = google_secret_manager_secret.secret["SPOTIFY_CLIENT_ID"].id },
+    { key = "SPOTIFY_CLIENT_SECRET", secret = google_secret_manager_secret.secret["SPOTIFY_CLIENT_SECRET"].id },
+
     # { key = "DATABASE_URL", secret = module.database.connection_string_secret }
   ]
 
@@ -133,7 +139,6 @@ resource "google_cloud_run_domain_mapping" "default" {
     route_name = module.frontend.name
   }
 }
-
 
 
 data "google_dns_managed_zone" "env_dns_zone" {

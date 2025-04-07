@@ -12,7 +12,7 @@ jobs:
     uses: kadima-tech/actions/.github/workflows/node-pr.yml@master
     
     with:
-      project: <PROJECT_NAME>
+      project: <barracuda-dms>
       baseDir: web
 
     secrets:

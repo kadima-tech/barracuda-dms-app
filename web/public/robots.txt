@@ -1,3 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /
+
+# Prevent crawling and indexing
+Sitemap: https://barracudadms.com/sitemap.xml 

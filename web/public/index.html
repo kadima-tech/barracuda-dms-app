@@ -1,43 +1,1107 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BarracudaDMS - Digital Signage Solution</title>
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+      rel="stylesheet"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <style>
+      :root {
+        --primary: #0cbab1;
+        --primary-dark: #098f88;
+        --gradient: linear-gradient(135deg, #0cbab1 0%, #098f88 100%);
+        --text-primary: #2d3748;
+        --text-secondary: #4a5568;
+        --grey: #a0aec0;
+        --light-grey: #f8f9ff;
+        --white: #ffffff;
+        --border-radius: 12px;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --shadow-hover: 0 8px 16px rgba(12, 186, 177, 0.12);
+        --transition: all 0.3s ease;
+      }
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        line-height: 1.6;
+        color: var(--text-primary);
+        background-color: var(--light-grey);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #0a8f88 0%, #14b8b0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-shadow: 0px 2px 4px rgba(10, 143, 136, 0.2);
+        position: relative;
+        display: inline-block;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Header Styles */
+      header {
+        background-color: var(--white);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 100;
+        height: 4.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .logo img {
+        height: 3.5rem;
+        width: auto;
+        margin-right: 0.5rem;
+      }
+
+      .logo h1 {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        margin: 0;
+      }
+
+      .divider {
+        color: var(--primary);
+        font-weight: 200;
+        margin: 0 0.5rem;
+        opacity: 0.3;
+      }
+
+      .punchline {
+        color: var(--text-primary);
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        opacity: 0.85;
+      }
+
+      /* Main Content Styles */
+      main {
+        margin-top: 5rem;
+        flex: 1;
+        padding: 2rem 0;
+      }
+
+      section {
+        margin-bottom: 3rem;
+        background: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .section-title {
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 1.8rem;
+        margin: 1.5rem 0;
+        font-weight: 600;
+        position: relative;
+      }
+
+      .section-title:after {
+        content: "";
+        display: block;
+        width: 40px;
+        height: 2px;
+        background: var(--primary);
+        margin: 0.5rem auto 0;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: var(--gradient);
+        color: var(--white);
+        padding: 6rem 0 4rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        min-height: 60vh;
+      }
+
+      .hero:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 70%
+        );
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        opacity: 0.95;
+        line-height: 1.7;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background-color: var(--white);
+        color: var(--primary);
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-size: 1.1rem;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Feature Cards Section */
+      .features-container {
+        padding: 2rem 2.5rem 3rem;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        transition: var(--transition);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        box-shadow: var(--shadow);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .feature-image {
+        background: var(--gradient);
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-image:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 70%
+        );
+      }
+
+      .feature-image span {
+        position: relative;
+        z-index: 1;
+        font-size: 3.5rem;
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover .feature-image span {
+        transform: scale(1.15) rotate(5deg);
+      }
+
+      .feature-content {
+        padding: 2rem;
+        background: var(--light-grey);
+        border-top: 3px solid rgba(12, 186, 177, 0.15);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .feature-title {
+        color: var(--primary);
+        font-size: 1.25rem;
+        margin: 0 0 1rem 0;
+        text-align: center;
+        font-weight: 700;
+        width: 100%;
+      }
+
+      .feature-description {
+        color: var(--text-secondary);
+        text-align: center;
+        line-height: 1.7;
+        font-size: 0.95rem;
+        margin: 0;
+        flex-grow: 1;
+      }
+
+      /* Architecture Section */
+      .architecture-container {
+        padding: 1.5rem 2.5rem 2.5rem;
+      }
+
+      .architecture-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .architecture-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      .architecture-text {
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 0.875rem;
+      }
+
+      .architecture-text p {
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+      }
+
+      .architecture-text ul {
+        margin: 1rem 0 1rem 2rem;
+        color: var(--text-secondary);
+      }
+
+      .architecture-text ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      /* Benefits Section */
+      .benefits-container {
+        padding: 2rem 2.5rem 3rem;
+      }
+
+      .benefits-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.25rem;
+        padding: 1.5rem;
+        background: var(--white);
+        border-radius: 12px;
+        transition: var(--transition);
+        height: 100%;
+        box-shadow: var(--shadow);
+      }
+
+      .benefit-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .benefit-icon {
+        font-size: 1.75rem;
+        color: var(--primary);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(12, 186, 177, 0.1);
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+      }
+
+      .benefit-content h4 {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+
+      .benefit-content p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+
+      /* Applications Section */
+      .applications-container {
+        padding: 2rem 2.5rem 3rem;
+      }
+
+      .applications-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        text-align: center;
+      }
+
+      .application-item {
+        padding: 2rem;
+        background: var(--white);
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow);
+      }
+
+      .application-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .application-icon {
+        font-size: 3rem;
+        margin-bottom: 1.25rem;
+        color: var(--primary);
+        background: rgba(12, 186, 177, 0.1);
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .application-item h4 {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+
+      .application-item p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+
+      /* Footer */
+      footer {
+        background: var(--white);
+        padding: 1.5rem 0;
+        border-top: 2px solid var(--primary);
+        margin-top: auto;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .brand-name {
+        color: var(--primary);
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .copyright {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .footer-links a {
+        color: var(--grey);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .social-links a {
+        color: var(--grey);
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: color 0.2s ease;
+      }
+
+      .social-links a:hover {
+        color: var(--primary);
+      }
+
+      /* Scroll Progress Bar */
+      .progress-container {
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+        height: 4px;
+        background: transparent;
+      }
+
+      .progress-bar {
+        height: 4px;
+        background: var(--primary);
+        width: 0%;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 992px) {
+        .features-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .benefits-list {
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .applications-list {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.25rem 0;
+        }
+
+        header {
+          height: auto;
+          padding: 0.25rem 0;
+          min-height: 2.5rem;
+        }
+
+        .logo {
+          justify-content: center;
+          gap: 0.25rem;
+        }
+
+        .logo h1 {
+          font-size: 1.1rem;
+          display: flex;
+          align-items: center;
+          flex-wrap: nowrap;
+          justify-content: center;
+        }
+
+        .logo img {
+          height: 2rem;
+          margin-right: 0.25rem;
+        }
+
+        .divider {
+          margin: 0 0.25rem;
+          display: inline-block;
+        }
+
+        .punchline {
+          font-size: 0.65rem;
+          display: inline-block;
+          opacity: 0.8;
+          margin-left: 0.25rem;
+        }
+
+        .gradient-text {
+          font-size: 1.1rem;
+        }
+
+        main {
+          margin-top: 3rem;
+        }
+
+        .hero {
+          padding: 3.5rem 0 2rem;
+        }
+
+        .hero h2 {
+          font-size: 1.75rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+          padding: 0 1rem;
+        }
+
+        .section-title {
+          font-size: 1.6rem;
+        }
+
+        .features-container,
+        .architecture-container,
+        .benefits-container,
+        .applications-container {
+          padding: 1rem 1.25rem 2rem;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .footer-left {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .footer-links {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <img src="/assets/logo.png" alt="Barracuda Logo" />
+            <h1>
+              <span class="gradient-text">BarracudaDMS</span>
+              <span class="divider">|</span>
+              <span class="punchline">Streamline Your Device Management</span>
+            </h1>
+          </div>
+        </div>
+      </div>
+    </header>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <h2>A Scalable and Modular Cloud-Based Digital Signage Solution</h2>
+            <p>
+              BarracudaDMS is a powerful Device Management System designed to
+              revolutionize how organizations monitor, manage, and control
+              connected digital signage devices. Built on modern technology
+              stack with React, TypeScript, Node.js, and PostgreSQL, it
+              overcomes the limitations of traditional systems by offering
+              modular hardware components, real-time monitoring, and seamless
+              content distribution.
+            </p>
+            <a href="#features" class="btn">Explore Features</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="container">
+        <section id="features">
+          <h3 class="section-title">Platform Features</h3>
+          <div class="features-container">
+            <div class="features-grid">
+              <div class="feature-card">
+                <div class="feature-image">
+                  <span>🖥️</span>
+                </div>
+                <div class="feature-content">
+                  <h4 class="feature-title">Advanced Device Management</h4>
+                  <p class="feature-description">
+                    Comprehensive control panel for monitoring and managing
+                    connected devices via WebSockets. Track device health
+                    metrics including temperature, CPU load, memory usage, and
+                    uptime in real-time. Send remote commands like reboot
+                    without physical access to devices.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-image">
+                  <span>🔄</span>
+                </div>
+                <div class="feature-content">
+                  <h4 class="feature-title">
+                    Intelligent Content Distribution
+                  </h4>
+                  <p class="feature-description">
+                    Dynamically update content across all devices from a central
+                    dashboard. Change web application URLs remotely, upload
+                    multimedia content directly to devices, and schedule content
+                    deployment with intelligent pre-caching to minimize network
+                    traffic and ensure smooth transitions.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-image">
+                  <span>📊</span>
+                </div>
+                <div class="feature-content">
+                  <h4 class="feature-title">Comprehensive Analytics</h4>
+                  <p class="feature-description">
+                    Monitor critical device metrics including temperature,
+                    uptime, CPU load, memory usage, and disk utilization.
+                    Receive alerts for potential issues, analyze performance
+                    trends, and anticipate maintenance needs before problems
+                    affect your digital signage network.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="architecture">
+          <h3 class="section-title">System Architecture</h3>
+          <div class="architecture-container">
+            <div class="architecture-content">
+              <img
+                src="/assets/architecture.svg"
+                alt="BarracudaDMS System Architecture"
+                class="architecture-image"
+              />
+              <div class="architecture-text">
+                <p>
+                  BarracudaDMS consists of a modular architecture designed for
+                  scalability, reliability, and future extensibility:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Frontend:</strong> React + TypeScript application
+                    providing an intuitive user interface with real-time device
+                    monitoring and content management capabilities
+                  </li>
+                  <li>
+                    <strong>Backend:</strong> Node.js with Express, providing
+                    RESTful APIs and Socket.IO WebSocket server for persistent,
+                    real-time communication with devices
+                  </li>
+                  <li>
+                    <strong>Database:</strong> PostgreSQL for reliable data
+                    storage of device information, performance metrics, and
+                    content management records
+                  </li>
+                  <li>
+                    <strong>Hardware:</strong> Raspberry Pi 5 for our first
+                    version, with plans to use the Compute Module 4/5 (CM4/5)
+                    for future versions, featuring dual-display support up to 4K
+                    resolution and hardware video-decoding capabilities
+                  </li>
+                  <li>
+                    <strong>Displays:</strong> Modular display components that
+                    can be easily swapped or upgraded without replacing the
+                    entire system
+                  </li>
+                  <li>
+                    <strong>Connectivity:</strong> WebSocket connections for
+                    real-time updates and Power over Ethernet (PoE) for
+                    simplified installation with a single cable for both power
+                    and data
+                  </li>
+                  <li>
+                    <strong>Kiosk Mode:</strong> Custom Chromium kiosk
+                    implementation that automatically boots into full-screen
+                    browser mode for seamless display operation with enhanced
+                    security and performance
+                  </li>
+                </ul>
+                <p>
+                  This robust architecture enables the system to handle more
+                  than 1000 devices simultaneously while maintaining efficient
+                  content delivery through pre-caching mechanisms and optimized
+                  network communication.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="benefits">
+          <h3 class="section-title">Key Benefits</h3>
+          <div class="benefits-container">
+            <div class="benefits-list">
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Hardware Modularity</h4>
+                  <p>
+                    The Raspberry Pi architecture allows individual components
+                    to be replaced rather than entire systems, significantly
+                    reducing maintenance costs and electronic waste while
+                    extending the overall lifespan of your digital signage
+                    investment.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Future-Proof Design</h4>
+                  <p>
+                    The system ensures compatibility with future hardware
+                    versions and provides ongoing software updates through CI/CD
+                    pipelines. The modular architecture allows seamless upgrades
+                    without requiring complete system replacement, protecting
+                    your investment.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Simplified Infrastructure</h4>
+                  <p>
+                    Power over Ethernet (PoE) capabilities dramatically reduce
+                    installation complexity by combining power and data
+                    transmission in a single cable, eliminating the need for
+                    additional power outlets and reducing cable management
+                    issues in deployment locations.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Enhanced Security Protocol</h4>
+                  <p>
+                    All system communications are secured via HTTPS, with robust
+                    device authentication during registration to prevent
+                    unauthorized access. The system maintains updated security
+                    protocols, unlike legacy systems with outdated TLS/SSL
+                    implementations.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Centralized Management Console</h4>
+                  <p>
+                    The comprehensive dashboard provides a single interface for
+                    managing all devices, content, and system health. Real-time
+                    metrics, alerts, and command execution capabilities
+                    eliminate the need for multiple tools and reduce operational
+                    complexity.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Minimal Energy Consumption</h4>
+                  <p>
+                    The system leverages the energy-efficient ARM architecture
+                    of the Raspberry Pi, consuming significantly less power than
+                    traditional digital signage solutions while maintaining
+                    optimal performance and reliability for 24/7 operation.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Automatic Device Registration</h4>
+                  <p>
+                    Newly deployed devices automatically register with the DMS
+                    upon first startup, eliminating manual configuration steps
+                    and allowing for rapid deployment of multiple devices across
+                    different locations simultaneously.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                  <h4>Proactive Maintenance</h4>
+                  <p>
+                    The system continuously monitors device health metrics and
+                    alerts administrators to potential issues before they cause
+                    failures. This proactive approach minimizes downtime and
+                    ensures reliable operation of your digital signage network.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="applications">
+          <h3 class="section-title">Applications</h3>
+          <div class="applications-container">
+            <div class="applications-list">
+              <div class="application-item">
+                <div class="application-icon">🚪</div>
+                <h4>Meeting Room & Door Displays</h4>
+                <p>
+                  Interactive room status indicators for offices, conference
+                  centers, and healthcare facilities. Show real-time booking
+                  information, availability status, and upcoming meetings with
+                  integration to popular calendar systems.
+                </p>
+              </div>
+              <div class="application-item">
+                <div class="application-icon">🏪</div>
+                <h4>Retail Digital Signage</h4>
+                <p>
+                  Dynamic product information displays, promotional content, and
+                  wayfinding solutions for retail environments. Remotely update
+                  pricing, promotions, and product details across multiple store
+                  locations from a central dashboard.
+                </p>
+              </div>
+              <div class="application-item">
+                <div class="application-icon">🏥</div>
+                <h4>Healthcare Information Systems</h4>
+                <p>
+                  Clear wayfinding, patient information, and queue management
+                  displays for hospitals and healthcare facilities. Improve
+                  patient experience while reducing staff workload with
+                  automated, real-time information distribution.
+                </p>
+              </div>
+              <div class="application-item">
+                <div class="application-icon">📱</div>
+                <h4>Interactive Digital Kiosks</h4>
+                <p>
+                  Self-service information points for public spaces, museums,
+                  transportation hubs, and commercial venues. Provide
+                  interactive maps, schedules, product catalogs, and information
+                  services with centralized content management.
+                </p>
+              </div>
+              <div class="application-item">
+                <div class="application-icon">📺</div>
+                <h4>Large-Format LED Walls</h4>
+                <p>
+                  High-impact visual displays for events, stadiums, corporate
+                  lobbies, and advertising installations. Deliver stunning
+                  visual content at scale with remote management capabilities
+                  and reliable 24/7 operation.
+                </p>
+              </div>
+              <div class="application-item">
+                <div class="application-icon">🏢</div>
+                <h4>Corporate Communication</h4>
+                <p>
+                  Internal communication displays for employee information, KPI
+                  dashboards, and company announcements. Keep your entire
+                  organization informed with targeted messaging across multiple
+                  locations and departments.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="technical">
+          <h3 class="section-title">Technical Implementation</h3>
+          <div class="benefits-container">
+            <div class="benefits-list">
+              <div class="benefit-item">
+                <div class="benefit-icon">🔌</div>
+                <div class="benefit-content">
+                  <h4>WebSocket Communication</h4>
+                  <p>
+                    The system utilizes Socket.IO for reliable, bidirectional
+                    communication between devices and the management server.
+                    This enables real-time monitoring, instant command
+                    execution, and resilient connections with automatic
+                    reconnection capabilities.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">🔄</div>
+                <div class="benefit-content">
+                  <h4>CI/CD Integration</h4>
+                  <p>
+                    A robust CI/CD pipeline built with Docker and Terraform
+                    ensures reliable and automated deployments, consistent
+                    testing, and seamless updates to both server and client
+                    components without disrupting active displays.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">🛡️</div>
+                <div class="benefit-content">
+                  <h4>Device Authentication</h4>
+                  <p>
+                    Each device is identified by a unique hardware ID derived
+                    from its CPU serial number, ensuring secure authentication
+                    and preventing unauthorized devices from connecting to the
+                    management system.
+                  </p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">📡</div>
+                <div class="benefit-content">
+                  <h4>Resilient Connectivity</h4>
+                  <p>
+                    Advanced reconnection logic and error handling ensure
+                    devices maintain persistent connections with the management
+                    server, automatically recovering from network interruptions
+                    without manual intervention.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-left">
+            <a href="#" class="brand-name">BarracudaDMS</a>
+            <div class="copyright">
+              © 2024 BarracudaDMS. All rights reserved.
+            </div>
+            <div class="footer-links">
+              <a href="#">Privacy</a>
+              <a href="#">Terms</a>
+              <a href="#">Contact</a>
+            </div>
+          </div>
+          <div class="social-links">
+            <a href="mailto:maurice@dvpd.nl">
+              <span>&#x2709;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Progress Bar
+      window.onscroll = function () {
+        let winScroll =
+          document.body.scrollTop || document.documentElement.scrollTop;
+        let height =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("progressBar").style.width = scrolled + "%";
+      };
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+      });
+    </script>
   </body>
 </html>

@@ -2,6 +2,16 @@
 
 locals {
   secrets = [
+    # Exchange secrets
+    "EXCHANGE_TENANT_ID",
+    "EXCHANGE_CLIENT_ID",
+    "EXCHANGE_CLIENT_SECRET",
+
+
+    # Spotify secrets
+    "SPOTIFY_CLIENT_ID",
+    "SPOTIFY_CLIENT_SECRET",
+
   ]
 }
 

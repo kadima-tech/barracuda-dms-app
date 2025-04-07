@@ -1,0 +1,67 @@
+<svg width="800" height="500" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" rx="12" fill="#f8fafc"/>
+  
+  <!-- Cloud Server -->
+  <rect x="300" y="50" width="200" height="120" rx="8" fill="white" stroke="#0A8F88" stroke-width="2"/>
+  <path d="M330 80 L350 80 M330 90 L370 90 M330 100 L360 100" stroke="#0A8F88" stroke-width="2"/>
+  <text x="400" y="130" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2C3E50">Cloud Backend</text>
+  
+  <!-- Database -->
+  <rect x="500" y="200" width="120" height="80" rx="8" fill="white" stroke="#0A8F88" stroke-width="2"/>
+  <path d="M530 220 C530 210, 590 210, 590 220 S530 230, 530 220 M530 220 L530 260 C530 270, 590 270, 590 260 L590 220" stroke="#0A8F88" stroke-width="2"/>
+  <text x="560" y="250" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2C3E50">PostgreSQL</text>
+  
+  <!-- Admin Dashboard -->
+  <rect x="80" y="200" width="160" height="80" rx="8" fill="white" stroke="#0A8F88" stroke-width="2"/>
+  <rect x="100" y="220" width="120" height="40" rx="4" fill="#E2F5F4"/>
+  <text x="160" y="250" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2C3E50">Admin Dashboard</text>
+  
+  <!-- Devices -->
+  <g id="device1">
+    <rect x="150" y="350" width="100" height="80" rx="8" fill="white" stroke="#0A8F88" stroke-width="2"/>
+    <rect x="160" y="360" width="80" height="50" rx="2" fill="#E2F5F4"/>
+    <text x="200" y="420" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2C3E50">Door Display</text>
+  </g>
+  
+  <g id="device2">
+    <rect x="320" y="350" width="100" height="80" rx="8" fill="white" stroke="#0A8F88" stroke-width="2"/>
+    <rect x="330" y="360" width="80" height="50" rx="2" fill="#E2F5F4"/>
+    <text x="370" y="420" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2C3E50">Digital Kiosk</text>
+  </g>
+  
+  <g id="device3">
+    <rect x="490" y="350" width="100" height="80" rx="8" fill="white" stroke="#0A8F88" stroke-width="2"/>
+    <rect x="500" y="360" width="80" height="50" rx="2" fill="#E2F5F4"/>
+    <text x="540" y="420" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2C3E50">LED Wall</text>
+  </g>
+  
+  <!-- Connection Lines -->
+  <line x1="400" y1="170" x2="400" y2="200" stroke="#94A3B8" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="400" y1="200" x2="160" y2="200" stroke="#94A3B8" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="400" y1="200" x2="500" y2="240" stroke="#94A3B8" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <line x1="400" y1="200" x2="400" y2="300" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="400" y1="300" x2="200" y2="300" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="400" y1="300" x2="540" y2="300" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="200" y1="300" x2="200" y2="350" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="400" y1="300" x2="370" y2="350" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="540" y1="300" x2="540" y2="350" stroke="#94A3B8" stroke-width="2"/>
+  
+  <!-- WebSocket Label -->
+  <rect x="420" y="280" width="100" height="25" rx="12" fill="#0A8F88"/>
+  <text x="470" y="296" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">WebSocket</text>
+  
+  <!-- PoE Labels -->
+  <rect x="140" y="320" width="40" height="20" rx="10" fill="#14B8B0"/>
+  <text x="160" y="334" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">PoE</text>
+  
+  <rect x="340" y="320" width="40" height="20" rx="10" fill="#14B8B0"/>
+  <text x="360" y="334" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">PoE</text>
+  
+  <rect x="510" y="320" width="40" height="20" rx="10" fill="#14B8B0"/>
+  <text x="530" y="334" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">PoE</text>
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2C3E50">BarracudaDMS System Architecture</text>
+</svg> 

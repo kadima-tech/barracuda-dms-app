@@ -11,7 +11,7 @@ jobs:
     uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
 
     with:
-      project: <PROJECT_NAME>
+      project: <barracuda-dms>
       baseDir: web
       stage: production
       tag: ${{ github.head_ref || github.ref }}
