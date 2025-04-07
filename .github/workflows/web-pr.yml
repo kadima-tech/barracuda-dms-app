@@ -12,8 +12,8 @@ jobs:
     uses: kadima-tech/actions/.github/workflows/node-pr.yml@master
     
     with:
-      project: <barracuda-dms>
+      project: barracuda-dms
       baseDir: web
-
+      scope: kadima-tech
     secrets:
       token: ${{ secrets.GH_ACCESS_TOKEN }}

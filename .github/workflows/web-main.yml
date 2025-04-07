@@ -19,6 +19,8 @@ jobs:
       baseDir: web
       stage: development
       tag: latest
+      scope: kadima-tech
+      artifact-repository-project: kadima-terraform
       
     secrets:
       token: ${{ secrets.GH_ACCESS_TOKEN }}

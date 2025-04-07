@@ -8,7 +8,7 @@ on:
 env:
   stage: production
   service: server
-  project: <barracuda-dms>
+  project: barracuda-dms
 
 jobs:
   qa-release:
@@ -16,7 +16,7 @@ jobs:
     uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
     
     with:
-      project: <barracuda-dms>
+      project: barracuda-dms
       baseDir: server
       stage: production
       tag: ${{ github.head_ref || github.ref }}

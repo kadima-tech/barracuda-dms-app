@@ -7,14 +7,16 @@ on:
 
 jobs:
   qa-release:
-    name: "Web (production)"
+    name: 'Web (production)'
     uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
 
     with:
-      project: <barracuda-dms>
+      project: barracuda-dms
       baseDir: web
       stage: production
       tag: ${{ github.head_ref || github.ref }}
+      scope: kadima-tech
+      artifact-repository-project: kadima-terraform
 
     secrets:
       token: ${{ secrets.GH_ACCESS_TOKEN }}
