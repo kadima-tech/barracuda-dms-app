@@ -1,0 +1,21 @@
+name: Server Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'server/**'
+      - Makefile
+
+jobs:
+  qa-deploy:
+    name: "Server (production)"
+    uses: kadima-tech/actions/.github/workflows/node-pr.yml@master
+
+    with:
+      project: <PROJECT_NAME>
+      baseDir: server
+      postgres: true
+
+    secrets:
+      token: ${{ secrets.GH_ACCESS_TOKEN }}

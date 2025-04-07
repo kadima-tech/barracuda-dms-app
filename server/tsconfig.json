@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "rootDirs": [
+      "./src"
+    ],
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "strict": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.*/*",
+    "jest.config.ts"
+  ]
+}

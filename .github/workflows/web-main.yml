@@ -1,0 +1,26 @@
+name: Frontend Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+    paths:
+      - .github/workflows/web-main.yml
+      - 'web/**'
+      - Makefile
+
+jobs:
+  qa-deploy:
+    name: "Web (development)"
+    uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
+    with:
+      project: <PROJECT_NAME>
+      baseDir: web
+      stage: development
+      tag: latest
+      
+    secrets:
+      token: ${{ secrets.GH_ACCESS_TOKEN }}
+      artifact_registry_upload_key: ${{ secrets.ARTIFACT_REGISTRY_UPLOAD_KEY }}
+      cloudrun_uploader_service_account: ${{ secrets.CLOUDRUN_UPLOADER_SERVICE_ACCOUNT }}

@@ -1,0 +1,28 @@
+name: Server Deployment
+
+on:
+  push:
+    tags:
+      - 'server/[0-9]+.[0-9]+.[0-9]+'
+    
+env:
+  stage: production
+  service: server
+  project: <PROJECT_NAME>
+
+jobs:
+  qa-release:
+    name: "Server (production)"
+    uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
+    
+    with:
+      project: <PROJECT_NAME>
+      baseDir: server
+      stage: production
+      tag: ${{ github.head_ref || github.ref }}
+      postgres: true
+
+    secrets:
+      token: ${{ secrets.GH_ACCESS_TOKEN }}
+      artifact_registry_upload_key: ${{ secrets.ARTIFACT_REGISTRY_UPLOAD_KEY }}
+      cloudrun_uploader_service_account: ${{ secrets.CLOUDRUN_UPLOADER_SERVICE_ACCOUNT_PRODUCTION }}

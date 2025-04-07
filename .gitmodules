@@ -1,0 +1,3 @@
+[submodule "scripts/make"]
+	path = scripts/make
+	url = git@github.com:kadima-tech/make-scripts.git

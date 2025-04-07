@@ -1,0 +1,63 @@
+server {
+    server_tokens off;
+    listen ${PORT};
+    server_name ${HOST};
+
+    # where the root lives
+    root /var/www;
+    index index.html index.htm;
+
+    # use compression where appropriate
+    gzip on;
+    gzip_disable "msie6";
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_min_length 1000;
+    gzip_types text/plain application/javascript text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype;
+
+    add_header Cache-Control "public" always;      
+    add_header X-Frame-Options "DENY" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Cross-Origin-Resource-Policy "same-site" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # Json files etc should be treated the same as pages
+    location ~* \.(?:manifest|appcache|html?|xml|json)$ {
+        expires 5m;
+    }
+
+    # These get unique per-build names so are safe to cache for a longer period
+    location ~* \.(?:css|js)$ {
+        
+        try_files $uri =404;
+        expires 1d;
+    }
+
+    # Any route containing a file extension (e.g. /Euclid.woff2)
+    location ~ ^.+\..+$ {
+        try_files $uri =404;
+        expires 1d;
+    }
+
+    # Any route that doesn't have a file extension (e.g. /devices)
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to redirecting to index.html
+        try_files $uri $uri/ /index.html;
+
+        # Even though its the page html our server side response does not contain
+        # Any user information, it's just the shell, so it's safe to cache
+
+        # We've never cached this before though so let's start with a short 5m cache
+        expires 5m;
+    }         
+
+    location /api/ {
+        proxy_pass $SERVER_URL/;
+    }
+}
+

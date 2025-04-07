@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "EditorConfig.EditorConfig",
+    "mikestead.dotenv",
+    "esbenp.prettier-vscode",
+    "rvest.vs-code-prettier-eslint",
+    "Prisma.prisma"
+  ]
+}

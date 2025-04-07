@@ -1,0 +1,19 @@
+name: Frontend Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'web/**'
+
+jobs:
+  qa:
+    name: "Web (development)"
+    uses: kadima-tech/actions/.github/workflows/node-pr.yml@master
+    
+    with:
+      project: <PROJECT_NAME>
+      baseDir: web
+
+    secrets:
+      token: ${{ secrets.GH_ACCESS_TOKEN }}

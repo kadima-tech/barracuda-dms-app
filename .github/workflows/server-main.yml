@@ -1,0 +1,73 @@
+name: Server Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'server/**'
+      - Makefile
+      - .github/workflows/server-main.yml
+
+jobs:
+  qa-deploy:
+    name: "Server (production)"
+    uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
+
+    with:
+      project: <PROJECT_NAME>
+      baseDir: server
+      stage: development
+      tag: latest
+      postgres: true
+
+    secrets:
+      token: ${{ secrets.GH_ACCESS_TOKEN }}
+      artifact_registry_upload_key: ${{ secrets.ARTIFACT_REGISTRY_UPLOAD_KEY }}
+      cloudrun_uploader_service_account: ${{ secrets.CLOUDRUN_UPLOADER_SERVICE_ACCOUNT }}
+
+  sdk-generate:
+    name: "Generate SDK"
+    needs: qa-deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: kadima-tech/actions/checkout@master
+        with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+          submodules: recursive
+
+      - name: Generate SDK
+        run: make sdk.generate
+
+      - name: See if there's any changes
+        id: changes
+        run: echo "changed=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Publish new package version
+        if: steps.changes.outputs.changed != 0
+        run: |
+          cd packages/standin-sdk
+          yarn
+          yarn build
+          yarn version --prerelease --preid SNAPSHOT --no-git-tag-version
+          yarn publish --no-git-tag-version
+
+      - name: Generate branch name
+        if: steps.changes.outputs.changed != 0
+        run: echo BRANCH=actions/sdk-autogen-$(date +%Y%M%m%H%M%S) >> $GITHUB_ENV
+      
+      - name: Configure Github
+        run: |
+          git config --global user.email "bot@kadima-tech.com"
+          git config --global user.name "Github Actions Bot"
+
+      - name: Create branch and push changes
+        if: steps.changes.outputs.changed != 0
+        run: git checkout -b $BRANCH && git add packages/standin-sdk && git commit -m "Auto-commit SDK update" && git push -u origin $BRANCH
+
+      - name: Create pull request
+        if: steps.changes.outputs.changed != 0
+        run: gh pr create -B main -H $BRANCH --title '[auto] Update SDK' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
