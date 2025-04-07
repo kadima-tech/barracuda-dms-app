@@ -11,7 +11,8 @@
     "preview": "http-server ./build -p 5173 --proxy http://localhost:5173?",
     "start": "http-server ./dist -p 5173 --proxy http://localhost:5173?",
     "docker:build": "docker build -t web-app .",
-    "docker:start": "docker run -p 0.0.0.0:5173:5173 web-app"
+    "docker:start": "docker run -p 0.0.0.0:5173:5173 web-app",
+    "test": "echo 'test'"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
