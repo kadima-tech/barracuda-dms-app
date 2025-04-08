@@ -24,7 +24,8 @@ MAIN_BRANCH = main
 project_name = $(shell basename $(shell pwd) | sed 's/-app//')
 
 # Name the argument for convenience
-baseDir = $(service)
+baseDir ?= web
+service ?= $(baseDir)
 
 # Some basic settings
 tag		  ?= latest
