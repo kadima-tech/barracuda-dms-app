@@ -10,11 +10,11 @@ endif
 stage   ?= local
 stages  ?= local development production
  
-GCR        ?= europe-west1-docker.pkg.dev/kadima-terraform/standin-works
-WEB_BUCKET ?= standin.works
+GCR        ?= europe-west1-docker.pkg.dev/kadima-terraform/barracuda-dms
+WEB_BUCKET ?= barracuda-dms
 
-development_project_id  ?= standin-works-development
-production_project_id   ?= standin-works-production
+development_project_id  ?= barracuda-dms-development
+production_project_id   ?= barracuda-dms-production
 OSNAME := $(shell uname)
 
 # Base directory for makefiles
@@ -27,7 +27,7 @@ project_name = $(shell basename $(shell pwd) | sed 's/-app//')
 baseDir = $(service)
 
 # Some basic settings
-tag		  ?= 
+tag		  ?= latest
 dry     ?= false
 quiet   ?= false
 type    ?= patch
@@ -37,8 +37,8 @@ sonatype_url = https://oss.sonatype.org/content/repositories/snapshots/org/opena
 binary_dir = .bin
 openapi_cli = openapi-generator-cli-7.0.0-20221012.083708-4.jar
 binary = $(binary_dir)/$(openapi_cli)
-target = packages/standin-sdk/src/v1
-docs := https://standin-works-development.kadima-tech.com/api/v1/documentation/json
+target = packages/barracuda-sdk/src/v1
+docs := https://barracuda-dms-development.kadima-tech.com/api/v1/documentation/json
 
 # Include the jobs we need
 include $(MAKE_BASE_DIR)/setup.mk
@@ -78,7 +78,9 @@ cloudrun.deploy.%:
 	gcloud run deploy $* \
 				--project=$($(stage)_project_id) \
 				--image=$(GCR)/$*:$(tag) \
-				--region=europe-west1
+				--region=europe-west1 \
+				--platform managed \
+				--allow-unauthenticated
 
 #########################
 #          SDK          #
@@ -90,15 +92,15 @@ ifeq ("$(wildcard $(binary))","")
 endif
 
 sdk.clean:
-	cd packages/standin-sdk && rm -rf intermediates
+	cd packages/barracuda-sdk && rm -rf intermediates
 
 sdk.update-schema:
 	echo "UPDATING"
-	curl $(docs) -o packages/standin-sdk/src/assets/schema.json 
+	curl $(docs) -o packages/barracuda-sdk/src/assets/schema.json 
 
 # Config: https://openapi-generator.tech/docs/generators/typescript-fetch
 sdk.generate: sdk.setup sdk.clean sdk.update-schema
-	java -cp $(binary) org.openapitools.codegen.OpenAPIGenerator generate -i packages/standin-sdk/src/assets/schema.json \
+	java -cp $(binary) org.openapitools.codegen.OpenAPIGenerator generate -i packages/barracuda-sdk/src/assets/schema.json \
                         -g typescript-fetch \
                         -o $(target) \
                         --additional-properties=legacyDiscriminatorBehavior=false,disallowAdditionalPropertiesIfNotPresent=false
