@@ -1,10 +1,10 @@
-import { Static, Type } from "@sinclair/typebox";
-import { FastifySchema } from "fastify";
+import { Static, Type } from '@sinclair/typebox';
+import { FastifySchema } from 'fastify';
 
 // Tag for grouping related API endpoints in documentation
 export const tag = {
-  name: "Device",
-  description: "Device Management",
+  name: 'Device',
+  description: 'Device Management',
 };
 
 // Device Metrics Resource Schema
@@ -17,7 +17,7 @@ const deviceMetricsResource = Type.Object(
     diskUsage: Type.Optional(Type.Number()),
     currentUrl: Type.Optional(Type.String()),
   },
-  { title: "DeviceMetrics" }
+  { title: 'DeviceMetrics' }
 );
 
 // Connected Device Resource Schema
@@ -28,65 +28,65 @@ const connectedDeviceResource = Type.Object(
     lastHeartbeat: Type.Number(),
     metrics: deviceMetricsResource,
   },
-  { title: "ConnectedDevice" }
+  { title: 'ConnectedDevice' }
 );
 
-// Response Schema for the getConnectedDevices endpoint
-const getConnectedDevicesResponse = Type.Array(connectedDeviceResource);
+// Common response wrapper
+const responseWrapper = Type.Object({
+  data: Type.Union([Type.Any(), Type.Array(Type.Any())]),
+  links: Type.Object({
+    self: Type.String(),
+  }),
+});
+
+// Common error response
+const errorResponse = Type.Object({
+  error: Type.String(),
+});
 
 // Schema for registering a device
 const registerDeviceBody = Type.Object(
   {
     deviceId: Type.String(),
   },
-  { title: "RegisterDeviceBody" }
+  { title: 'RegisterDeviceBody' }
 );
 
 // Video Streaming Schema
 export const streamVideoSchema: FastifySchema = {
-  operationId: "streamVideo",
+  operationId: 'streamVideo',
   tags: [tag.name],
   response: {
-    "2xx": {
-      type: "string",
-      description: "Video stream response",
+    '2xx': {
+      type: 'string',
+      description: 'Video stream response',
     },
   },
 };
 
 export const registerDeviceSchema: FastifySchema = {
-  operationId: "registerDevice",
+  operationId: 'registerDevice',
   tags: [tag.name],
   body: registerDeviceBody,
   response: {
-    "2xx": {
-      type: "object",
-      properties: {
-        message: Type.String(),
-      },
-      description: "Confirmation of successful device registration",
-    },
+    200: responseWrapper,
+    500: errorResponse,
   },
 };
 
 // Schema for handling device heartbeat messages
 const handleHeartbeatBody = Type.Intersect(
   [Type.Object({ deviceId: Type.String() }), deviceMetricsResource],
-  { title: "HandleHeartbeatBody" }
+  { title: 'HandleHeartbeatBody' }
 );
 
 export const handleHeartbeatSchema: FastifySchema = {
-  operationId: "handleHeartbeat",
+  operationId: 'handleHeartbeat',
   tags: [tag.name],
   body: handleHeartbeatBody,
   response: {
-    "2xx": {
-      type: "object",
-      properties: {
-        message: Type.String(),
-      },
-      description: "Acknowledgment of heartbeat received",
-    },
+    200: responseWrapper,
+    404: errorResponse,
   },
 };
 
@@ -95,28 +95,16 @@ const sendRebootCommandParams = Type.Object(
   {
     deviceId: Type.String(),
   },
-  { title: "SendRebootCommandParams" }
+  { title: 'SendRebootCommandParams' }
 );
 
 export const sendRebootCommandSchema: FastifySchema = {
-  operationId: "sendRebootCommand",
+  operationId: 'sendRebootCommand',
   tags: [tag.name],
   params: sendRebootCommandParams,
   response: {
-    "2xx": {
-      type: "object",
-      properties: {
-        message: Type.String(),
-      },
-      description: "Confirmation of reboot command sent",
-    },
-    "404": {
-      type: "object",
-      properties: {
-        error: Type.String(),
-      },
-      description: "Error if device not found or disconnected",
-    },
+    200: responseWrapper,
+    404: errorResponse,
   },
 };
 
@@ -125,33 +113,26 @@ const unregisterDeviceParams = Type.Object(
   {
     deviceId: Type.String(),
   },
-  { title: "UnregisterDeviceParams" }
+  { title: 'UnregisterDeviceParams' }
 );
 
 export const unregisterDeviceSchema: FastifySchema = {
-  operationId: "unregisterDevice",
+  operationId: 'unregisterDevice',
   tags: [tag.name],
   params: unregisterDeviceParams,
   response: {
-    "2xx": {
-      type: "object",
-      properties: {
-        message: Type.String(),
-      },
-      description: "Confirmation of device unregistration",
-    },
+    200: responseWrapper,
+    404: errorResponse,
   },
 };
 
 // Schema for getting connected devices
 export const getConnectedDevicesSchema: FastifySchema = {
-  operationId: "getConnectedDevices",
+  operationId: 'getConnectedDevices',
   tags: [tag.name],
   response: {
-    "2xx": {
-      ...getConnectedDevicesResponse,
-      description: "List of connected devices with metrics",
-    },
+    200: responseWrapper,
+    500: errorResponse,
   },
 };
 
@@ -161,27 +142,9 @@ export const uploadVideoSchema: FastifySchema = {
   tags: [tag.name],
   consumes: ['multipart/form-data'],
   response: {
-    200: {
-      type: 'object',
-      properties: {
-        message: Type.String(),
-      },
-      description: 'Video upload success response',
-    },
-    400: {
-      type: 'object',
-      properties: {
-        error: Type.String(),
-      },
-      description: 'Bad request error',
-    },
-    500: {
-      type: 'object',
-      properties: {
-        error: Type.String(),
-      },
-      description: 'Server error response',
-    },
+    200: responseWrapper,
+    400: errorResponse,
+    500: errorResponse,
   },
 };
 
@@ -191,31 +154,19 @@ const sendUrlToDeviceBody = Type.Object(
     url: Type.String(),
     active: Type.Optional(Type.Boolean()),
   },
-  { title: "SendUrlToDeviceBody" }
+  { title: 'SendUrlToDeviceBody' }
 );
 
 export const sendUrlToDeviceSchema: FastifySchema = {
-  operationId: "sendUrlToDevice",
+  operationId: 'sendUrlToDevice',
   tags: [tag.name],
   params: Type.Object({
     deviceId: Type.String(),
   }),
   body: sendUrlToDeviceBody,
   response: {
-    "2xx": {
-      type: "object",
-      properties: {
-        message: Type.String(),
-      },
-      description: "Confirmation of URL command sent",
-    },
-    "404": {
-      type: "object",
-      properties: {
-        error: Type.String(),
-      },
-      description: "Error if device not found or disconnected",
-    },
+    200: responseWrapper,
+    404: errorResponse,
   },
 };
 

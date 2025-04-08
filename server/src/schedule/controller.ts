@@ -2,17 +2,22 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import * as service from './service';
 import { CreateScheduleRequest, UpdateScheduleRequest } from './types';
 
-
 export const createSchedule = async (
   req: FastifyRequest<{ Body: CreateScheduleRequest }>,
   reply: FastifyReply
 ) => {
   try {
     const schedule = await service.createSchedule(req.body);
-    return reply.send(schedule);
+    return reply.send({
+      data: schedule,
+      links: {
+        self: `http://localhost:80/schedules/${schedule.id}`,
+      },
+    });
   } catch (error) {
     return reply.status(400).send({
-      error: error instanceof Error ? error.message : 'Failed to create schedule'
+      error:
+        error instanceof Error ? error.message : 'Failed to create schedule',
     });
   }
 };
@@ -25,11 +30,20 @@ export const updateSchedule = async (
   reply: FastifyReply
 ) => {
   try {
-    const schedule = await service.updateSchedule(req.params.scheduleId, req.body);
-    return reply.send(schedule);
+    const schedule = await service.updateSchedule(
+      req.params.scheduleId,
+      req.body
+    );
+    return reply.send({
+      data: schedule,
+      links: {
+        self: `http://localhost:80/schedules/${schedule.id}`,
+      },
+    });
   } catch (error) {
     return reply.status(404).send({
-      error: error instanceof Error ? error.message : 'Failed to update schedule'
+      error:
+        error instanceof Error ? error.message : 'Failed to update schedule',
     });
   }
 };
@@ -40,10 +54,15 @@ export const getSchedule = async (
 ) => {
   try {
     const schedule = service.getSchedule(req.params.scheduleId);
-    return reply.send(schedule);
+    return reply.send({
+      data: schedule,
+      links: {
+        self: `http://localhost:80/schedules/${schedule.id}`,
+      },
+    });
   } catch (error) {
     return reply.status(404).send({
-      error: error instanceof Error ? error.message : 'Schedule not found'
+      error: error instanceof Error ? error.message : 'Schedule not found',
     });
   }
 };
@@ -54,8 +73,19 @@ export const getSchedules = async (
   }>,
   reply: FastifyReply
 ) => {
-  const schedules = service.getSchedules(req.query);
-  return reply.send(schedules);
+  try {
+    const schedules = service.getSchedules(req.query);
+    return reply.send({
+      data: schedules,
+      links: {
+        self: 'http://localhost:80/schedules',
+      },
+    });
+  } catch (error) {
+    return reply.status(500).send({
+      error: error instanceof Error ? error.message : 'Failed to get schedules',
+    });
+  }
 };
 
 export const deleteSchedule = async (
@@ -64,12 +94,18 @@ export const deleteSchedule = async (
 ) => {
   try {
     service.deleteSchedule(req.params.scheduleId);
-    return reply.send({ message: 'Schedule deleted successfully' });
+    return reply.send({
+      data: {
+        message: 'Schedule deleted successfully',
+      },
+      links: {
+        self: `http://localhost:80/schedules/${req.params.scheduleId}`,
+      },
+    });
   } catch (error) {
     return reply.status(404).send({
-      error: error instanceof Error ? error.message : 'Failed to delete schedule'
+      error:
+        error instanceof Error ? error.message : 'Failed to delete schedule',
     });
   }
 };
-
-
