@@ -7,16 +7,14 @@ const envSchema = z.object({
   EXCHANGE_CLIENT_SECRET: z
     .string()
     .min(1, 'EXCHANGE_CLIENT_SECRET is required'),
-  EXCHANGE_REDIRECT_URI: z.string().default('http://localhost:8085/exchange/callback'),
+  EXCHANGE_REDIRECT_URI: z
+    .string()
+    .default('http://localhost:8080/exchange/callback'),
   APP_URL: z.string().default('http://192.168.2.128:5173'),
 
   SPOTIFY_CLIENT_ID: z.string().min(1, 'SPOTIFY_CLIENT_ID is required'),
-  SPOTIFY_CLIENT_SECRET: z
-    .string()
-    .min(1, 'SPOTIFY_CLIENT_SECRET is required'),
-  SPOTIFY_REDIRECT_URI: z
-    .string()
-    .min(1, 'SPOTIFY_REDIRECT_URI is required'),
+  SPOTIFY_CLIENT_SECRET: z.string().min(1, 'SPOTIFY_CLIENT_SECRET is required'),
+  SPOTIFY_REDIRECT_URI: z.string().min(1, 'SPOTIFY_REDIRECT_URI is required'),
 });
 
 // Parse and validate environment variables
@@ -27,8 +25,6 @@ if (!parsedEnv.success) {
   console.error('❌ Invalid environment variables:', parsedEnv.error.format());
   throw new Error('Invalid environment variables');
 }
-
-
 
 // Configuration with proper typing from validated env
 export const config = {

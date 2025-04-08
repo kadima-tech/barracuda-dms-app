@@ -5,21 +5,21 @@ import {
   ImageUploadResponse,
   SlideshowConfig,
   BallPosition,
-} from "./types";
-import { Server } from "socket.io";
+} from './types';
+import { Server } from 'socket.io';
 
-import { FastifyReply, FastifyRequest } from "fastify";
-import { createReadStream, statSync, createWriteStream } from "fs";
-import { join } from "path";
-import { logger } from "@kadima-tech/micro-service-base";
-import { pipeline } from "stream/promises";
-import { mkdir } from "fs/promises";
-import { existsSync } from "fs";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { createReadStream, statSync, createWriteStream } from 'fs';
+import { join } from 'path';
+import { logger } from '@kadima-tech/micro-service-base';
+import { pipeline } from 'stream/promises';
+import { mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
 
 // Map to store connected devices by `deviceId`
 const connectedDevices = new Map<string, DeviceSocket>();
 let io: Server;
-let currentBallHolder = "device1";
+let currentBallHolder = 'device1';
 let lastBallPosition: BallPosition & { velocity?: { x: number; y: number } } = {
   x: 100,
   y: 100,
@@ -61,12 +61,12 @@ export const registerDevice = (socket: DeviceSocket, deviceId: string) => {
 
     connectedDevices.set(deviceId, socket);
     if (io) {
-      io.emit("devicesUpdated");
+      io.emit('devicesUpdated');
     }
 
     return true;
   } catch (error) {
-    console.error("Error registering device:", error);
+    console.error('Error registering device:', error);
     return false;
   }
 };
@@ -94,7 +94,7 @@ export const handleDeviceMessage = (
   data: DeviceMetrics
 ) => {
   if (!socket.deviceId) {
-    logger.error("Received heartbeat from unregistered device");
+    logger.error('Received heartbeat from unregistered device');
     return;
   }
 
@@ -144,9 +144,9 @@ function checkForAlerts(deviceId: string, metrics: DeviceMetrics) {
   }
 
   if (alerts.length > 0) {
-    console.warn(`Alert for ${deviceId}:`, alerts.join(", "));
+    console.warn(`Alert for ${deviceId}:`, alerts.join(', '));
     if (io) {
-      io.emit("deviceAlert", { deviceId, alerts });
+      io.emit('deviceAlert', { deviceId, alerts });
     }
   }
 }
@@ -158,9 +158,9 @@ function checkForAlerts(deviceId: string, metrics: DeviceMetrics) {
  */
 function emitDeviceUpdate(deviceId: string, data: DeviceMetrics) {
   if (io) {
-    io.emit("deviceUpdate", { deviceId, ...data });
+    io.emit('deviceUpdate', { deviceId, ...data });
   } else {
-    console.error("Socket.IO server not initialized");
+    console.error('Socket.IO server not initialized');
   }
 }
 
@@ -174,7 +174,7 @@ export const getConnectedDevices = () => {
     if (socket.connected) {
       const deviceData: Device = {
         deviceId,
-        status: "connected" as const,
+        status: 'connected' as const,
         lastHeartbeat: socket.lastHeartbeat || Date.now(),
         metrics: {
           ...socket.data,
@@ -206,7 +206,7 @@ export const sendRebootCommand = async (deviceId: string) => {
     return { error: `Device ${deviceId} is disconnected` };
   }
 
-  deviceSocket.emit("reboot");
+  deviceSocket.emit('reboot');
   console.log(`Reboot command sent to device ${deviceId}`);
 
   // Set a timeout to check if the device reconnects after reboot
@@ -215,12 +215,12 @@ export const sendRebootCommand = async (deviceId: string) => {
     if (!updatedSocket || !updatedSocket.connected) {
       console.warn(`Device ${deviceId} did not reconnect after reboot`);
       if (io) {
-        io.emit("deviceRebootFailed", { deviceId });
+        io.emit('deviceRebootFailed', { deviceId });
       }
     } else {
       console.log(`Device ${deviceId} successfully reconnected after reboot`);
       if (io) {
-        io.emit("deviceRebootSuccess", { deviceId });
+        io.emit('deviceRebootSuccess', { deviceId });
       }
     }
   }, 180000); // Check after 3 minutes
@@ -240,29 +240,29 @@ export const streamVideoService = (
   videoName: string
 ) => {
   try {
-    console.log("Streaming video:", videoName);
-    const videoPath = join(__dirname, "../assets", videoName);
-    console.log("Video path:", videoPath);
+    console.log('Streaming video:', videoName);
+    const videoPath = join(__dirname, '../assets', videoName);
+    console.log('Video path:', videoPath);
 
     if (!existsSync(videoPath)) {
-      console.error("Video file not found:", videoPath);
-      return reply.status(404).send({ error: "Video not found" });
+      console.error('Video file not found:', videoPath);
+      return reply.status(404).send({ error: 'Video not found' });
     }
 
     const videoStat = statSync(videoPath);
     const fileSize = videoStat.size;
     const range = req.headers.range;
 
-    console.log("Video stats:", {
+    console.log('Video stats:', {
       size: fileSize,
-      range: range || "none",
+      range: range || 'none',
     });
 
     // Handle range request for partial content
     if (range) {
       const [start, end] = range
-        .replace(/bytes=/, "")
-        .split("-")
+        .replace(/bytes=/, '')
+        .split('-')
         .map(Number);
       const chunkStart = start || 0;
       const chunkEnd = end || fileSize - 1;
@@ -277,10 +277,10 @@ export const streamVideoService = (
       // Set appropriate headers for partial content response
       reply
         .code(206) // Partial Content
-        .header("Content-Range", `bytes ${chunkStart}-${chunkEnd}/${fileSize}`)
-        .header("Accept-Ranges", "bytes")
-        .header("Content-Length", chunkSize)
-        .header("Content-Type", "video/mp4");
+        .header('Content-Range', `bytes ${chunkStart}-${chunkEnd}/${fileSize}`)
+        .header('Accept-Ranges', 'bytes')
+        .header('Content-Length', chunkSize)
+        .header('Content-Type', 'video/mp4');
 
       return reply.send(fileStream);
     }
@@ -288,13 +288,13 @@ export const streamVideoService = (
     // Handle request without range (serve the entire video)
     const fileStream = createReadStream(videoPath);
     reply
-      .header("Content-Length", fileSize)
-      .header("Content-Type", "video/mp4");
+      .header('Content-Length', fileSize)
+      .header('Content-Type', 'video/mp4');
 
     return reply.send(fileStream);
   } catch (error) {
-    console.error("Error in streamVideoService:", error);
-    return reply.status(500).send({ error: "Failed to stream video" });
+    console.error('Error in streamVideoService:', error);
+    return reply.status(500).send({ error: 'Failed to stream video' });
   }
 };
 
@@ -305,11 +305,11 @@ export const streamVideoService = (
 //TODO: don't use any, but since it's a POC :)
 export const handleVideoUpload = async (file: any, deviceId?: string) => {
   try {
-    console.log("Starting video upload handling");
+    console.log('Starting video upload handling');
 
     // Ensure upload directory exists
-    const uploadDir = join(__dirname, "../assets");
-    console.log("Upload directory:", uploadDir);
+    const uploadDir = join(__dirname, '../assets');
+    console.log('Upload directory:', uploadDir);
 
     await mkdir(uploadDir, { recursive: true });
 
@@ -318,15 +318,15 @@ export const handleVideoUpload = async (file: any, deviceId?: string) => {
     const filename = `video-${timestamp}.mp4`;
     const filePath = join(uploadDir, filename);
 
-    console.log("Saving file to:", filePath);
+    console.log('Saving file to:', filePath);
 
     // Save the video file
     await pipeline(file.file, createWriteStream(filePath));
-    console.log("File saved successfully");
+    console.log('File saved successfully');
 
     // Create the full URL including the server base URL
     const videoUrl = `/devices/video?filename=${filename}`;
-    const fullUrl = `http://192.168.2.128:8085${videoUrl}`;
+    const fullUrl = `http://192.168.2.128:8080${videoUrl}`;
 
     // If deviceId is provided, send the URL to the device
     if (deviceId) {
@@ -336,7 +336,7 @@ export const handleVideoUpload = async (file: any, deviceId?: string) => {
 
     // Notify all connected clients about the new video
     if (io) {
-      io.emit("videoUpdated", {
+      io.emit('videoUpdated', {
         timestamp,
         url: videoUrl,
       });
@@ -348,9 +348,9 @@ export const handleVideoUpload = async (file: any, deviceId?: string) => {
       url: videoUrl,
     };
   } catch (error) {
-    console.error("Error in handleVideoUpload:", error);
+    console.error('Error in handleVideoUpload:', error);
     if (error instanceof Error) {
-      console.error("Error stack:", error.stack);
+      console.error('Error stack:', error.stack);
     }
     throw error;
   }
@@ -391,13 +391,13 @@ export const sendUrlToDevice = async (
     currentUrl: active ? url : undefined,
   };
 
-  deviceSocket.emit("displayUrl", { url, active });
+  deviceSocket.emit('displayUrl', { url, active });
 
   // Log the updated socket data
   logger.info(`Updated device data:`, deviceSocket.data);
 
   // Add confirmation log
-  deviceSocket.once("urlReceived", (data) => {
+  deviceSocket.once('urlReceived', (data) => {
     logger.info(`Device ${deviceId} confirmed URL receipt:`, data);
   });
 
@@ -410,18 +410,18 @@ export const handleImageUploads = async (
   deviceId?: string
 ): Promise<ImageUploadResponse[]> => {
   try {
-    console.log("Starting multiple image upload handling");
+    console.log('Starting multiple image upload handling');
 
     // Ensure upload directory exists
-    const uploadDir = join(__dirname, "../assets");
-    console.log("Upload directory:", uploadDir);
+    const uploadDir = join(__dirname, '../assets');
+    console.log('Upload directory:', uploadDir);
 
     await mkdir(uploadDir, { recursive: true });
 
     const uploadPromises = files.map(
       async (file): Promise<ImageUploadResponse> => {
         // Validate file type
-        if (!file.mimetype.startsWith("image/")) {
+        if (!file.mimetype.startsWith('image/')) {
           throw new Error(`Invalid file type: ${file.mimetype}`);
         }
 
@@ -429,7 +429,7 @@ export const handleImageUploads = async (
         const filename = `image-${timestamp}-${file.filename}`;
         const filePath = join(uploadDir, filename);
 
-        console.log("Processing file:", {
+        console.log('Processing file:', {
           originalName: file.filename,
           newPath: filePath,
           mimetype: file.mimetype,
@@ -438,14 +438,14 @@ export const handleImageUploads = async (
         // Save the file using pipeline
         try {
           await pipeline(file.file, createWriteStream(filePath));
-          console.log("File saved successfully:", filename);
+          console.log('File saved successfully:', filename);
         } catch (error) {
-          console.error("Error saving file:", error);
+          console.error('Error saving file:', error);
           throw error;
         }
 
         const imageUrl = `/devices/images?filename=${filename}`;
-        const fullUrl = `http://10.0.0.126:8085${imageUrl}`;
+        const fullUrl = `http://10.0.0.126:8080${imageUrl}`;
 
         return {
           path: filePath,
@@ -456,7 +456,7 @@ export const handleImageUploads = async (
     );
 
     const results = await Promise.all(uploadPromises);
-    console.log("Successfully processed all images:", results);
+    console.log('Successfully processed all images:', results);
 
     // If deviceId is provided, send the slideshow config to the device
     if (deviceId && results.length > 0) {
@@ -470,7 +470,7 @@ export const handleImageUploads = async (
 
     return results;
   } catch (error) {
-    console.error("Error in handleImageUploads:", error);
+    console.error('Error in handleImageUploads:', error);
     throw error;
   }
 };
@@ -489,7 +489,7 @@ export const sendSlideshowConfig = async (
     return { error: `Device ${deviceId} is disconnected` };
   }
 
-  deviceSocket.emit("slideshowConfig", config);
+  deviceSocket.emit('slideshowConfig', config);
   return { message: `Slideshow config sent to device ${deviceId}` };
 };
 
@@ -500,16 +500,16 @@ export const sendSlideshowConfig = async (
 // Helper function to get the next/previous device ID
 const getNextDeviceId = (
   currentDeviceId: string,
-  direction: "next" | "prev"
+  direction: 'next' | 'prev'
 ): string | null => {
   const devices = Array.from(connectedDevices.keys())
-    .filter((id) => id.startsWith("device"))
+    .filter((id) => id.startsWith('device'))
     .sort();
 
   const currentIndex = devices.indexOf(currentDeviceId);
   if (currentIndex === -1) return null;
 
-  if (direction === "next") {
+  if (direction === 'next') {
     const nextIndex = (currentIndex + 1) % devices.length;
     return devices[nextIndex];
   } else {
@@ -523,7 +523,7 @@ export const handleBallPosition = async (
   position: BallPosition & {
     velocity?: { x: number; y: number };
     transfer?: boolean;
-    direction?: "next" | "prev";
+    direction?: 'next' | 'prev';
   }
 ) => {
   if (deviceId !== currentBallHolder) return;
@@ -537,14 +537,14 @@ export const handleBallPosition = async (
     ((position.x >= screenWidth - 250 && position.velocity.x > 0) ||
       (position.x <= 0 && position.velocity.x < 0))
   ) {
-    const direction = position.velocity.x > 0 ? "next" : "prev";
+    const direction = position.velocity.x > 0 ? 'next' : 'prev';
     const targetDeviceId = getNextDeviceId(deviceId, direction);
 
     if (!targetDeviceId) {
       if (io) {
-        io.emit("ballPositionUpdate", {
+        io.emit('ballPositionUpdate', {
           deviceId,
-          x: direction === "next" ? screenWidth - 250 : 10,
+          x: direction === 'next' ? screenWidth - 250 : 10,
           y: position.y,
           velocity: {
             x: -position.velocity.x * 0.8,
@@ -562,14 +562,14 @@ export const handleBallPosition = async (
     const targetWidth = targetDevice?.data?.screenWidth || 1024;
 
     if (io) {
-      io.emit("ballHolderUpdate", {
+      io.emit('ballHolderUpdate', {
         currentHolder: targetDeviceId,
         previousHolder: deviceId,
       });
 
-      io.emit("ballPositionUpdate", {
+      io.emit('ballPositionUpdate', {
         deviceId: targetDeviceId,
-        x: direction === "next" ? 10 : targetWidth - 250,
+        x: direction === 'next' ? 10 : targetWidth - 250,
         y: position.y,
         velocity: position.velocity,
         timestamp: Date.now(),
@@ -580,7 +580,7 @@ export const handleBallPosition = async (
   }
 
   if (io) {
-    io.emit("ballPositionUpdate", {
+    io.emit('ballPositionUpdate', {
       ...position,
       deviceId,
       timestamp: Date.now(),
@@ -594,9 +594,9 @@ export const handleInitialBallPosition = (socket: DeviceSocket) => {
   if (!socket.deviceId) return;
 
   if (io) {
-    socket.emit("ballHolderUpdate", { currentHolder: currentBallHolder });
+    socket.emit('ballHolderUpdate', { currentHolder: currentBallHolder });
     if (socket.deviceId === currentBallHolder) {
-      socket.emit("ballPositionUpdate", {
+      socket.emit('ballPositionUpdate', {
         ...lastBallPosition,
         deviceId: currentBallHolder,
         timestamp: Date.now(),
@@ -618,7 +618,7 @@ const assignDeviceZones = () => {
 
     if (index > 0) {
       device.data.zone = {
-        position: "right",
+        position: 'right',
         x: 0,
         y: 0,
         width: 10,
@@ -628,7 +628,7 @@ const assignDeviceZones = () => {
 
     if (index < devices.length - 1) {
       device.data.zone = {
-        position: "left",
+        position: 'left',
         x: (device.data.screenWidth || 0) - 10,
         y: 0,
         width: 10,
@@ -640,7 +640,7 @@ const assignDeviceZones = () => {
   // Notify all devices of zone updates
   if (io) {
     io.emit(
-      "zonesUpdated",
+      'zonesUpdated',
       devices.map((d) => ({
         deviceId: d.deviceId,
         zone: d.data.zone,
@@ -665,26 +665,26 @@ export const getPersonForDevice = async (
   // For now, we'll use mock data
   const mockPersons: { [key: string]: PersonData } = {
     device1: {
-      id: "1",
-      name: "Marie-Antoinette van Leeuwenhoven",
-      roomNumber: "Kamer 02",
-      imageUrl: "/assets/person1.jpg",
+      id: '1',
+      name: 'Marie-Antoinette van Leeuwenhoven',
+      roomNumber: 'Kamer 02',
+      imageUrl: '/assets/person1.jpg',
     },
     device2: {
-      id: "2",
-      name: "Johannes van der Molen",
-      roomNumber: "Kamer 04",
-      imageUrl: "/assets/person2.jpg",
+      id: '2',
+      name: 'Johannes van der Molen',
+      roomNumber: 'Kamer 04',
+      imageUrl: '/assets/person2.jpg',
     },
     // Add more mock data as needed
   };
 
   return (
     mockPersons[deviceId] || {
-      id: "0",
-      name: "Niet toegewezen",
-      roomNumber: "Geen kamer",
-      imageUrl: "/assets/placeholder.jpg",
+      id: '0',
+      name: 'Niet toegewezen',
+      roomNumber: 'Geen kamer',
+      imageUrl: '/assets/placeholder.jpg',
     }
   );
 };

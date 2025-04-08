@@ -31,7 +31,7 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
   if (!process.env.EXCHANGE_REDIRECT_URI) {
     // Only override if not explicitly set
     process.env.EXCHANGE_REDIRECT_URI =
-      'http://localhost:8085/exchange/callback';
+      'http://localhost:8080/exchange/callback';
   }
 
   // Endpoint to initiate OAuth flow

@@ -23,7 +23,7 @@ const setup = async () => {
     logger.info('Starting setup of Fastify server...');
 
     // Get port from environment variable or use default
-    const port = process.env.PORT ? parseInt(process.env.PORT) : 8085;
+    const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
     logger.info(`Server will listen on port ${port}`);
 
     // Setup up Fastify
@@ -41,8 +41,8 @@ const setup = async () => {
         'http://localhost:5173',
         'http://192.168.2.128:5174',
         'http://localhost:5174',
-        'http://192.168.2.128:8085',
-        'http://localhost:8085',
+        'http://192.168.2.128:8080',
+        'http://localhost:8080',
         'http://192.168.2.128',
         'http://localhost',
       ],
@@ -69,8 +69,8 @@ const setup = async () => {
           'http://localhost:5173',
           'http://192.168.2.128:5174',
           'http://localhost:5174',
-          'http://192.168.2.128:8085',
-          'http://localhost:8085',
+          'http://192.168.2.128:8080',
+          'http://localhost:8080',
           'http://192.168.2.128',
           'http://localhost',
         ],
@@ -100,10 +100,10 @@ const setup = async () => {
       console.log(fastify.printRoutes());
     });
 
-    // Start Fastify server on port 8085
+    // Start Fastify server on port 8080
     await fastify.listen({ port: port, host: '::' });
     logger.info(
-      'Fastify HTTP server with Socket.IO started successfully on port 8085'
+      'Fastify HTTP server with Socket.IO started successfully on port 8080'
     );
   } catch (e) {
     logger.error('Failed to start service because of error:', e);
