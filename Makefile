@@ -10,8 +10,8 @@ endif
 stage   ?= local
 stages  ?= local development production
  
-GCR        ?= europe-west1-docker.pkg.dev/barracuda-dms-development/barracuda-dms
-WEB_BUCKET ?= barracuda-dms
+GCR        ?= europe-west1-docker.pkg.dev/kadima-terraform/barracuda-dms
+WEB_BUCKET ?= standin.works
 
 development_project_id  ?= barracuda-dms-development
 production_project_id   ?= barracuda-dms-production
