@@ -21,8 +21,8 @@ FROM --platform=linux/amd64 node:18-alpine AS runtime
 
 WORKDIR /app
 
-# Expose port 8081 for Socket.IO server
-EXPOSE 8081
+# Expose port 8080 for HTTP server
+EXPOSE 8080
 
 COPY --from=build-env /app/node_modules ./node_modules
 COPY . /app
