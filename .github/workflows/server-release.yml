@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'server/[0-9]+.[0-9]+.[0-9]+'
-    
+
 env:
   stage: production
   service: server
@@ -12,15 +12,15 @@ env:
 
 jobs:
   qa-release:
-    name: "Server (production)"
+    name: 'Server (production)'
     uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
-    
+
     with:
       project: barracuda-dms
       baseDir: server
       stage: production
       tag: ${{ github.head_ref || github.ref }}
-      postgres: true
+      postgres: false
 
     secrets:
       token: ${{ secrets.GH_ACCESS_TOKEN }}
