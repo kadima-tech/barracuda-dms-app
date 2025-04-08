@@ -12,16 +12,16 @@ on:
 
 jobs:
   qa-deploy:
-    name: "Web (development)"
+    name: 'Web (development)'
     uses: kadima-tech/actions/.github/workflows/node-deploy.yml@master
     with:
-      project: <barracuda-dms>
+      project: barracuda-dms
       baseDir: web
       stage: development
       tag: latest
       scope: kadima-tech
       artifact-repository-project: kadima-terraform
-      
+
     secrets:
       token: ${{ secrets.GH_ACCESS_TOKEN }}
       artifact_registry_upload_key: ${{ secrets.ARTIFACT_REGISTRY_UPLOAD_KEY }}
