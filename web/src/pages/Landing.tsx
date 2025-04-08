@@ -40,6 +40,10 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    height: 3.5rem;
+  }
 `;
 
 const HeaderContent = styled.div`
@@ -60,6 +64,10 @@ const Logo = styled.div`
     height: 3.5rem;
     width: auto;
     margin-right: 0.5rem;
+
+    @media (max-width: 768px) {
+      height: 2.5rem;
+    }
   }
 
   h1 {
@@ -67,6 +75,10 @@ const Logo = styled.div`
     align-items: center;
     font-size: 1.8rem;
     margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.4rem;
+    }
   }
 `;
 
@@ -80,6 +92,10 @@ const GradientText = styled.span`
   text-shadow: 0px 2px 4px rgba(10, 143, 136, 0.2);
   position: relative;
   display: inline-block;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const Divider = styled.span`
@@ -95,6 +111,10 @@ const Punchline = styled.span`
   font-weight: 500;
   letter-spacing: 0.01em;
   opacity: 0.85;
+
+  @media (max-width: 768px) {
+    font-size: 0.65rem;
+  }
 `;
 
 const Hero = styled.section`
@@ -110,6 +130,11 @@ const Hero = styled.section`
   display: flex;
   align-items: center;
   min-height: 60vh;
+
+  @media (max-width: 768px) {
+    padding: 4rem 0 3rem;
+    min-height: 50vh;
+  }
 
   &:after {
     content: '';
@@ -131,6 +156,10 @@ const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+  }
 `;
 
 const HeroContent = styled.div`
@@ -149,6 +178,11 @@ const HeroContent = styled.div`
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
   }
 
   p {
@@ -157,6 +191,11 @@ const HeroContent = styled.div`
     margin: 0 auto 2rem;
     opacity: 0.95;
     line-height: 1.7;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin: 0 auto 1.5rem;
+    }
   }
 `;
 
@@ -171,6 +210,11 @@ const Button = styled.a`
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 1.1rem;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+  }
 
   &:hover {
     transform: translateY(-3px);
@@ -212,12 +256,21 @@ const SectionTitle = styled.h3`
 
 const FeaturesContainer = styled.div`
   padding: 2rem 2.5rem 3rem;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem 2rem;
+  }
 `;
 
 const FeaturesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 `;
 
 const FeatureCard = styled.div`
@@ -230,6 +283,10 @@ const FeatureCard = styled.div`
   flex-direction: column;
   height: 100%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    margin: 0 0.5rem;
+  }
 
   &:hover {
     transform: translateY(-5px);
@@ -246,6 +303,11 @@ const FeatureImage = styled.div`
   padding: 2.5rem;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: 180px;
+    padding: 1.5rem;
+  }
 
   &:after {
     content: '';
@@ -350,6 +412,11 @@ const BenefitsList = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 `;
 
 const BenefitItem = styled.div`
@@ -362,6 +429,11 @@ const BenefitItem = styled.div`
   transition: all 0.3s ease;
   height: 100%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 1rem;
+  }
 
   &:hover {
     transform: translateY(-3px);
@@ -380,6 +452,12 @@ const BenefitIcon = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 12px;
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
 `;
 
 const BenefitContent = styled.div`
@@ -388,12 +466,22 @@ const BenefitContent = styled.div`
     margin-bottom: 0.75rem;
     color: #2d3748;
     font-weight: 700;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
   }
 
   p {
     color: #4a5568;
     font-size: 0.95rem;
     line-height: 1.7;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
   }
 `;
 
@@ -406,6 +494,11 @@ const ApplicationsList = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   text-align: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 `;
 
 const ApplicationItem = styled.div`
@@ -420,6 +513,10 @@ const ApplicationItem = styled.div`
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(12, 186, 177, 0.12);
@@ -430,6 +527,11 @@ const ApplicationItem = styled.div`
     margin-bottom: 0.75rem;
     color: #2d3748;
     font-weight: 600;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
   }
 
   p {
@@ -437,6 +539,11 @@ const ApplicationItem = styled.div`
     font-size: 0.9rem;
     line-height: 1.6;
     text-align: center;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
   }
 `;
 
@@ -451,6 +558,14 @@ const ApplicationIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    border-radius: 15px;
+  }
 `;
 
 const Footer = styled.footer`
@@ -458,6 +573,10 @@ const Footer = styled.footer`
   padding: 1.5rem 0;
   border-top: 2px solid #0cbab1;
   margin-top: auto;
+
+  @media (max-width: 768px) {
+    padding: 1rem 0;
+  }
 `;
 
 const FooterContent = styled.div`
@@ -466,6 +585,12 @@ const FooterContent = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
 `;
 
 const FooterLeft = styled.div`
@@ -473,6 +598,11 @@ const FooterLeft = styled.div`
   align-items: center;
   gap: 2rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 `;
 
 const BrandName = styled.a`
@@ -480,11 +610,19 @@ const BrandName = styled.a`
   font-size: 1.1rem;
   font-weight: 600;
   text-decoration: none;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const Copyright = styled.div`
   color: #4a5568;
   font-size: 0.9rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const DeveloperInfo = styled.div`
@@ -509,11 +647,19 @@ const FooterLinks = styled.div`
   display: flex;
   gap: 2rem;
 
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
+
   a {
     color: #a0aec0;
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.2s ease;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
 
     &:hover {
       color: #0cbab1;
@@ -525,11 +671,19 @@ const SocialLinks = styled.div`
   display: flex;
   gap: 1rem;
 
+  @media (max-width: 768px) {
+    margin-top: 0.5rem;
+  }
+
   a {
     color: #a0aec0;
     text-decoration: none;
     font-size: 1.2rem;
     transition: color 0.2s ease;
+
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+    }
 
     &:hover {
       color: #0cbab1;
