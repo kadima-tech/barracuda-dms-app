@@ -1,7 +1,8 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { ExchangeService, config } from "./service";
-import { logger } from "@kadima-tech/micro-service-base";
-import { BookingRequest } from "./schema";
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { ExchangeService } from './service';
+import { logger } from '@kadima-tech/micro-service-base';
+import { BookingRequest } from './schema';
+import { config } from '../config';
 
 const exchangeService = ExchangeService.getInstance();
 
@@ -9,17 +10,17 @@ const exchangeService = ExchangeService.getInstance();
 export default async function exchangeRoutes(fastify: FastifyInstance) {
   // Add this special proxy handler at the top of the routes function
   fastify.get(
-    "/proxy-redirect",
+    '/proxy-redirect',
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        logger.info("Handling proxy redirect");
+        logger.info('Handling proxy redirect');
         // Redirect to the actual app URL with successful authentication
         return reply.redirect(
           `${config.APP_URL}/room-booking/booking-dashboard`
         );
       } catch (error) {
-        logger.error("Error in proxy redirect:", error);
-        return reply.code(500).send("Error redirecting");
+        logger.error('Error in proxy redirect:', error);
+        return reply.code(500).send('Error redirecting');
       }
     }
   );
@@ -27,14 +28,15 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
   // Update the REDIRECT_URI to use localhost but redirect to our proxy
   const actualAppUrl = config.APP_URL; // Store the actual app URL for redirects
   // This is a hack to make Azure AD happy while still working with IP addresses
-  if (!process.env.REDIRECT_URI) {
+  if (!process.env.EXCHANGE_REDIRECT_URI) {
     // Only override if not explicitly set
-    config.REDIRECT_URI = "http://localhost:8085/exchange/callback";
+    process.env.EXCHANGE_REDIRECT_URI =
+      'http://localhost:8085/exchange/callback';
   }
 
   // Endpoint to initiate OAuth flow
   fastify.get(
-    "/auth",
+    '/auth',
     async (
       request: FastifyRequest<{
         Querystring: {
@@ -53,21 +55,21 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
 
         // Create a state object with return_host and other metadata
         const stateObj = {
-          flow: "authentication",
+          flow: 'authentication',
           timestamp: Date.now(),
           return_host: return_host || null,
-          admin_consent: admin_consent === "true",
+          admin_consent: admin_consent === 'true',
         };
 
         const stateString = Buffer.from(JSON.stringify(stateObj)).toString(
-          "base64"
+          'base64'
         );
         logger.info(
           `Generated state parameter with payload: ${JSON.stringify(stateObj)}`
         );
 
         // Get authorization URL - if admin_consent=true, use the admin consent version
-        const useAdminConsent = admin_consent === "true";
+        const useAdminConsent = admin_consent === 'true';
         const authUrl = await exchangeService.getAuthorizationUrl(
           stateString,
           useAdminConsent
@@ -76,13 +78,13 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
         logger.info(`Redirecting to auth URL: ${authUrl}`);
         return reply.redirect(authUrl);
       } catch (error) {
-        logger.error("Error initiating auth flow:", error);
+        logger.error('Error initiating auth flow:', error);
         return reply.code(500).send(`
           <html>
             <body>
               <h2>Authentication Error</h2>
               <p>Error initiating authentication: ${
-                error instanceof Error ? error.message : "Unknown error"
+                error instanceof Error ? error.message : 'Unknown error'
               }</p>
               <p><a href="/">Return to dashboard</a></p>
             </body>
@@ -94,7 +96,7 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
 
   // Special endpoint just for admin consent
   fastify.get(
-    "/admin-consent",
+    '/admin-consent',
     async (
       request: FastifyRequest<{
         Querystring: { return_host?: string };
@@ -104,18 +106,18 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
       try {
         const { return_host } = request.query;
         logger.info(
-          "Admin consent initiated, capturing return host:",
+          'Admin consent initiated, capturing return host:',
           return_host
         );
 
         // Generate a state that includes return information if needed
         const stateObj = {
-          flow: "admin_consent",
+          flow: 'admin_consent',
           timestamp: Date.now(),
           return_host: return_host || null,
         };
         const stateParam = Buffer.from(JSON.stringify(stateObj)).toString(
-          "base64"
+          'base64'
         );
 
         // Get admin consent URL using new parameter
@@ -129,13 +131,13 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
         );
         return reply.redirect(adminConsentUrl);
       } catch (error) {
-        logger.error("Error initiating admin consent flow:", error);
+        logger.error('Error initiating admin consent flow:', error);
         return reply.code(500).send(`
           <html>
             <body>
               <h2>Error Requesting Admin Consent</h2>
               <p>There was a problem initiating the admin consent flow: ${
-                error instanceof Error ? error.message : "Unknown error"
+                error instanceof Error ? error.message : 'Unknown error'
               }</p>
               <p>Please ensure you are using an account with administrative privileges for your Azure AD tenant.</p>
               <p><a href="/">Return to dashboard</a></p>
@@ -148,7 +150,7 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
 
   // Callback endpoint for OAuth response
   fastify.get(
-    "/callback",
+    '/callback',
     async (
       request: FastifyRequest<{
         Querystring: {
@@ -166,9 +168,9 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
         logger.info(`Received callback with query: ${JSON.stringify(query)}`);
 
         // Handle admin consent response
-        if (query.admin_consent === "true") {
-          logger.info("Admin consent was granted");
-          return reply.code(200).type("text/html").send(`
+        if (query.admin_consent === 'true') {
+          logger.info('Admin consent was granted');
+          return reply.code(200).type('text/html').send(`
             <html>
               <body>
                 <h2>Admin Consent Granted</h2>
@@ -184,7 +186,7 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
         let returnHost: string | undefined;
         if (query.state) {
           try {
-            const stateBuffer = Buffer.from(query.state, "base64");
+            const stateBuffer = Buffer.from(query.state, 'base64');
             const stateData = JSON.parse(stateBuffer.toString());
 
             // Extract return_host from state if present
@@ -194,22 +196,22 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
             }
 
             // Check if this was an admin consent flow
-            if (stateData && stateData.flow === "admin_consent") {
-              logger.info("This was an admin consent flow");
+            if (stateData && stateData.flow === 'admin_consent') {
+              logger.info('This was an admin consent flow');
               // If we got here without an admin_consent=true parameter, it means the user didn't complete admin consent
               if (query.error) {
                 logger.error(
                   `Admin consent error: ${query.error} - ${
-                    query.error_description || "No description"
+                    query.error_description || 'No description'
                   }`
                 );
-                return reply.code(400).type("text/html").send(`
+                return reply.code(400).type('text/html').send(`
                   <html>
                     <body>
                       <h2>Admin Consent Was Not Granted</h2>
                       <p>Error: ${query.error}</p>
                       <p>Description: ${
-                        query.error_description || "No description provided"
+                        query.error_description || 'No description provided'
                       }</p>
                       <p>The administrator didn't grant consent for the application.</p>
                       <p>Please ensure you're signed in with an administrator account for your organization.</p>
@@ -219,7 +221,7 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
                 `);
               }
 
-              return reply.code(200).type("text/html").send(`
+              return reply.code(200).type('text/html').send(`
                 <html>
                   <body>
                     <h2>Admin Consent Process Complete</h2>
@@ -231,18 +233,18 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
               `);
             }
           } catch (err) {
-            logger.error("Failed to parse state parameter:", err);
+            logger.error('Failed to parse state parameter:', err);
             // Continue with normal flow if state parsing fails
           }
         }
 
         // Check for error in the OAuth response
         if (query.error) {
-          const errorDesc = query.error_description || "Unknown error";
+          const errorDesc = query.error_description || 'Unknown error';
           logger.error(`Authentication error: ${query.error} - ${errorDesc}`);
 
           // Provide a user-friendly error response
-          return reply.code(400).type("text/html").send(`
+          return reply.code(400).type('text/html').send(`
               <html>
                 <body>
                   <h2>Authentication Failed</h2>
@@ -257,17 +259,17 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
 
         // Check for authorization code
         if (!query.code) {
-          logger.error("No authorization code received in callback");
-          return reply.redirect("/?error=no_code");
+          logger.error('No authorization code received in callback');
+          return reply.redirect('/?error=no_code');
         }
 
-        logger.info("Authorization code received, exchanging for tokens");
+        logger.info('Authorization code received, exchanging for tokens');
 
         // Get the return host from query parameters or state
         const success = await exchangeService.exchangeCodeForToken(query.code);
 
         if (success) {
-          logger.info("Token exchange successful, redirecting to dashboard");
+          logger.info('Token exchange successful, redirecting to dashboard');
 
           // Redirect to the appropriate host (either localhost or the original host)
           if (returnHost) {
@@ -275,10 +277,10 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
               `http://${returnHost}:5173/exchange/dashboard`
             );
           } else {
-            return reply.redirect("/exchange/dashboard");
+            return reply.redirect('/exchange/dashboard');
           }
         } else {
-          logger.error("Token exchange failed, redirecting to error page");
+          logger.error('Token exchange failed, redirecting to error page');
 
           // Redirect with error
           if (returnHost) {
@@ -287,59 +289,59 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
             );
           } else {
             return reply.redirect(
-              "/exchange/dashboard?error=token_exchange_failed"
+              '/exchange/dashboard?error=token_exchange_failed'
             );
           }
         }
       } catch (error) {
         logger.error(`Error in callback handler: ${error}`);
-        return reply.redirect("/?error=callback_error");
+        return reply.redirect('/?error=callback_error');
       }
     }
   );
 
   // Endpoint to check auth status
   fastify.get(
-    "/status",
+    '/status',
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const isAuthenticated = await exchangeService.hasValidCredentials();
         logger.info(
           `Auth status check: ${
-            isAuthenticated ? "Authenticated" : "Not authenticated"
+            isAuthenticated ? 'Authenticated' : 'Not authenticated'
           }`
         );
         return reply.send({ authenticated: isAuthenticated });
       } catch (error) {
-        logger.error("Error checking auth status:", error);
+        logger.error('Error checking auth status:', error);
         return reply
           .code(500)
-          .send({ authenticated: false, error: "Error checking status" });
+          .send({ authenticated: false, error: 'Error checking status' });
       }
     }
   );
 
   // Endpoint to get all rooms
   fastify.get(
-    "/rooms",
+    '/rooms',
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        logger.info("Fetching all rooms");
+        logger.info('Fetching all rooms');
         const rooms = await exchangeService.getAllRooms();
         logger.info(`Retrieved ${rooms?.length || 0} rooms`);
 
         // Check if rooms is undefined, null, or empty array
         if (!rooms || (Array.isArray(rooms) && rooms.length === 0)) {
-          logger.warn("No rooms found or empty rooms array returned");
-          return reply.send({ rooms: [], message: "No rooms available" });
+          logger.warn('No rooms found or empty rooms array returned');
+          return reply.send({ rooms: [], message: 'No rooms available' });
         }
 
         return reply.send({ rooms });
       } catch (error) {
-        logger.error("Error fetching rooms:", error);
+        logger.error('Error fetching rooms:', error);
         return reply.code(500).send({
-          error: "Failed to fetch rooms",
-          details: error instanceof Error ? error.message : "Unknown error",
+          error: 'Failed to fetch rooms',
+          details: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -347,7 +349,7 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
 
   // Endpoint to get room info
   fastify.get(
-    "/rooms/:roomId",
+    '/rooms/:roomId',
     async (
       request: FastifyRequest<{
         Params: { roomId: string };
@@ -358,34 +360,34 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
         const { roomId } = request.params;
 
         if (!roomId) {
-          return reply.code(400).send({ error: "Room ID is required" });
+          return reply.code(400).send({ error: 'Room ID is required' });
         }
 
         const roomInfo = await exchangeService.getRoomInfo(roomId);
 
         if (!roomInfo) {
-          return reply.code(404).send({ error: "Room not found" });
+          return reply.code(404).send({ error: 'Room not found' });
         }
 
         return reply.send(roomInfo);
       } catch (error) {
-        logger.error("Error fetching room info:", error);
-        return reply.code(500).send({ error: "Failed to fetch room info" });
+        logger.error('Error fetching room info:', error);
+        return reply.code(500).send({ error: 'Failed to fetch room info' });
       }
     }
   );
 
   // Endpoint to book a room
   fastify.post(
-    "/rooms/:roomId/book",
+    '/rooms/:roomId/book',
     {
       schema: {
         body: {
-          type: "object",
-          required: ["duration"],
+          type: 'object',
+          required: ['duration'],
           properties: {
-            duration: { type: "number" },
-            title: { type: "string" },
+            duration: { type: 'number' },
+            title: { type: 'string' },
           },
         },
       },
@@ -402,19 +404,19 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
         const bookingRequest = request.body;
 
         if (!roomId) {
-          return reply.code(400).send({ error: "Room ID is required" });
+          return reply.code(400).send({ error: 'Room ID is required' });
         }
 
         const result = await exchangeService.bookRoom(roomId, bookingRequest);
 
         if (!result.success) {
-          return reply.code(500).send({ error: "Failed to book room" });
+          return reply.code(500).send({ error: 'Failed to book room' });
         }
 
         return reply.send(result);
       } catch (error) {
-        logger.error("Error booking room:", error);
-        return reply.code(500).send({ error: "Failed to book room" });
+        logger.error('Error booking room:', error);
+        return reply.code(500).send({ error: 'Failed to book room' });
       }
     }
   );
@@ -432,10 +434,10 @@ export async function getRoomInfo(
     logger.info(`[CONTROLLER] Getting room info for room ID: ${roomId}`);
 
     if (!exchangeService) {
-      logger.error("[CONTROLLER] Exchange service not initialized");
+      logger.error('[CONTROLLER] Exchange service not initialized');
       return reply.code(500).send({
         success: false,
-        error: "Exchange service not initialized",
+        error: 'Exchange service not initialized',
       });
     }
 
@@ -452,7 +454,7 @@ export async function getRoomInfo(
       );
       return reply.code(404).send({
         success: false,
-        error: "Room not found or error retrieving room info",
+        error: 'Room not found or error retrieving room info',
       });
     }
 
@@ -484,13 +486,13 @@ export async function getRoomInfo(
     // Check for specific error types and return appropriate responses
     if (
       error &&
-      typeof error === "object" &&
-      "name" in error &&
-      error.name === "AuthError"
+      typeof error === 'object' &&
+      'name' in error &&
+      error.name === 'AuthError'
     ) {
       return reply.code(401).send({
         success: false,
-        error: "Authentication error",
+        error: 'Authentication error',
         details: error instanceof Error ? error.message : String(error),
       });
     }

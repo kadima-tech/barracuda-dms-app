@@ -10,6 +10,9 @@ import { Client } from '@microsoft/microsoft-graph-client';
 import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
 import { ClientSecretCredential } from '@azure/identity';
 
+// Re-export config for use in other modules
+export { config };
+
 // In-memory storage for credentials (in a real app, use a database)
 let exchangeCredentials: ExchangeCredentials | null = null;
 
