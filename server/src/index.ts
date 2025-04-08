@@ -26,11 +26,10 @@ const setup = async () => {
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8085;
     logger.info(`Server will listen on port ${port}`);
 
-    // Setup up Fastify on the specified port
+    // Setup up Fastify
     const { fastify } = await createMicroService({
       title: 'BarracudaDMS Service',
       routes: [],
-      port: port,
     });
 
     logger.info('Fastify instance created successfully.');
