@@ -1,31 +1,30 @@
-import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../../utils/api/config";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { paths } from "../../config/paths";
+import { useEffect } from 'react';
+import { API_BASE_URL } from '../../utils/api/config';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { paths } from '../../config/paths';
 
-const LoadingContainer = styled.div`
+const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 100vw;
-  background: #121212;
+  background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
   color: #1db954;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 600;
 `;
 
-const SpotifyAuth: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+const SpotifyAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     // Check if we're returning from Spotify auth (URL has error or code param)
     const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get("error");
+    const error = urlParams.get('error');
 
     if (error) {
-      console.error("Spotify authentication error:", error);
+      console.error('Spotify authentication error:', error);
       // Navigate to music dashboard with error parameter
       navigate(`${paths.spotify.musicDashboard}?error=${error}`, {
         replace: true,
@@ -39,7 +38,7 @@ const SpotifyAuth: React.FC = () => {
         const response = await fetch(
           `${API_BASE_URL}/spotify/currently-playing`,
           {
-            credentials: "include",
+            credentials: 'include',
           }
         );
 
@@ -51,18 +50,20 @@ const SpotifyAuth: React.FC = () => {
           navigate(paths.spotify.musicDashboard, { replace: true });
         }
       } catch (error) {
-        console.error("Error checking authentication:", error);
+        console.error('Error checking authentication:', error);
         // On error, try to authenticate
         window.location.href = `${API_BASE_URL}/spotify`;
-      } finally {
-        setIsLoading(false);
       }
     }
 
     checkAuth();
   }, [navigate]);
 
-  return <LoadingContainer>Connecting to Spotify...</LoadingContainer>;
+  return (
+    <AuthContainer>
+      <h1>Authenticating with Spotify...</h1>
+    </AuthContainer>
+  );
 };
 
 export default SpotifyAuth;

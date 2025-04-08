@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { RoomInfo, Meeting } from "./types";
-import { useTheme } from "./ThemeContext";
-import { parseTime, formatTimeForDisplay, findCurrentMeeting } from "./utils";
+import React, { useState } from 'react';
+import { RoomInfo } from './types';
+import { useTheme } from './ThemeContext';
+import { parseTime, formatTimeForDisplay } from './utils';
 import {
   MeetingsList as MeetingsListContainer,
   MeetingItem,
@@ -16,9 +16,9 @@ import {
   TimeLabel,
   TimeMarker,
   CurrentTimeIndicator,
-} from "./StyledComponents.ts";
-import styled from "styled-components";
-import { cancelMeeting, cancelMeeting2 } from "../../services/exchange-api";
+} from './StyledComponents.ts';
+import styled from 'styled-components';
+import { cancelMeeting, cancelMeeting2 } from '../../services/exchange-api';
 
 interface MeetingsListProps {
   roomInfo: RoomInfo | null;
@@ -48,28 +48,10 @@ const CancelButton = styled.button`
 
 const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const isDark = theme === 'dark';
   const [cancellingMeetingId, setCancellingMeetingId] = useState<string | null>(
     null
   );
-
-  // Effect to handle responsive design
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth <= 768);
-    };
-
-    // Initial check
-    checkScreenSize();
-
-    // Add event listener for window resize
-    window.addEventListener("resize", checkScreenSize);
-
-    // Clean up
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
 
   // If no room info, return nothing
   if (!roomInfo) {
@@ -82,7 +64,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
   // Add this function to handle meeting cancellation
   const handleCancelMeeting = async (meetingId: string, roomId: string) => {
     if (!roomId || !meetingId) {
-      console.error("Cannot cancel meeting: Missing roomId or meetingId");
+      console.error('Cannot cancel meeting: Missing roomId or meetingId');
       return;
     }
 
@@ -90,9 +72,9 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
     console.log(`Meeting ID details:`, {
       meetingId,
       length: meetingId.length,
-      containsSlash: meetingId.includes("/"),
-      containsPlus: meetingId.includes("+"),
-      containsEquals: meetingId.includes("="),
+      containsSlash: meetingId.includes('/'),
+      containsPlus: meetingId.includes('+'),
+      containsEquals: meetingId.includes('='),
     });
 
     setCancellingMeetingId(meetingId);
@@ -147,14 +129,14 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
         {roomInfo.upcomingMeetings?.length === 0 && (
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "200px",
-              color: "#64748b",
-              textAlign: "center",
-              padding: "0 20px",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '200px',
+              color: '#64748b',
+              textAlign: 'center',
+              padding: '0 20px',
             }}
           >
             <svg
@@ -185,10 +167,10 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                 strokeLinejoin="round"
               />
             </svg>
-            <p style={{ marginTop: "16px", fontSize: "16px" }}>
+            <p style={{ marginTop: '16px', fontSize: '16px' }}>
               No meetings scheduled for this room today
             </p>
-            <p style={{ fontSize: "14px" }}>
+            <p style={{ fontSize: '14px' }}>
               The room is available for booking
             </p>
           </div>
@@ -198,26 +180,26 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
         {roomInfo.upcomingMeetings && roomInfo.upcomingMeetings.length > 0 && (
           <div
             style={{
-              marginBottom: "16px",
-              padding: "10px 16px",
-              background: "#f0f9ff",
-              borderRadius: "12px",
-              display: "flex",
-              alignItems: "center",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-              border: "1px solid rgba(3, 105, 161, 0.1)",
+              marginBottom: '16px',
+              padding: '10px 16px',
+              background: '#f0f9ff',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+              border: '1px solid rgba(3, 105, 161, 0.1)',
             }}
           >
             <span
               style={{
-                color: "#0369a1",
-                fontWeight: "500",
-                fontSize: "15px",
+                color: '#0369a1',
+                fontWeight: '500',
+                fontSize: '15px',
               }}
             >
               {roomInfo.upcomingMeetings.length
                 ? `${roomInfo.upcomingMeetings.length} meetings found for today`
-                : "No meetings found for this room today"}
+                : 'No meetings found for this room today'}
             </span>
           </div>
         )}
@@ -234,20 +216,18 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
           return (
             <MeetingItem
               key={meeting.id}
-              $isActive={isActive}
+              isActive={isActive}
               $isDark={isDark}
               style={{
-                opacity: isPast ? 0.7 : 1,
-                background: isPast
-                  ? "#f3f4f6"
-                  : isActive
-                  ? "#eff6ff"
-                  : "#f8fafc",
-                borderLeft: isPast
-                  ? "3px solid #9ca3af"
-                  : isActive
-                  ? "4px solid #3b82f6"
-                  : "4px solid #e2e8f0",
+                opacity: isActive ? 1 : 0.7,
+                background: isActive
+                  ? 'var(--active-meeting-bg)'
+                  : 'var(--inactive-meeting-bg)',
+                borderLeft: `4px solid ${
+                  isActive
+                    ? 'var(--active-meeting-border)'
+                    : 'var(--inactive-meeting-border)'
+                }`,
               }}
             >
               <MeetingTime>
@@ -256,10 +236,10 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                 </MeetingTimeText>
                 <div
                   style={{
-                    height: "1px",
-                    background: "#e2e8f0",
-                    width: "20px",
-                    margin: "4px 0",
+                    height: '1px',
+                    background: '#e2e8f0',
+                    width: '20px',
+                    margin: '4px 0',
                   }}
                 ></div>
                 <MeetingTimeText>
@@ -272,13 +252,13 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                   {isActive && (
                     <span
                       style={{
-                        marginLeft: "8px",
-                        fontSize: "12px",
-                        background: "#ef4444",
-                        color: "white",
-                        padding: "2px 6px",
-                        borderRadius: "10px",
-                        fontWeight: "500",
+                        marginLeft: '8px',
+                        fontSize: '12px',
+                        background: '#ef4444',
+                        color: 'white',
+                        padding: '2px 6px',
+                        borderRadius: '10px',
+                        fontWeight: '500',
                       }}
                     >
                       NOW
@@ -287,13 +267,13 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                   {isPast && (
                     <span
                       style={{
-                        marginLeft: "8px",
-                        fontSize: "12px",
-                        background: "#9ca3af",
-                        color: "white",
-                        padding: "2px 6px",
-                        borderRadius: "10px",
-                        fontWeight: "500",
+                        marginLeft: '8px',
+                        fontSize: '12px',
+                        background: '#9ca3af',
+                        color: 'white',
+                        padding: '2px 6px',
+                        borderRadius: '10px',
+                        fontWeight: '500',
                       }}
                     >
                       ENDED
@@ -302,28 +282,28 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                   {!isPast && (
                     <CancelButton
                       onClick={() =>
-                        handleCancelMeeting(meeting.id, roomInfo?.id || "")
+                        handleCancelMeeting(meeting.id, roomInfo?.id || '')
                       }
                       disabled={
                         cancellingMeetingId === meeting.id || !roomInfo?.id
                       }
                     >
                       {cancellingMeetingId === meeting.id
-                        ? "Cancelling..."
-                        : "Cancel"}
+                        ? 'Cancelling...'
+                        : 'Cancel'}
                     </CancelButton>
                   )}
                 </MeetingTitle>
                 <MeetingInfo>
                   {meeting.organizer && (
-                    <span style={{ display: "flex", alignItems: "center" }}>
+                    <span style={{ display: 'flex', alignItems: 'center' }}>
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        style={{ marginRight: "4px" }}
+                        style={{ marginRight: '4px' }}
                       >
                         <path
                           d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z"
@@ -338,17 +318,17 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                     </span>
                   )}
                   {meeting.attendees && meeting.organizer && (
-                    <span style={{ margin: "0 6px" }}>•</span>
+                    <span style={{ margin: '0 6px' }}>•</span>
                   )}
                   {meeting.attendees && (
-                    <span style={{ display: "flex", alignItems: "center" }}>
+                    <span style={{ display: 'flex', alignItems: 'center' }}>
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        style={{ marginRight: "4px" }}
+                        style={{ marginRight: '4px' }}
                       >
                         <path
                           d="M16 21V19C16 16.7909 14.2091 15 12 15H5C2.79086 15 1 16.7909 1 19V21"
@@ -387,22 +367,22 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
 
         {/* Available time slot after meetings */}
         {roomInfo.upcomingMeetings?.length > 0 &&
-          roomInfo.availabilityStatus !== "busy" && (
+          roomInfo.availabilityStatus !== 'busy' && (
             <MeetingItem
               style={{
-                marginTop: "16px",
-                background: "#ecfdf5",
-                borderLeft: "4px solid #10b981",
+                marginTop: '16px',
+                background: '#ecfdf5',
+                borderLeft: '4px solid #10b981',
               }}
             >
               <MeetingTime>
                 <MeetingTimeText>Now</MeetingTimeText>
                 <div
                   style={{
-                    height: "1px",
-                    background: "#e2e8f0",
-                    width: "20px",
-                    margin: "4px 0",
+                    height: '1px',
+                    background: '#e2e8f0',
+                    width: '20px',
+                    margin: '4px 0',
                   }}
                 ></div>
                 <MeetingTimeText>EOD</MeetingTimeText>
@@ -410,10 +390,10 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
               <MeetingDetails>
                 <MeetingTitle
                   style={{
-                    color: "#10b981",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
+                    color: '#10b981',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
                   }}
                 >
                   <svg
@@ -430,7 +410,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                   </svg>
                   Available for booking
                 </MeetingTitle>
-                <MeetingInfo style={{ color: "#10b981" }}>
+                <MeetingInfo style={{ color: '#10b981' }}>
                   Room is free for the rest of the day
                 </MeetingInfo>
               </MeetingDetails>
@@ -472,7 +452,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
             ...(roomInfo?.currentMeeting ? [roomInfo.currentMeeting] : []),
           ];
 
-          return timeSlots.map((hour, index) => {
+          return timeSlots.map((hour) => {
             // Check if there are meetings overlapping with this hour
             const hasMeetingAtThisHour = allMeetings.some((meeting) => {
               // Get start and end times for the meeting
@@ -486,7 +466,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
               if (startTimeParts.length > 2) {
                 const startIsPM = startTimeParts[2]
                   ?.toUpperCase()
-                  .includes("PM");
+                  .includes('PM');
                 if (startIsPM && startHour !== 12) {
                   startHour += 12;
                 } else if (!startIsPM && startHour === 12) {
@@ -495,7 +475,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
               }
 
               if (endTimeParts.length > 2) {
-                const endIsPM = endTimeParts[2]?.toUpperCase().includes("PM");
+                const endIsPM = endTimeParts[2]?.toUpperCase().includes('PM');
                 if (endIsPM && endHour !== 12) {
                   endHour += 12;
                 } else if (!endIsPM && endHour === 12) {
@@ -529,14 +509,14 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
             const isCurrentHour = currentHour === hour;
 
             // Determine marker type based on meetings and current time
-            let markerType: "available" | "busy" = "available";
+            let markerType: 'available' | 'busy' = 'available';
 
             if (hasMeetingAtThisHour) {
-              markerType = "busy";
-            } else if (roomInfo?.availabilityStatus === "busy") {
+              markerType = 'busy';
+            } else if (roomInfo?.availabilityStatus === 'busy') {
               // If room is marked as busy, mark the current and next hour as busy for better visibility
               if (isCurrentHour || hour === currentHour + 1) {
-                markerType = "busy";
+                markerType = 'busy';
               }
             } else if (roomInfo?.currentMeeting) {
               // If there's a current meeting, always mark it as busy
@@ -549,14 +529,14 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
 
               // Check for overlap
               if (meetingStart < hourEnd && meetingEnd > hourStart) {
-                markerType = "busy";
+                markerType = 'busy';
               }
             }
 
             return (
               <TimeSlot key={hour}>
                 <TimeMarker type={markerType} />
-                <TimeLabel>{`${hour < 10 ? "0" : ""}${hour}:00`}</TimeLabel>
+                <TimeLabel>{`${hour < 10 ? '0' : ''}${hour}:00`}</TimeLabel>
               </TimeSlot>
             );
           });

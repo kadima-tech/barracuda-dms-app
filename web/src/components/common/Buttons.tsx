@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Icon from './Icon';
 
-
-
 interface ButtonProps {
   color?: string;
   icon?: string;

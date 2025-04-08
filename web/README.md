@@ -1,3 +1,76 @@
+# BarracudaDMS Web Application
+
+A modern web application for the BarracudaDMS platform, built with React, TypeScript, and Vite.
+
+## Developer
+
+**Maurice Waelen | Red Multimedia Development**
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Yarn package manager
+
+### Installation
+
+1. Clone the repository
+2. Navigate to the web directory
+3. Install dependencies:
+
+```bash
+yarn install
+```
+
+### Development
+
+To start the development server:
+
+```bash
+yarn dev
+```
+
+The application will be available at http://localhost:5173
+
+### Building for Production
+
+To build the application for production:
+
+```bash
+yarn build
+```
+
+To preview the production build:
+
+```bash
+yarn preview
+```
+
+## Docker Support
+
+### Building the Docker Image
+
+```bash
+yarn docker:build
+```
+
+### Running the Docker Container
+
+```bash
+yarn docker:start
+```
+
+## Testing
+
+```bash
+yarn test
+```
+
+## License
+
+ISC
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

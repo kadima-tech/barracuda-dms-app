@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { GitHub, Mail } from "react-feather";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { GitHub, Mail } from 'react-feather';
 
 const FooterContainer = styled.footer`
   background: white;
@@ -73,7 +73,7 @@ const SocialLinks = styled.div`
 `;
 
 const Copyright = styled.div`
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: ${({ theme }) => theme.colors.grey};
   font-size: 0.9rem;
 `;
 export const Footer = () => {

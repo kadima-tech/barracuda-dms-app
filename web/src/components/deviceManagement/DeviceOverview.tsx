@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import styled from "styled-components";
-import ControlPanel from "./ControlPanel";
-import { deviceApi } from "../../utils/api/devices";
-import { ClientSelector } from "./ClientSelector";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import styled from 'styled-components';
+import ControlPanel from './ControlPanel';
+import { deviceApi } from '../../utils/api/devices';
+import { ClientSelector } from './ClientSelector';
 
 const OverviewContainer = styled.div`
   max-width: 1800px;
@@ -18,18 +18,18 @@ const DevicesGrid = styled.div`
 `;
 
 const DeviceCard = styled.div<{ isSelected?: boolean; isExpanded?: boolean }>`
-  border: 1px solid ${(props) => (props.isSelected ? "#0CBAB1" : "#e1e1e1")};
+  border: 1px solid ${(props) => (props.isSelected ? '#0CBAB1' : '#e1e1e1')};
   border-radius: 12px;
-  background-color: ${(props) => (props.isSelected ? "#f8f9ff" : "white")};
+  background-color: ${(props) => (props.isSelected ? '#f8f9ff' : 'white')};
   box-shadow: ${(props) =>
     props.isSelected
-      ? "0 8px 24px rgba(12, 186, 177, 0.15)"
-      : "0 4px 16px rgba(0, 0, 0, 0.04)"};
+      ? '0 8px 24px rgba(12, 186, 177, 0.15)'
+      : '0 4px 16px rgba(0, 0, 0, 0.04)'};
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   overflow: hidden;
-  height: ${(props) => (props.isExpanded ? "auto" : "fit-content")};
-  grid-column: ${(props) => (props.isExpanded ? "span 2" : "span 1")};
+  height: ${(props) => (props.isExpanded ? 'auto' : 'fit-content')};
+  grid-column: ${(props) => (props.isExpanded ? 'span 2' : 'span 1')};
 
   &:hover {
     transform: translateY(-2px);
@@ -84,16 +84,16 @@ const MetricText = styled.span`
 `;
 
 const CardBody = styled.div<{ isExpanded: boolean }>`
-  height: ${(props) => (props.isExpanded ? "auto" : "0")};
-  max-height: ${(props) => (props.isExpanded ? "none" : "0")};
-  padding: ${(props) => (props.isExpanded ? "1.5rem" : "0")};
-  opacity: ${(props) => (props.isExpanded ? "1" : "0")};
+  height: ${(props) => (props.isExpanded ? 'auto' : '0')};
+  max-height: ${(props) => (props.isExpanded ? 'none' : '0')};
+  padding: ${(props) => (props.isExpanded ? '1.5rem' : '0')};
+  opacity: ${(props) => (props.isExpanded ? '1' : '0')};
   transition: all 0.3s ease-in-out;
   overflow: hidden;
-  border-top: ${(props) => (props.isExpanded ? "1px solid #f1f5f9" : "none")};
-  display: ${(props) => (props.isExpanded ? "block" : "none")};
+  border-top: ${(props) => (props.isExpanded ? '1px solid #f1f5f9' : 'none')};
+  display: ${(props) => (props.isExpanded ? 'block' : 'none')};
   background-color: ${(props) =>
-    props.isExpanded ? "#f9fafb" : "transparent"};
+    props.isExpanded ? '#f9fafb' : 'transparent'};
 `;
 
 const MetricsSection = styled.div`
@@ -222,26 +222,26 @@ const StatusBadge = styled.span<{ status: string }>`
   letter-spacing: 0.5px;
   background-color: ${(props) => {
     switch (props.status.toLowerCase()) {
-      case "online":
-      case "connected":
-        return "#e8f5e9";
-      case "offline":
-      case "disconnected":
-        return "#ffebee";
+      case 'online':
+      case 'connected':
+        return '#e8f5e9';
+      case 'offline':
+      case 'disconnected':
+        return '#ffebee';
       default:
-        return "#fff3e0";
+        return '#fff3e0';
     }
   }};
   color: ${(props) => {
     switch (props.status.toLowerCase()) {
-      case "online":
-      case "connected":
-        return "#2e7d32";
-      case "offline":
-      case "disconnected":
-        return "#c62828";
+      case 'online':
+      case 'connected':
+        return '#2e7d32';
+      case 'offline':
+      case 'disconnected':
+        return '#c62828';
       default:
-        return "#ef6c00";
+        return '#ef6c00';
     }
   }};
 `;
@@ -298,7 +298,7 @@ const Banner = styled.div`
   overflow: hidden;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -423,9 +423,8 @@ interface Device {
 const DeviceOverview = () => {
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const prevDevicesRef = useRef<Device[]>([]);
 
   // Debounce function to avoid rapid state changes
@@ -483,7 +482,6 @@ const DeviceOverview = () => {
 
   const fetchDevices = useCallback(async () => {
     try {
-      setIsUpdating(true);
       const response = await deviceApi.getDevices();
 
       setDevices((prev) => {
@@ -493,11 +491,9 @@ const DeviceOverview = () => {
       });
 
       if (loading) setLoading(false);
-      setIsUpdating(false);
     } catch (error) {
-      console.error("Failed to fetch devices:", error);
+      console.error('Failed to fetch devices:', error);
       if (loading) setLoading(false);
-      setIsUpdating(false);
     }
   }, [loading, mergeDeviceData]);
 
@@ -531,7 +527,7 @@ const DeviceOverview = () => {
         )
       );
     } catch (error) {
-      console.error("Failed to assign client:", error);
+      console.error('Failed to assign client:', error);
       // Revert to previous state if there was an error
       fetchDevices();
     }
@@ -544,12 +540,12 @@ const DeviceOverview = () => {
 
   // Format metric values with memo
   const formatMetricValue = useCallback(
-    (value: number | undefined, suffix: string = "") => {
+    (value: number | undefined, suffix: string = '') => {
       if (value === undefined || value === null) {
-        return "-";
+        return '-';
       }
       if (value === 0) {
-        return "-";
+        return '-';
       }
       return suffix ? `${value}${suffix}` : value;
     },
@@ -559,7 +555,7 @@ const DeviceOverview = () => {
   // Format uptime to show hours and minutes
   const formatUptimeValue = useCallback((seconds: number | undefined) => {
     if (seconds === undefined || seconds === null || seconds === 0) {
-      return "-";
+      return '-';
     }
 
     const hours = Math.floor(seconds / 3600);
@@ -724,7 +720,7 @@ const DeviceOverview = () => {
                       </svg>
                     </MetricIcon>
                     <MetricText>
-                      CPU:{" "}
+                      CPU:{' '}
                       {formatMetricValue(Math.round(device.metrics.cpuLoad))}%
                     </MetricText>
                   </CompactMetric>
@@ -764,7 +760,7 @@ const DeviceOverview = () => {
                   </SectionHeader>
 
                   {device.metrics.cpuLoad !== undefined && (
-                    <div style={{ textAlign: "center" }}>
+                    <div style={{ textAlign: 'center' }}>
                       <MainMetric>
                         {formatMetricValue(Math.round(device.metrics.cpuLoad))}
                       </MainMetric>
@@ -776,7 +772,7 @@ const DeviceOverview = () => {
                     {device.metrics.temperature !== undefined && (
                       <MetricCard>
                         <MetricValue>
-                          {formatMetricValue(device.metrics.temperature, "°C")}
+                          {formatMetricValue(device.metrics.temperature, '°C')}
                         </MetricValue>
                         <MetricLabel>Temperature</MetricLabel>
                       </MetricCard>
@@ -787,7 +783,7 @@ const DeviceOverview = () => {
                         <MetricValue>
                           {formatMetricValue(
                             parseFloat(device.metrics.memoryUsage.toFixed(1)),
-                            "%"
+                            '%'
                           )}
                         </MetricValue>
                         <MetricLabel>Memory Usage</MetricLabel>
@@ -799,7 +795,7 @@ const DeviceOverview = () => {
                         <MetricValue
                           style={{
                             fontSize:
-                              device.metrics.uptime > 0 ? "1.8rem" : "2.5rem",
+                              device.metrics.uptime > 0 ? '1.8rem' : '2.5rem',
                           }}
                         >
                           {formatUptimeValue(device.metrics.uptime)}
@@ -813,7 +809,7 @@ const DeviceOverview = () => {
                         <MetricValue>
                           {formatMetricValue(
                             parseFloat(device.metrics.diskUsage.toFixed(1)),
-                            "%"
+                            '%'
                           )}
                         </MetricValue>
                         <MetricLabel>Disk Usage</MetricLabel>
@@ -824,9 +820,9 @@ const DeviceOverview = () => {
 
                 <div
                   style={{
-                    marginTop: "2rem",
-                    paddingTop: "2rem",
-                    borderTop: "1px solid #f1f5f9",
+                    marginTop: '2rem',
+                    paddingTop: '2rem',
+                    borderTop: '1px solid #f1f5f9',
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >

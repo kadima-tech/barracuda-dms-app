@@ -1,7 +1,7 @@
-import { Meeting, RoomInfo, RoomStatusMessage } from "./types";
+import { Meeting, RoomInfo, RoomStatusMessage } from './types';
 
 // Timezone constant for Amsterdam
-export const AMSTERDAM_TIMEZONE = "Europe/Amsterdam";
+export const AMSTERDAM_TIMEZONE = 'Europe/Amsterdam';
 
 // Get current time in Amsterdam timezone
 export const getAmsterdamTime = (): Date => {
@@ -9,14 +9,14 @@ export const getAmsterdamTime = (): Date => {
   const now = new Date();
 
   // Create a formatter using the Amsterdam timezone
-  const formatter = new Intl.DateTimeFormat("en-US", {
+  const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: AMSTERDAM_TIMEZONE,
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
     hour12: false,
   });
 
@@ -26,7 +26,7 @@ export const getAmsterdamTime = (): Date => {
 
   // Convert the parts into an object
   parts.forEach((part) => {
-    if (part.type !== "literal") {
+    if (part.type !== 'literal') {
       dateParts[part.type] = parseInt(part.value);
     }
   });
@@ -55,13 +55,13 @@ export const parseTime = (timeString: string): Date => {
   // Handle AM/PM if present
   if (
     parts.length > 2 &&
-    parts[2]?.toUpperCase().includes("PM") &&
+    parts[2]?.toUpperCase().includes('PM') &&
     hours < 12
   ) {
     hours += 12;
   } else if (
     parts.length > 2 &&
-    parts[2]?.toUpperCase().includes("AM") &&
+    parts[2]?.toUpperCase().includes('AM') &&
     hours === 12
   ) {
     hours = 0; // 12 AM is 0 hours in 24h format
@@ -77,22 +77,22 @@ export const parseTime = (timeString: string): Date => {
 export const formatTimeForDisplay = (timeInput: string | Date): string => {
   // If input is a Date object, format it directly
   if (timeInput instanceof Date) {
-    const hours = timeInput.getHours().toString().padStart(2, "0");
-    const minutes = timeInput.getMinutes().toString().padStart(2, "0");
+    const hours = timeInput.getHours().toString().padStart(2, '0');
+    const minutes = timeInput.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
 
   // If the time is already in HH:MM format, return it with proper formatting
-  if (typeof timeInput === "string" && /^\d{1,2}:\d{2}$/.test(timeInput)) {
+  if (typeof timeInput === 'string' && /^\d{1,2}:\d{2}$/.test(timeInput)) {
     // Ensure single-digit hours have leading zeros
-    const [hours, minutes] = timeInput.split(":");
-    return `${hours.padStart(2, "0")}:${minutes}`;
+    const [hours, minutes] = timeInput.split(':');
+    return `${hours.padStart(2, '0')}:${minutes}`;
   }
 
   // Otherwise parse it and reformat
   const date = parseTime(timeInput as string);
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 };
 
@@ -102,7 +102,7 @@ export const formatTimeInDutchFormat = (timeStr: string | Date): string => {
     let dateObj: Date;
 
     // Handle different input types
-    if (typeof timeStr === "string") {
+    if (typeof timeStr === 'string') {
       // If timeStr is already in 24-hour format, parse it directly
       dateObj = parseTime(timeStr);
     } else {
@@ -111,24 +111,24 @@ export const formatTimeInDutchFormat = (timeStr: string | Date): string => {
     }
 
     // Format to Dutch locale with 24-hour time
-    return dateObj.toLocaleTimeString("nl-NL", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return dateObj.toLocaleTimeString('nl-NL', {
+      hour: '2-digit',
+      minute: '2-digit',
       hour12: false,
       timeZone: AMSTERDAM_TIMEZONE,
     });
   } catch (error) {
-    console.error("Error formatting time:", error);
-    return typeof timeStr === "string" ? timeStr : timeStr.toLocaleTimeString(); // Return original if parsing fails
+    console.error('Error formatting time:', error);
+    return typeof timeStr === 'string' ? timeStr : timeStr.toLocaleTimeString(); // Return original if parsing fails
   }
 };
 
 // Format date for display with timezone awareness
 export const formatDateForDisplay = (date: Date): string => {
-  return date.toLocaleDateString("nl-NL", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+  return date.toLocaleDateString('nl-NL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
     timeZone: AMSTERDAM_TIMEZONE,
   });
 };
@@ -189,14 +189,13 @@ export const calculateTimePositionPercentage = (): number => {
 
 // Get room status message based on current availability
 export const getRoomStatusMessage = (
-  roomInfo: RoomInfo | null,
-  isDark: boolean
+  roomInfo: RoomInfo | null
 ): RoomStatusMessage => {
   if (!roomInfo) {
     return {
-      status: "available",
-      title: "Select a room",
-      message: "Choose from dropdown above",
+      status: 'available',
+      title: 'Select a room',
+      message: 'Choose from dropdown above',
     };
   }
 
@@ -205,35 +204,35 @@ export const getRoomStatusMessage = (
 
   if (currentMeeting) {
     return {
-      status: "busy",
-      title: "In use",
+      status: 'busy',
+      title: 'In use',
       message: `Until ${formatTimeForDisplay(currentMeeting.endTime)}`,
     };
-  } else if (roomInfo.availabilityStatus === "busy") {
+  } else if (roomInfo.availabilityStatus === 'busy') {
     const nextMeeting = findNextMeeting(roomInfo.upcomingMeetings);
     return {
-      status: "busy",
-      title: "Busy",
+      status: 'busy',
+      title: 'Busy',
       message: nextMeeting
         ? `Next: ${formatTimeForDisplay(nextMeeting.startTime)}`
-        : "No upcoming meetings",
+        : 'No upcoming meetings',
     };
   } else if (
-    roomInfo.availabilityStatus === "reserved" ||
+    roomInfo.availabilityStatus === 'reserved' ||
     roomInfo.availableUntil
   ) {
     return {
-      status: "reserved",
-      title: "Available now",
+      status: 'reserved',
+      title: 'Available now',
       message: roomInfo.availableUntil
         ? `Until ${formatTimeForDisplay(roomInfo.availableUntil)}`
-        : "Limited time",
+        : 'Limited time',
     };
   } else {
     return {
-      status: "available",
-      title: "Available",
-      message: "Rest of the day",
+      status: 'available',
+      title: 'Available',
+      message: 'Rest of the day',
     };
   }
 };

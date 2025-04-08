@@ -1,15 +1,15 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
-import { ThemeMode, ThemeContextType } from "./types";
+import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { ThemeMode, ThemeContextType } from './types';
 import {
   ThemeToggleContainer,
   ToggleLabel,
   ToggleInput,
   ToggleSlider,
-} from "./StyledComponents.ts";
+} from './StyledComponents.ts';
 
 // Create the theme context with default values
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
+  theme: 'light',
   toggleTheme: () => {},
 });
 
@@ -22,22 +22,22 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   // Check for saved preference or use system preference
   const getSavedTheme = (): ThemeMode => {
-    const savedTheme = localStorage.getItem("theme") as ThemeMode;
+    const savedTheme = localStorage.getItem('theme') as ThemeMode;
     if (savedTheme) return savedTheme;
 
     // Check system preference
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      '(prefers-color-scheme: dark)'
     ).matches;
-    return prefersDark ? "dark" : "light";
+    return prefersDark ? 'dark' : 'light';
   };
 
   const [theme, setTheme] = useState<ThemeMode>(getSavedTheme());
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
+    const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+    localStorage.setItem('theme', newTheme);
   };
 
   return (
@@ -59,7 +59,7 @@ export const ThemeToggle: React.FC = () => {
       <ToggleLabel>
         <ToggleInput
           type="checkbox"
-          checked={theme === "dark"}
+          checked={theme === 'dark'}
           onChange={toggleTheme}
         />
         <ToggleSlider />

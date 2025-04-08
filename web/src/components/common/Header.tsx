@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
-import { paths } from "../../config/paths";
+import styled from 'styled-components';
+import Navbar from './Navbar';
+import { Link } from 'react-router-dom';
+import { paths } from '../../config/paths';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -71,7 +71,7 @@ const Header = () => {
     <StyledHeader>
       <LogoLink to={paths.global.landingPage}>
         <Logo>
-          <img src="/src/assets/logo.png" alt="Barracuda Logo" />
+          <img src="/assets/logo.png" alt="Barracuda Logo" />
           <h3>
             <span>BarracudaDMS</span>
             <span className="divider">|</span>

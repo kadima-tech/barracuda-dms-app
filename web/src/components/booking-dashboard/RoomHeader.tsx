@@ -1,13 +1,13 @@
-import React from "react";
-import { Room, RoomInfo } from "./types";
-import { useTheme } from "./ThemeContext";
+import React from 'react';
+import { Room, RoomInfo } from './types';
+import { useTheme } from './ThemeContext';
 import {
   Header,
   RoomInfo as RoomInfoContainer,
   RoomSelector,
   RoomName,
   TimeInfo,
-} from "./StyledComponents";
+} from './StyledComponents';
 
 interface RoomHeaderProps {
   rooms: Room[];
@@ -25,7 +25,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({
   onTimeInfoClick,
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
+  const isDark = theme === 'dark';
 
   const handleTimeClick = () => {
     // Toggle theme first, then refresh data
@@ -38,7 +38,7 @@ const RoomHeader: React.FC<RoomHeaderProps> = ({
       <RoomInfoContainer>
         <RoomSelector
           $isDark={isDark}
-          value={roomId || ""}
+          value={roomId || ''}
           onChange={(e) => onRoomChange(e.target.value)}
         >
           <option value="">Select a room</option>

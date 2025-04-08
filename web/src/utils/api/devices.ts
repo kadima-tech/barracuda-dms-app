@@ -1,5 +1,5 @@
-import { api } from "./instance";
-import { API_BASE_URL } from "./config";
+import { api } from './instance';
+import { API_BASE_URL } from './config';
 
 export interface DeviceMetrics {
   temperature?: number;
@@ -14,7 +14,7 @@ export interface DeviceMetrics {
 
 export interface Device {
   deviceId: string;
-  status: "connected" | "disconnected";
+  status: 'connected' | 'disconnected';
   lastHeartbeat: number;
   metrics: DeviceMetrics;
 }
@@ -22,7 +22,7 @@ export interface Device {
 export const deviceApi = {
   // Get all connected devices
   getDevices: () => {
-    return api.get("/devices");
+    return api.get('/devices');
   },
 
   // Send reboot command to a specific device
@@ -32,7 +32,7 @@ export const deviceApi = {
       {},
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -40,25 +40,17 @@ export const deviceApi = {
 
   // Rename a device
   renameDevice: (deviceId: string, newName: string) => {
-    return api.put(
-      `/devices/${deviceId}/rename`,
-      { name: newName },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return api.put(`/devices/${deviceId}/rename`, { name: newName });
   },
 
   // Register a device (typically used by devices, not frontend)
   registerDevice: (deviceId: string) => {
     return api.post(
-      "/devices/register",
+      '/devices/register',
       { deviceId },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -67,14 +59,14 @@ export const deviceApi = {
   // Send heartbeat (typically used by devices, not frontend)
   sendHeartbeat: (deviceId: string, metrics: DeviceMetrics) => {
     return api.post(
-      "/devices/heartbeat",
+      '/devices/heartbeat',
       {
         deviceId,
         ...metrics,
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -88,14 +80,14 @@ export const deviceApi = {
   // Upload video for devices
   uploadVideo: async (deviceId: string, videoFile: File) => {
     const formData = new FormData();
-    formData.append("file", videoFile);
+    formData.append('file', videoFile);
 
     const response = await api.post<{ message: string; data: { url: string } }>(
       `/devices/${deviceId}/video/upload`,
       formData,
       {
         headers: {
-          Accept: "application/json",
+          Accept: 'application/json',
         },
       }
     );
@@ -110,7 +102,7 @@ export const deviceApi = {
       { url, active },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -118,15 +110,15 @@ export const deviceApi = {
 
   async assignClient(deviceId: string, clientId: string | null) {
     const response = await fetch(`/api/devices/${deviceId}/client`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ clientId }),
     });
 
     if (!response.ok) {
-      throw new Error("Failed to assign client to device");
+      throw new Error('Failed to assign client to device');
     }
 
     return response.json();
@@ -135,19 +127,19 @@ export const deviceApi = {
   // Function to upload images
   uploadImages: async (deviceId: string, files: File[]) => {
     const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
+    files.forEach((file) => formData.append('files', file));
 
     const response = await fetch(
       `${API_BASE_URL}/devices/${deviceId}/images/upload`,
       {
-        method: "POST",
+        method: 'POST',
         body: formData,
         // No need for default headers as FormData sets its own
       }
     );
 
     if (!response.ok) {
-      throw new Error("Failed to upload images");
+      throw new Error('Failed to upload images');
     }
 
     return response.json();

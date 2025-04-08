@@ -1,43 +1,35 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useTheme } from "./ThemeContext";
-import {
-  Room,
-  RoomInfo,
-  Meeting,
-  BookingStatus,
-  ExchangeMeeting,
-} from "./types";
-import RoomHeader from "./RoomHeader";
-import BookingControlPanel from "./BookingControlPanel";
-import MeetingsListComponent from "./MeetingsList";
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useTheme } from './ThemeContext';
+import { Room, RoomInfo, Meeting, BookingStatus } from './types';
+import RoomHeader from './RoomHeader';
+import BookingControlPanel from './BookingControlPanel';
+import MeetingsListComponent from './MeetingsList';
 import {
   Loading,
   Error,
   BookingStatusNotification,
-} from "./LoadingErrorComponents";
+} from './LoadingErrorComponents';
 import {
   formatTimeInDutchFormat,
   getAmsterdamTime,
   calculateEndTime,
-  calculateTimePositionPercentage,
   getCurrentAmsterdamTimeFormatted,
   formatDateForDisplay,
-  AMSTERDAM_TIMEZONE,
-} from "./utils";
-import * as ExchangeAPI from "../../services/exchange-api";
+} from './utils';
+import * as ExchangeAPI from '../../services/exchange-api';
 import {
   DashboardContainer,
   ContentWrapper,
   SchedulePanel,
-} from "./StyledComponents";
+} from './StyledComponents';
 
 const BookingDashboard: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const roomId = searchParams.get("roomId") || "";
+  const roomId = searchParams.get('roomId') || '';
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -105,7 +97,7 @@ const BookingDashboard: React.FC = () => {
       setError(null);
     } catch (e: unknown) {
       const err = e as Error;
-      console.error("Error refreshing room info:", err);
+      console.error('Error refreshing room info:', err);
       setError(`Error refreshing room data: ${err.message || String(err)}`);
     } finally {
       setIsLoading(false);
@@ -127,7 +119,7 @@ const BookingDashboard: React.FC = () => {
   const handleBookNow = async (duration: number): Promise<void> => {
     if (!roomId) {
       setBookingStatus({
-        message: "Error: No room selected",
+        message: 'Error: No room selected',
         isError: true,
       });
       return;
@@ -135,7 +127,7 @@ const BookingDashboard: React.FC = () => {
 
     try {
       setBookingStatus({
-        message: "Booking room...",
+        message: 'Booking room...',
         isError: false,
       });
 
@@ -143,7 +135,7 @@ const BookingDashboard: React.FC = () => {
 
       if (!result.success) {
         setBookingStatus({
-          message: result.error || "Booking failed",
+          message: result.error || 'Booking failed',
           isError: true,
         });
         return;
@@ -151,7 +143,7 @@ const BookingDashboard: React.FC = () => {
 
       // Success! Show success message
       setBookingStatus({
-        message: "Room booked successfully!",
+        message: 'Room booked successfully!',
         isError: false,
       });
 
@@ -167,13 +159,13 @@ const BookingDashboard: React.FC = () => {
 
         // Get organizer name and attendees count safely
         const organizerName =
-          result.meeting.organizer?.emailAddress?.name || "You";
+          result.meeting.organizer?.emailAddress?.name || 'You';
         const attendeesCount = result.meeting.attendees?.length || 1;
 
         // Create a new meeting object based on the response
         const newMeeting: Meeting = {
-          id: result.meeting.id || "temp-id-" + Date.now(),
-          title: result.meeting.title || "Ad-hoc Meeting",
+          id: result.meeting.id || 'temp-id-' + Date.now(),
+          title: result.meeting.title || 'Ad-hoc Meeting',
           startTime: formattedStartTime,
           endTime: formattedEndTime,
           organizer: organizerName,
@@ -183,7 +175,7 @@ const BookingDashboard: React.FC = () => {
         // Create updated roomInfo with new meeting and updated status
         const updatedRoomInfo = {
           ...roomInfo,
-          availabilityStatus: "busy" as const,
+          availabilityStatus: 'busy' as const,
           currentMeeting: newMeeting,
           upcomingMeetings: [newMeeting, ...roomInfo.upcomingMeetings],
         };
@@ -216,12 +208,12 @@ const BookingDashboard: React.FC = () => {
               const formattedEndTime = formatTimeInDutchFormat(endTime);
 
               const updatedMeeting: Meeting = {
-                id: result.meeting?.id || "temp-id-" + Date.now(),
-                title: result.meeting?.title || "Ad-hoc Meeting",
+                id: result.meeting?.id || 'temp-id-' + Date.now(),
+                title: result.meeting?.title || 'Ad-hoc Meeting',
                 startTime: formattedStartTime,
                 endTime: formattedEndTime,
                 organizer:
-                  result.meeting?.organizer?.emailAddress?.name || "You",
+                  result.meeting?.organizer?.emailAddress?.name || 'You',
                 attendees: result.meeting?.attendees?.length || 1,
               };
 
@@ -240,7 +232,7 @@ const BookingDashboard: React.FC = () => {
               // Return updated roomInfo with consistent meeting information
               return {
                 ...prevRoomInfo,
-                availabilityStatus: "busy" as const,
+                availabilityStatus: 'busy' as const,
                 currentMeeting: updatedMeeting,
                 upcomingMeetings: updatedMeetings,
               };
@@ -250,7 +242,7 @@ const BookingDashboard: React.FC = () => {
       }, 3000);
     } catch (e: unknown) {
       const err = e as Error;
-      console.error("Error booking room:", err);
+      console.error('Error booking room:', err);
       setBookingStatus({
         message: `Error: ${err.message || String(err)}`,
         isError: true,
@@ -290,10 +282,10 @@ const BookingDashboard: React.FC = () => {
 
   // Create displayRoomInfo for RoomHeader
   const displayRoomInfo = roomInfo || {
-    roomName: "No Room Selected",
+    roomName: 'No Room Selected',
     currentTime: getCurrentAmsterdamTimeFormatted(),
     currentDate: formatDateForDisplay(getAmsterdamTime()),
-    availabilityStatus: "available" as const,
+    availabilityStatus: 'available' as const,
     upcomingMeetings: [],
   };
 

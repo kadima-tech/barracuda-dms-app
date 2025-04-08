@@ -1,12 +1,9 @@
-import { API_BASE_URL } from "../utils/api/config";
+import { API_BASE_URL } from '../utils/api/config';
 import {
   Room,
   RoomInfo,
-  Meeting,
-  BookingStatus,
-  ExchangeMeeting,
   BookingResult,
-} from "../components/booking-dashboard/types";
+} from '../components/booking-dashboard/types';
 
 /**
  * Check authentication status with the Exchange API
@@ -16,7 +13,7 @@ export const checkAuthStatus = async (): Promise<{
   authenticated: boolean;
 }> => {
   const response = await fetch(`${API_BASE_URL}/exchange/status`, {
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -36,7 +33,7 @@ export const checkAuthStatus = async (): Promise<{
 export const getAuthUrl = (adminConsent: boolean = false): string => {
   const currentHost = window.location.hostname;
   const isLocalhost =
-    currentHost === "localhost" || currentHost === "127.0.0.1";
+    currentHost === 'localhost' || currentHost === '127.0.0.1';
 
   if (isLocalhost) {
     return `${API_BASE_URL}/exchange/auth?admin_consent=${adminConsent}&t=${Date.now()}`;
@@ -60,13 +57,13 @@ export const getAdminConsentUrl = (): string => {
  */
 export const fetchRooms = async (): Promise<Room[]> => {
   const response = await fetch(`${API_BASE_URL}/exchange/rooms`, {
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (!response.ok) {
     // If unauthorized, throw a specific error
     if (response.status === 401 || response.status === 403) {
-      throw new Error("UNAUTHORIZED");
+      throw new Error('UNAUTHORIZED');
     }
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -84,7 +81,7 @@ export const fetchRooms = async (): Promise<Room[]> => {
  */
 export const fetchRoomInfo = async (roomId: string): Promise<RoomInfo> => {
   const response = await fetch(`${API_BASE_URL}/exchange/rooms/${roomId}`, {
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -95,7 +92,7 @@ export const fetchRoomInfo = async (roomId: string): Promise<RoomInfo> => {
 
   // Verify the room data is valid
   if (!data || !data.roomName) {
-    throw new Error("Invalid room data received");
+    throw new Error('Invalid room data received');
   }
 
   return data;
@@ -111,7 +108,7 @@ export const fetchRoomInfo = async (roomId: string): Promise<RoomInfo> => {
 export const bookRoom = async (
   roomId: string,
   duration: number,
-  title: string = "Ad-hoc Meeting"
+  title: string = 'Ad-hoc Meeting'
 ): Promise<BookingResult> => {
   try {
     const bookingData = {
@@ -122,12 +119,12 @@ export const bookRoom = async (
     const response = await fetch(
       `${API_BASE_URL}/exchange/rooms/${roomId}/book`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(bookingData),
-        credentials: "include",
+        credentials: 'include',
       }
     );
 
@@ -170,8 +167,8 @@ export const cancelMeeting = async (
     console.log(`[API] Request URL: ${url}`);
 
     const response = await fetch(url, {
-      method: "DELETE",
-      credentials: "include",
+      method: 'DELETE',
+      credentials: 'include',
     });
 
     console.log(`[API] Response status:`, response.status);
@@ -226,12 +223,12 @@ export const cancelMeeting2 = async (
     console.log(`[API] Request URL: ${url}`);
 
     const response = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ meetingId }),
-      credentials: "include",
+      credentials: 'include',
     });
 
     console.log(`[API] Response status:`, response.status);

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { RoomInfo } from "./types";
-import { useTheme } from "./ThemeContext";
-import { getRoomStatusMessage } from "./utils";
+import React, { useState } from 'react';
+import { RoomInfo } from './types';
+import { useTheme } from './ThemeContext';
+import { getRoomStatusMessage } from './utils';
 import {
   ControlPanel,
   StatusIndicator,
@@ -14,7 +14,7 @@ import {
   DurationButton,
   DurationDisplay,
   BookNowButton,
-} from "./StyledComponents.ts";
+} from './StyledComponents.ts';
 
 interface BookingControlPanelProps {
   roomInfo: RoomInfo | null;
@@ -26,7 +26,7 @@ const BookingControlPanel: React.FC<BookingControlPanelProps> = ({
   onBookNow,
 }) => {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const isDark = theme === 'dark';
   const [meetingDuration, setMeetingDuration] = useState<number>(30);
   const [isBooking, setIsBooking] = useState<boolean>(false);
 
@@ -47,19 +47,19 @@ const BookingControlPanel: React.FC<BookingControlPanelProps> = ({
     }
   };
 
-  const roomStatusMessage = getRoomStatusMessage(roomInfo, isDark);
+  const roomStatusMessage = getRoomStatusMessage(roomInfo);
 
   return (
     <ControlPanel $isDark={isDark}>
       <StatusIndicator
-        status={roomInfo?.availabilityStatus || "available"}
+        status={roomInfo?.availabilityStatus || 'available'}
         $isDark={isDark}
       >
         {!roomInfo
-          ? "SELECT A ROOM"
-          : roomInfo.availabilityStatus === "busy"
-          ? "BUSY"
-          : "AVAILABLE"}
+          ? 'SELECT A ROOM'
+          : roomInfo.availabilityStatus === 'busy'
+          ? 'BUSY'
+          : 'AVAILABLE'}
       </StatusIndicator>
 
       {!roomInfo && (
@@ -73,37 +73,37 @@ const BookingControlPanel: React.FC<BookingControlPanelProps> = ({
         <AvailabilityInfo $isDark={isDark}>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "4px",
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
             }}
           >
             <div
               style={{
                 color:
-                  roomStatusMessage.status === "busy"
+                  roomStatusMessage.status === 'busy'
                     ? isDark
-                      ? "#f87171"
-                      : "#ef4444"
+                      ? '#f87171'
+                      : '#ef4444'
                     : isDark
-                    ? "#34d399"
-                    : "#10b981",
-                fontWeight: "600",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                fontSize: "0.95em",
+                    ? '#34d399'
+                    : '#10b981',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '0.95em',
               }}
             >
               {roomStatusMessage.title}
             </div>
             <div
               style={{
-                fontSize: "0.85em",
-                color: isDark ? "#94a3b8" : "#6b7280",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                fontSize: '0.85em',
+                color: isDark ? '#94a3b8' : '#6b7280',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               {roomStatusMessage.message}
@@ -136,23 +136,23 @@ const BookingControlPanel: React.FC<BookingControlPanelProps> = ({
 
           <BookNowButton
             onClick={handleBookNowClick}
-            disabled={roomInfo?.availabilityStatus === "busy" || isBooking}
+            disabled={roomInfo?.availabilityStatus === 'busy' || isBooking}
             style={{
               opacity:
-                roomInfo?.availabilityStatus === "busy" || isBooking ? 0.5 : 1,
+                roomInfo?.availabilityStatus === 'busy' || isBooking ? 0.5 : 1,
               cursor:
-                roomInfo?.availabilityStatus === "busy" || isBooking
-                  ? "not-allowed"
-                  : "pointer",
+                roomInfo?.availabilityStatus === 'busy' || isBooking
+                  ? 'not-allowed'
+                  : 'pointer',
               background:
-                roomInfo?.availabilityStatus === "reserved"
-                  ? "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
-                  : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                roomInfo?.availabilityStatus === 'reserved'
+                  ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+                  : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
             }}
           >
             {isBooking ? (
-              "Booking..."
-            ) : roomInfo?.availabilityStatus === "busy" ? (
+              'Booking...'
+            ) : roomInfo?.availabilityStatus === 'busy' ? (
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +165,7 @@ const BookingControlPanel: React.FC<BookingControlPanelProps> = ({
                 </svg>
                 Room Not Available
               </>
-            ) : roomInfo?.availabilityStatus === "reserved" ? (
+            ) : roomInfo?.availabilityStatus === 'reserved' ? (
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

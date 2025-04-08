@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { API_BASE_URL } from "../../utils/api/config";
-import NewsTicker from "../../components/NewsTicker";
+import styled from 'styled-components';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { API_BASE_URL } from '../../utils/api/config';
+import NewsTicker from '../../components/NewsTicker';
 //import { api } from "../../utils/api/instance";
 
 // Types
@@ -44,7 +44,7 @@ const DashboardContainer = styled.div`
   position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -77,7 +77,7 @@ const Logo = styled.div`
   position: relative;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -4px;
     left: 0;
@@ -99,7 +99,7 @@ const StatusIndicator = styled.div`
   border-radius: 20px;
 
   &::before {
-    content: "";
+    content: '';
     display: inline-block;
     width: 8px;
     height: 8px;
@@ -187,19 +187,6 @@ const BottomSection = styled.div`
   min-height: 120px;
 `;
 
-const Card = styled.div`
-  flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  height: 100%; /* Ensure consistent height */
-  min-height: 160px; /* Match parent's min-height */
-  display: flex; /* Add flex display */
-  align-items: center; /* Center content vertically */
-`;
-
 const NowPlayingLabel = styled.div`
   font-size: 14px;
   color: #1db954;
@@ -211,7 +198,7 @@ const NowPlayingLabel = styled.div`
   align-items: center;
 
   &::before {
-    content: "";
+    content: '';
     display: inline-block;
     width: 20px;
     height: 2px;
@@ -317,7 +304,7 @@ const NextTrackLabel = styled.div`
   align-items: center;
 
   &::before {
-    content: "›";
+    content: '›';
     margin-right: 4px;
     font-size: 16px;
   }
@@ -522,7 +509,7 @@ export const LoadingContainer = styled.div`
   letter-spacing: 0.5px;
 
   &::after {
-    content: "...";
+    content: '...';
     animation: loadingDots 1.5s infinite;
     width: 24px;
     display: inline-block;
@@ -531,16 +518,16 @@ export const LoadingContainer = styled.div`
 
   @keyframes loadingDots {
     0% {
-      content: ".";
+      content: '.';
     }
     33% {
-      content: "..";
+      content: '..';
     }
     66% {
-      content: "...";
+      content: '...';
     }
     100% {
-      content: ".";
+      content: '.';
     }
   }
 `;
@@ -570,11 +557,11 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
   const [error, setError] = useState<string | null>(null);
   const [isControlLoading, setIsControlLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const progressInterval = useRef<number>();
+  const progressInterval = useRef<number>(0);
   const lastTickRef = useRef<number>(Date.now());
   const currentProgressRef = useRef(0);
   const skipInProgressRef = useRef(false);
-  const pollingTimeoutRef = useRef<number>();
+  const pollingTimeoutRef = useRef<number>(0);
   const lastControlActionRef = useRef<number>(0);
   const lastFetchRef = useRef<number>(0);
   const CONTROL_DEBOUNCE = 300; // Reduced from 1000ms to 300ms
@@ -645,10 +632,10 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
       const response = await fetch(
         `${API_BASE_URL}/spotify/currently-playing`,
         {
-          credentials: "include",
+          credentials: 'include',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -735,13 +722,13 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
 
         const response = await operation();
         if (!response.ok) {
-          throw new Error("Failed to perform skip operation");
+          throw new Error('Failed to perform skip operation');
         }
 
         // Fetch updated track state immediately
         await fetchNowPlaying();
       } catch (error) {
-        console.error("Error performing skip operation:", error);
+        console.error('Error performing skip operation:', error);
       } finally {
         setIsControlLoading(false);
         skipInProgressRef.current = false;
@@ -755,8 +742,8 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
 
     handleSkipOperation(() =>
       fetch(`${API_BASE_URL}/spotify/player/next`, {
-        method: "POST",
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
       })
     );
   }, [track?.nextTrack, handleSkipOperation]);
@@ -766,8 +753,8 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
 
     handleSkipOperation(() =>
       fetch(`${API_BASE_URL}/spotify/player/previous`, {
-        method: "POST",
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
       })
     );
   }, [track, handleSkipOperation]);
@@ -778,13 +765,13 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
 
     try {
       setIsControlLoading(true);
-      const endpoint = track?.isPlaying ? "pause" : "play";
+      const endpoint = track?.isPlaying ? 'pause' : 'play';
 
       const response = await fetch(
         `${API_BASE_URL}/spotify/player/${endpoint}`,
         {
-          method: "PUT",
-          credentials: "include",
+          method: 'PUT',
+          credentials: 'include',
         }
       );
 
@@ -805,7 +792,7 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   // Use progress in the render
@@ -863,7 +850,7 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
                   <PlayPauseButton
                     onClick={handlePlayPause}
                     disabled={isControlLoading}
-                    title={track.isPlaying ? "Pause" : "Play"}
+                    title={track.isPlaying ? 'Pause' : 'Play'}
                   >
                     {track.isPlaying ? <PauseIcon /> : <PlayIcon />}
                   </PlayPauseButton>
@@ -898,7 +885,7 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
                   <NextTrackInfo>
                     <NextTrackLabel>Up Next</NextTrackLabel>
                     <NextTrackLoadingText />
-                    <NextTrackLoadingText style={{ width: "80px" }} />
+                    <NextTrackLoadingText style={{ width: '80px' }} />
                   </NextTrackInfo>
                 </NextTrackLoadingSection>
               )}

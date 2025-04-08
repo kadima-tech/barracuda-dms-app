@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { useEffect, useState, useRef } from "react";
-import { API_BASE_URL } from "../utils/api/config";
+import styled from 'styled-components';
+import { useEffect, useState, useRef } from 'react';
+import { API_BASE_URL } from '../utils/api/config';
 
 interface NewsItem {
   title: string;
@@ -69,8 +69,8 @@ const NewsTicker = () => {
   const [offset, setOffset] = useState(window.innerWidth);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
-  const animationRef = useRef<number>();
-  const lastTimeRef = useRef<number>();
+  const animationRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
   const currentOffsetRef = useRef<number>(window.innerWidth);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const NewsTicker = () => {
         const data = await response.json();
         setNews(data);
       } catch (error) {
-        console.error("Error fetching news:", error);
+        console.error('Error fetching news:', error);
       }
     };
 
@@ -151,8 +151,8 @@ const NewsTicker = () => {
             <div
               key={index}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
+                display: 'inline-flex',
+                alignItems: 'center',
               }}
             >
               <NewsLabel>NOS</NewsLabel>

@@ -1,5 +1,5 @@
 // Theme types
-export type ThemeMode = "light" | "dark";
+export type ThemeMode = 'light' | 'dark';
 
 export interface ThemeContextType {
   theme: ThemeMode;
@@ -19,7 +19,7 @@ export interface RoomInfo {
   roomName: string;
   currentTime: string;
   currentDate: string;
-  availabilityStatus: "available" | "busy" | "reserved";
+  availabilityStatus: 'available' | 'busy' | 'reserved';
   currentMeeting?: Meeting;
   upcomingMeetings: Meeting[];
   availableUntil?: string;
@@ -36,7 +36,7 @@ export interface Meeting {
 }
 
 export interface RoomStatusMessage {
-  status: "available" | "busy" | "reserved";
+  status: 'available' | 'busy' | 'reserved';
   title: string;
   message: string;
 }
