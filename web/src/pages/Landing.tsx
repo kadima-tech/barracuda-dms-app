@@ -625,24 +625,6 @@ const Copyright = styled.div`
   }
 `;
 
-const DeveloperInfo = styled.div`
-  color: #4a5568;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  a {
-    color: #0cbab1;
-    text-decoration: none;
-    font-weight: 500;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
 const FooterLinks = styled.div`
   display: flex;
   gap: 2rem;
