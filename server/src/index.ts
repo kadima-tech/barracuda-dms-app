@@ -101,7 +101,7 @@ const setup = async () => {
     });
 
     // Start Fastify server on port 8080
-    await fastify.listen({ port: port, host: '::' });
+    await fastify.listen({ port: port, host: '0.0.0.0' });
     logger.info(
       'Fastify HTTP server with Socket.IO started successfully on port 8080'
     );

@@ -14,6 +14,10 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn
 
+# Copy source code and build TypeScript
+COPY . /app
+RUN yarn build
+
 #################
 # Runtime Image #
 #################
@@ -25,7 +29,8 @@ WORKDIR /app
 EXPOSE 8080
 
 COPY --from=build-env /app/node_modules ./node_modules
-COPY . /app
+COPY --from=build-env /app/dist ./dist
+COPY package.json ./
 COPY docker/entrypoint.sh /app
 
 CMD ./entrypoint.sh

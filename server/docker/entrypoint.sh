@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Ensure we kill the service if migration fails
+# Ensure we kill the service if any command fails
 set -e
 
 # Export PORT if not set (for local development)
@@ -8,5 +8,9 @@ if [ -z "$PORT" ]; then
   export PORT=8080
 fi
 
+# Make sure the script is executable
+chmod +x /app/entrypoint.sh
+
 # Start the application
-yarn start
+echo "Starting application on port $PORT"
+node dist/index.js
