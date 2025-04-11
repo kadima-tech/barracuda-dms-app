@@ -43,6 +43,7 @@ const setup = async () => {
         'http://localhost:5174',
         'http://192.168.2.128:8080',
         'http://localhost:8080',
+        'http://localhost:3000',
         'http://192.168.2.128',
         'http://localhost',
       ],
