@@ -1,10 +1,7 @@
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  (typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:8080'
-      : 'http://192.168.2.128:8080'));
+import { getCurrentConfig } from '../../config/environments';
+
+// Get API base URL from environment configuration
+export const API_BASE_URL = getCurrentConfig().apiBaseUrl;
 
 // Common fetch options
 export const defaultOptions: RequestInit = {

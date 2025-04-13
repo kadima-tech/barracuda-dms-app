@@ -87,6 +87,7 @@ module "server" {
     { key = "EXCHANGE_CLIENT_SECRET", secret = google_secret_manager_secret.secret["EXCHANGE_CLIENT_SECRET"].id },
     { key = "SPOTIFY_CLIENT_ID", secret = google_secret_manager_secret.secret["SPOTIFY_CLIENT_ID"].id },
     { key = "SPOTIFY_CLIENT_SECRET", secret = google_secret_manager_secret.secret["SPOTIFY_CLIENT_SECRET"].id },
+    { key = "SPOTIFY_REDIRECT_URI", value = "http://localhost:8080/callback" },
 
     # { key = "DATABASE_URL", secret = module.database.connection_string_secret }
   ]
