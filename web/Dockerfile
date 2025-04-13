@@ -20,21 +20,21 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Build the Next.js application
 RUN npm install -g pnpm && pnpm build
 
-# Production image, copy all the files and run next
+# Production image, copy all the files and run nginx
 FROM nginx:mainline-alpine AS runner
-WORKDIR /var/www
+WORKDIR /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx/. /etc/nginx/templates/.
 RUN rm /etc/nginx/conf.d/*
 
-# Copy build output
-COPY --from=builder /app/dist /var/www
+# Copy build output from Next.js
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 ENV PORT 8080
-
 EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"] 
