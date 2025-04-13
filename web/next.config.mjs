@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Initially set output to export for SPA mode to minimize changes
-  // output: 'export',
+  // Enable static exports for SPA mode
+  output: 'export',
   distDir: './dist',
   // Preserve React Router's client-side routing
   trailingSlash: true,
