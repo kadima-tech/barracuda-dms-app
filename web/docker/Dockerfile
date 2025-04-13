@@ -4,7 +4,7 @@ FROM nginx:mainline-alpine
 RUN rm /etc/nginx/conf.d/*
 
 COPY nginx/. /etc/nginx/templates/.
-COPY .next /var/www
+COPY dist /var/www
 
 ENV PORT 8080
 ENV HOST 0.0.0.0
