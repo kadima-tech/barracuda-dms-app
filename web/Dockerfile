@@ -23,22 +23,18 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm install -g pnpm && pnpm build
 
 # Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
+FROM nginx:mainline-alpine AS runner
+WORKDIR /var/www
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# Copy nginx configuration
+COPY nginx/. /etc/nginx/templates/.
+RUN rm /etc/nginx/conf.d/*
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Copy build output
+COPY --from=builder /app/dist /var/www
 
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/dist ./dist
+ENV PORT 8080
 
-USER nextjs
+EXPOSE 8080
 
-EXPOSE 5173
-
-ENV PORT 5173
-
-CMD ["node", "./dist/server.js"] 
+CMD ["nginx", "-g", "daemon off;"] 
