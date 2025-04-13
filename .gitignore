@@ -2,6 +2,11 @@ build/
 intermediates/
 .bin
 
+# Python virtual environments
+.venv/
+venv/
+env/
+
 # Generated files
 .openapi-generator
 .openapi-generator-ignore
@@ -138,3 +143,9 @@ dist
 .pnp.*
 
 lib
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/

@@ -428,11 +428,11 @@ const DeviceOverview = () => {
   const prevDevicesRef = useRef<Device[]>([]);
 
   // Debounce function to avoid rapid state changes
-  const useDebounce = (func: Function, delay: number) => {
-    const timeoutRef = useRef<number | null>(null);
+  const useDebounce = (func: (...args: unknown[]) => void, delay: number) => {
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     return useCallback(
-      (...args: any[]) => {
+      (...args: unknown[]) => {
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
         }
@@ -450,30 +450,35 @@ const DeviceOverview = () => {
     (oldDevices: Device[], newDevices: Device[]) => {
       const mergedDevices = [...oldDevices];
 
-      newDevices.forEach((newDevice) => {
-        const existingIndex = mergedDevices.findIndex(
-          (device) => device.deviceId === newDevice.deviceId
-        );
+      // Check if newDevices is actually an array before using forEach
+      if (Array.isArray(newDevices)) {
+        newDevices.forEach((newDevice) => {
+          const existingIndex = mergedDevices.findIndex(
+            (device) => device.deviceId === newDevice.deviceId
+          );
 
-        if (existingIndex >= 0) {
-          // Only update if there are actual changes to prevent re-renders
-          if (
-            JSON.stringify(mergedDevices[existingIndex]) !==
-            JSON.stringify(newDevice)
-          ) {
-            mergedDevices[existingIndex] = {
-              ...mergedDevices[existingIndex],
-              ...newDevice,
-              metrics: {
-                ...mergedDevices[existingIndex].metrics,
-                ...newDevice.metrics,
-              },
-            };
+          if (existingIndex >= 0) {
+            // Only update if there are actual changes to prevent re-renders
+            if (
+              JSON.stringify(mergedDevices[existingIndex]) !==
+              JSON.stringify(newDevice)
+            ) {
+              mergedDevices[existingIndex] = {
+                ...mergedDevices[existingIndex],
+                ...newDevice,
+                metrics: {
+                  ...mergedDevices[existingIndex].metrics,
+                  ...newDevice.metrics,
+                },
+              };
+            }
+          } else {
+            mergedDevices.push(newDevice);
           }
-        } else {
-          mergedDevices.push(newDevice);
-        }
-      });
+        });
+      } else {
+        console.error('newDevices is not an array:', newDevices);
+      }
 
       return mergedDevices;
     },

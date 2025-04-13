@@ -547,9 +547,8 @@ const ErrorIcon = styled.div`
   margin-bottom: 16px;
 `;
 
-interface SpotifyDashboardProps {
-  // Remove deviceId prop
-}
+// No props needed, using a type instead of an empty interface
+type SpotifyDashboardProps = Record<string, never>;
 
 const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
   const [track, setTrack] = useState<TrackInfo | null>(null);
@@ -699,7 +698,7 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
         clearInterval(pollingTimeoutRef.current);
       }
     };
-  }, [fetchNowPlaying]);
+  }, [fetchNowPlaying, track]);
 
   // Add debounce check for control actions
   const isControlDebounced = () => {

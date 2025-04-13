@@ -5,18 +5,20 @@
   "type": "module",
   "license": "ISC",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "http-server ./build -p 5173 --proxy http://localhost:5173?",
-    "start": "http-server ./dist -p 5173 --proxy http://localhost:5173?",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "preview": "next start -p 5173",
     "docker:build": "docker build -t web-app .",
     "docker:start": "docker run -p 0.0.0.0:5173:5173 web-app",
     "test": "echo 'test'"
   },
   "dependencies": {
+    "cors-anywhere": "^0.4.4",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "next": "^15.3.0",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
+    "@types/node": "^22.14.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
     "@vitejs/plugin-react": "^4.3.4",

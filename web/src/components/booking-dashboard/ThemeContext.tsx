@@ -1,11 +1,19 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+'use client';
+
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { ThemeMode, ThemeContextType } from './types';
 import {
   ThemeToggleContainer,
   ToggleLabel,
   ToggleInput,
   ToggleSlider,
-} from './StyledComponents.ts';
+} from './StyledComponents';
 
 // Create the theme context with default values
 const ThemeContext = createContext<ThemeContextType>({
@@ -20,25 +28,44 @@ export const useTheme = () => useContext(ThemeContext);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // Check for saved preference or use system preference
-  const getSavedTheme = (): ThemeMode => {
-    const savedTheme = localStorage.getItem('theme') as ThemeMode;
-    if (savedTheme) return savedTheme;
+  // Default to light theme until client-side code runs
+  const [theme, setTheme] = useState<ThemeMode>('light');
+  const [mounted, setMounted] = useState(false);
 
-    // Check system preference
-    const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches;
-    return prefersDark ? 'dark' : 'light';
-  };
+  // Only execute client-side code after mounting
+  useEffect(() => {
+    setMounted(true);
+    // Get saved theme from localStorage only on client
+    const savedTheme =
+      typeof window !== 'undefined'
+        ? (localStorage.getItem('theme') as ThemeMode)
+        : null;
 
-  const [theme, setTheme] = useState<ThemeMode>(getSavedTheme());
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (typeof window !== 'undefined') {
+      // Check system preference
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      setTheme(prefersDark ? 'dark' : 'light');
+    }
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+
+    // Only access localStorage on the client
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', newTheme);
+    }
   };
+
+  // To prevent flash of incorrect theme
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

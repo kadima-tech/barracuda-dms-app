@@ -1,0 +1,8 @@
+google-adk==0.1.0
+azure-identity
+msgraph-sdk
+microsoft-kiota-abstractions
+requests
+python-dotenv
+pytz
+typing-extensions

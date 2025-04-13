@@ -1,15 +1,15 @@
-import React, { useState, useCallback, useRef } from "react";
-import styled from "styled-components";
-import { deviceApi } from "../../utils/api";
-import ScheduleSection from "./ScheduleSection";
-import DeviceImageUploader from "./DeviceImageUploader";
+import React, { useState, useCallback, useRef } from 'react';
+import styled from 'styled-components';
+import { deviceApi } from '../../utils/api';
+import ScheduleSection from './ScheduleSection';
+import DeviceImageUploader from './DeviceImageUploader';
 
 const Panel = styled.div`
   padding: 0;
   background: white;
   border-radius: 12px;
   width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, sans-serif;
   overflow: hidden;
 `;
@@ -140,7 +140,7 @@ const Toggle = styled.label`
   user-select: none;
   margin-top: 0.5rem;
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     appearance: none;
     width: 3rem;
     height: 1.5rem;
@@ -155,7 +155,7 @@ const Toggle = styled.label`
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0.2rem;
       left: 0.2rem;
@@ -201,7 +201,7 @@ const FileInputLabel = styled.label`
     background-color: #f0fffd;
   }
 
-  input[type="file"] {
+  input[type='file'] {
     display: none;
   }
 
@@ -330,13 +330,13 @@ const Tab = styled.button<{ active: boolean }>`
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
-  color: ${(props) => (props.active ? "#0cbab1" : "#64748b")};
+  color: ${(props) => (props.active ? '#0cbab1' : '#64748b')};
   border-bottom: 2px solid
-    ${(props) => (props.active ? "#0cbab1" : "transparent")};
+    ${(props) => (props.active ? '#0cbab1' : 'transparent')};
   transition: all 0.2s;
 
   &:hover {
-    color: ${(props) => (props.active ? "#0cbab1" : "#334155")};
+    color: ${(props) => (props.active ? '#0cbab1' : '#334155')};
   }
 `;
 
@@ -353,8 +353,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   deviceId,
   deviceName,
 }) => {
-  const [_name, setName] = useState("");
-  const [url, setUrl] = useState("");
+  const [, setName] = useState('');
+  const [url, setUrl] = useState('');
   const [active, setActive] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -362,11 +362,11 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
-    "content" | "media" | "schedule" | "settings"
-  >("content");
+    'content' | 'media' | 'schedule' | 'settings'
+  >('content');
 
   // Add state for device rename form
-  const [deviceNewName, setDeviceNewName] = useState(deviceName || "");
+  const [deviceNewName, setDeviceNewName] = useState(deviceName || '');
 
   // Use refs to prevent unnecessary re-renders
   const previousDeviceIdRef = useRef<string>(deviceId);
@@ -374,38 +374,38 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   // Preset URLs for quick launch
   const presetUrls = [
     {
-      name: "Room Booking",
-      url: "http://192.168.2.128:5173/room-booking/booking-dashboard",
+      name: 'Room Booking',
+      url: 'http://192.168.2.128:5173/room-booking/booking-dashboard',
     },
-    { name: "NOS", url: "https://www.nos.nl" },
+    { name: 'NOS', url: 'https://www.nos.nl' },
     {
-      name: "DELA Person Viewer",
-      url: "http://192.168.2.128:5173/clients/dela/person-viewer",
-    },
-    {
-      name: "Kiwa Screen",
-      url: "https://server.inavv.nl/screen/2ede100c-8e16-11eb-8de9-9600009f9a9c/Kiwa-A001",
+      name: 'DELA Person Viewer',
+      url: 'http://192.168.2.128:5173/clients/dela/person-viewer',
     },
     {
-      name: "Spotify",
-      url: "http://192.168.2.128:5173/spotify",
+      name: 'Kiwa Screen',
+      url: 'https://server.inavv.nl/screen/2ede100c-8e16-11eb-8de9-9600009f9a9c/Kiwa-A001',
     },
     {
-      name: "BarracudaDMS",
-      url: "http://192.168.2.128:5173/public/index.html",
+      name: 'Spotify',
+      url: 'http://192.168.2.128:5173/spotify',
     },
-    { name: "Dashboard", url: "http://192.168.2.128:5173/dashboard" },
+    {
+      name: 'BarracudaDMS',
+      url: 'http://192.168.2.128:5173/public/index.html',
+    },
+    { name: 'Dashboard', url: 'http://192.168.2.128:5173/dashboard' },
   ];
 
   // Use useCallback to memorize function references
   const handleReboot = useCallback(async () => {
     try {
       await deviceApi.sendReboot(deviceId);
-      setSuccess("Reboot command sent successfully");
+      setSuccess('Reboot command sent successfully');
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error("Failed to reboot device:", error);
-      setError("Failed to reboot device");
+      console.error('Failed to reboot device:', error);
+      setError('Failed to reboot device');
       setTimeout(() => setError(null), 3000);
     }
   }, [deviceId]);
@@ -417,7 +417,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       // Optionally submit the URL immediately
       try {
         await deviceApi.sendUrl(deviceId, presetUrl, active);
-        setSuccess("URL sent successfully");
+        setSuccess('URL sent successfully');
 
         // Store locally without causing a re-render
         setVideoUrl((prevUrl) => {
@@ -427,8 +427,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
           return presetUrl;
         });
       } catch (err) {
-        console.error("Failed to send URL to device:", err);
-        setError("Failed to send URL to device");
+        console.error('Failed to send URL to device:', err);
+        setError('Failed to send URL to device');
       }
     },
     [deviceId, active]
@@ -442,7 +442,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 
       try {
         await deviceApi.sendUrl(deviceId, url, active);
-        setSuccess("URL sent successfully");
+        setSuccess('URL sent successfully');
 
         // Store locally without causing a re-render
         setVideoUrl((prevUrl) => {
@@ -453,12 +453,12 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         });
 
         // Clear form
-        setName("");
-        setUrl("");
+        setName('');
+        setUrl('');
         setActive(true);
       } catch (err) {
-        console.error("Failed to send URL to device:", err);
-        setError("Failed to send URL to device");
+        console.error('Failed to send URL to device:', err);
+        setError('Failed to send URL to device');
       }
     },
     [deviceId, url, active]
@@ -468,24 +468,24 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!videoFile) {
-        setError("Please select a video file");
+        setError('Please select a video file');
         return;
       }
 
       const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB in bytes
       if (videoFile.size > MAX_FILE_SIZE) {
-        setError("File is too large. Maximum size is 100MB");
+        setError('File is too large. Maximum size is 100MB');
         return;
       }
 
       setError(null);
       setSuccess(null);
-      setUploadStatus("Uploading video...");
+      setUploadStatus('Uploading video...');
 
       try {
         const response = await deviceApi.uploadVideo(deviceId, videoFile);
         setUploadStatus(null);
-        setSuccess("Video uploaded successfully");
+        setSuccess('Video uploaded successfully');
         setVideoFile(null);
 
         // If upload is successful, we automatically send the URL to the device
@@ -501,16 +501,16 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 
           try {
             await deviceApi.sendUrl(deviceId, newVideoUrl, true);
-            setSuccess("Video uploaded and sent to device");
+            setSuccess('Video uploaded and sent to device');
           } catch (err) {
-            console.error("Failed to send video URL to device:", err);
-            setError("Video uploaded but failed to send to device");
+            console.error('Failed to send video URL to device:', err);
+            setError('Video uploaded but failed to send to device');
           }
         }
       } catch (err) {
-        console.error("Failed to upload video:", err);
+        console.error('Failed to upload video:', err);
         setUploadStatus(null);
-        setError("Failed to upload video");
+        setError('Failed to upload video');
       }
     },
     [deviceId, videoFile]
@@ -528,7 +528,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 
   // Use useCallback for tab switching to prevent unnecessary renders
   const handleTabSwitch = useCallback(
-    (tab: "content" | "media" | "schedule" | "settings") => {
+    (tab: 'content' | 'media' | 'schedule' | 'settings') => {
       setActiveTab(tab);
     },
     []
@@ -542,19 +542,19 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       setSuccess(null);
 
       if (!deviceNewName.trim()) {
-        setError("Device name cannot be empty");
+        setError('Device name cannot be empty');
         return;
       }
 
       try {
         await deviceApi.renameDevice(deviceId, deviceNewName);
-        setSuccess("Device renamed successfully");
+        setSuccess('Device renamed successfully');
 
         // Ideally we would want to update the UI with the new name
         // This could be done via props or context depending on your app's structure
       } catch (err) {
-        console.error("Failed to rename device:", err);
-        setError("Failed to rename device");
+        console.error('Failed to rename device:', err);
+        setError('Failed to rename device');
       }
     },
     [deviceId, deviceNewName]
@@ -575,33 +575,33 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       <TabContainer>
         <TabList>
           <Tab
-            active={activeTab === "content"}
-            onClick={() => handleTabSwitch("content")}
+            active={activeTab === 'content'}
+            onClick={() => handleTabSwitch('content')}
           >
             Content
           </Tab>
           <Tab
-            active={activeTab === "media"}
-            onClick={() => handleTabSwitch("media")}
+            active={activeTab === 'media'}
+            onClick={() => handleTabSwitch('media')}
           >
             Media
           </Tab>
           <Tab
-            active={activeTab === "schedule"}
-            onClick={() => handleTabSwitch("schedule")}
+            active={activeTab === 'schedule'}
+            onClick={() => handleTabSwitch('schedule')}
           >
             Schedule
           </Tab>
           <Tab
-            active={activeTab === "settings"}
-            onClick={() => handleTabSwitch("settings")}
+            active={activeTab === 'settings'}
+            onClick={() => handleTabSwitch('settings')}
           >
             Settings
           </Tab>
         </TabList>
       </TabContainer>
 
-      {activeTab === "content" && (
+      {activeTab === 'content' && (
         <>
           <PanelSection>
             <SectionHeader>
@@ -748,7 +748,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         </>
       )}
 
-      {activeTab === "media" && (
+      {activeTab === 'media' && (
         <>
           <PanelSection>
             <SectionHeader>
@@ -804,7 +804,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                     <Button
                       type="button"
                       onClick={() => setVideoFile(null)}
-                      style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}
+                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
                     >
                       Change
                     </Button>
@@ -907,13 +907,13 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         </>
       )}
 
-      {activeTab === "schedule" && (
+      {activeTab === 'schedule' && (
         <PanelSection>
-          <ScheduleSection deviceId={deviceId} videoUrl={videoUrl || ""} />
+          <ScheduleSection deviceId={deviceId} videoUrl={videoUrl || ''} />
         </PanelSection>
       )}
 
-      {activeTab === "settings" && (
+      {activeTab === 'settings' && (
         <PanelSection>
           <SectionHeader>
             <Title>

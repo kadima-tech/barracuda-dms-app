@@ -16,7 +16,7 @@ import {
   TimeLabel,
   TimeMarker,
   CurrentTimeIndicator,
-} from './StyledComponents.ts';
+} from './StyledComponents';
 import styled from 'styled-components';
 import { cancelMeeting, cancelMeeting2 } from '../../services/exchange-api';
 

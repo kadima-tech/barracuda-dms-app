@@ -14,7 +14,7 @@ import {
   DurationButton,
   DurationDisplay,
   BookNowButton,
-} from './StyledComponents.ts';
+} from './StyledComponents';
 
 interface BookingControlPanelProps {
   roomInfo: RoomInfo | null;

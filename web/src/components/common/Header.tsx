@@ -1,7 +1,10 @@
+'use client';
+
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import { paths } from '../../config/paths';
+import ClientOnly from './ClientOnly';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -68,19 +71,25 @@ const Logo = styled.div`
 
 const Header = () => {
   return (
-    <StyledHeader>
-      <LogoLink to={paths.global.landingPage}>
-        <Logo>
-          <img src="/assets/logo.png" alt="Barracuda Logo" />
-          <h3>
-            <span>BarracudaDMS</span>
-            <span className="divider">|</span>
-            <span className="punchline">Streamline Your Device Management</span>
-          </h3>
-        </Logo>
-      </LogoLink>
-      <Navbar />
-    </StyledHeader>
+    <ClientOnly
+      fallback={<div style={{ height: '4.5rem' }}>Loading header...</div>}
+    >
+      <StyledHeader>
+        <LogoLink to={paths.global.landingPage}>
+          <Logo>
+            <img src="/assets/logo.png" alt="Barracuda Logo" />
+            <h3>
+              <span>BarracudaDMS</span>
+              <span className="divider">|</span>
+              <span className="punchline">
+                Streamline Your Device Management
+              </span>
+            </h3>
+          </Logo>
+        </LogoLink>
+        <Navbar />
+      </StyledHeader>
+    </ClientOnly>
   );
 };
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { scheduleApi, Schedule } from "../../utils/api/schedule";
+import React, { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+import { scheduleApi, Schedule } from '../../utils/api/schedule';
 
 const Section = styled.div`
   margin-bottom: 1.5rem;
@@ -110,26 +110,26 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   videoUrl,
 }) => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [repeat, setRepeat] = useState<"none" | "daily" | "weekly" | "monthly">(
-    "none"
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [repeat, setRepeat] = useState<'none' | 'daily' | 'weekly' | 'monthly'>(
+    'none'
   );
-  const [_error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadSchedules();
-  }, [deviceId]);
-
-  const loadSchedules = async () => {
+  const loadSchedules = useCallback(async () => {
     try {
       const response = await scheduleApi.getSchedulesByDevice(deviceId);
       setSchedules(response);
     } catch (error) {
-      console.error("Failed to load schedules:", error);
-      setError("Failed to load schedules");
+      console.error('Failed to load schedules:', error);
+      setError('Failed to load schedules');
     }
-  };
+  }, [deviceId]);
+
+  useEffect(() => {
+    loadSchedules();
+  }, [loadSchedules]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,13 +146,13 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
       });
 
       // Reset form and reload schedules
-      setStartTime("");
-      setEndTime("");
-      setRepeat("none");
+      setStartTime('');
+      setEndTime('');
+      setRepeat('none');
       loadSchedules();
     } catch (error) {
-      console.error("Failed to create schedule:", error);
-      setError("Failed to create schedule");
+      console.error('Failed to create schedule:', error);
+      setError('Failed to create schedule');
     }
   };
 
@@ -161,14 +161,17 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
       await scheduleApi.deleteSchedule(scheduleId);
       loadSchedules();
     } catch (error) {
-      console.error("Failed to delete schedule:", error);
-      setError("Failed to delete schedule");
+      console.error('Failed to delete schedule:', error);
+      setError('Failed to delete schedule');
     }
   };
 
   return (
     <Section>
       <Title>Schedule Playback</Title>
+      {error && (
+        <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>
+      )}
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <label>Start Time</label>
@@ -194,7 +197,11 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
           <label>Repeat</label>
           <Select
             value={repeat}
-            onChange={(e) => setRepeat(e.target.value as any)}
+            onChange={(e) =>
+              setRepeat(
+                e.target.value as 'none' | 'daily' | 'weekly' | 'monthly'
+              )
+            }
           >
             <option value="none">No repeat</option>
             <option value="daily">Daily</option>

@@ -1,4 +1,4 @@
-import { api } from "./instance";
+import { api } from './instance';
 
 export interface Schedule {
   id: string;
@@ -6,25 +6,25 @@ export interface Schedule {
   videoUrl: string;
   startTime: string;
   endTime: string;
-  repeat?: "daily" | "weekly" | "monthly" | "none";
-  status: "pending" | "caching" | "ready" | "playing" | "completed" | "error";
+  repeat?: 'daily' | 'weekly' | 'monthly' | 'none';
+  status: 'pending' | 'caching' | 'ready' | 'playing' | 'completed' | 'error';
   cacheDuration: number;
   created: string;
   updated: string;
 }
 
-export interface CreateScheduleRequest {
+export interface CreateScheduleRequest extends Record<string, unknown> {
   deviceId: string;
   videoUrl: string;
   startTime: string;
   endTime: string;
-  repeat?: "daily" | "weekly" | "monthly" | "none";
+  repeat?: 'daily' | 'weekly' | 'monthly' | 'none';
   cacheDuration: number;
 }
 
 export const scheduleApi = {
   getSchedules: () => {
-    return api.get("/schedules") as Promise<Schedule[]>;
+    return api.get('/schedules') as Promise<Schedule[]>;
   },
 
   getSchedulesByDevice: (deviceId: string) => {
@@ -32,7 +32,7 @@ export const scheduleApi = {
   },
 
   createSchedule: (schedule: CreateScheduleRequest) => {
-    return api.post("/schedules", schedule);
+    return api.post('/schedules', schedule);
   },
 
   updateSchedule: (

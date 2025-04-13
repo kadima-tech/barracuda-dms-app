@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- White background to match PNG -->
+  <rect width="800" height="800" fill="white"/>
+  
+  <!-- Shadow under character -->
+  <ellipse cx="400" cy="747" rx="130" ry="6" fill="#E5E5E5" fill-opacity="0.35"/>
+  
+  <!-- Main body - white robot body with precise border -->
+  <ellipse cx="400" cy="480" rx="130" ry="162" fill="white" stroke="#1D2E3B" stroke-width="9"/>
+  
+  <!-- Body decorations -->
+  <ellipse cx="400" cy="480" rx="122" ry="154" fill="none" stroke="#F8F8F8" stroke-width="45" stroke-opacity="0.25"/>
+  
+  <!-- Head - outer border and inner screen -->
+  <rect x="290" y="215" width="220" height="170" rx="40" ry="40" fill="#1D2E3B" stroke="#1D2E3B" stroke-width="9"/>
+  <rect x="275" y="200" width="250" height="200" rx="45" ry="45" fill="none" stroke="#1D2E3B" stroke-width="9"/>
+  
+  <!-- Antennas -->
+  <path d="M335 200 Q335 155 335 130" fill="none" stroke="#1D2E3B" stroke-width="9" stroke-linecap="round"/>
+  <path d="M465 200 Q465 155 465 130" fill="none" stroke="#1D2E3B" stroke-width="9" stroke-linecap="round"/>
+  <ellipse cx="335" cy="120" rx="10" ry="14" fill="#A4D4E4" stroke="#1D2E3B" stroke-width="4"/>
+  <ellipse cx="465" cy="120" rx="10" ry="14" fill="#A4D4E4" stroke="#1D2E3B" stroke-width="4"/>
+  
+  <!-- Eyebrows -->
+  <path d="M355 245 Q370 235 385 245" fill="none" stroke="#A4D4E4" stroke-width="7" stroke-linecap="round"/>
+  <path d="M415 245 Q430 235 445 245" fill="none" stroke="#A4D4E4" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="370" cy="275" rx="20" ry="24" fill="#A4D4E4" stroke="none"/>
+  <ellipse cx="430" cy="275" rx="20" ry="24" fill="#A4D4E4" stroke="none"/>
+  <ellipse cx="373" cy="285" rx="9" ry="11" fill="#1D2E3B" stroke="none"/>
+  <ellipse cx="433" cy="285" rx="9" ry="11" fill="#1D2E3B" stroke="none"/>
+  <ellipse cx="365" cy="270" rx="4" ry="3" fill="white" fill-opacity="0.7" stroke="none"/>
+  <ellipse cx="425" cy="270" rx="4" ry="3" fill="white" fill-opacity="0.7" stroke="none"/>
+  
+  <!-- Smile -->
+  <path d="M370 330 Q400 345 430 330" fill="none" stroke="#A4D4E4" stroke-width="10" stroke-linecap="round"/>
+  
+  <!-- Ear/headphone -->
+  <ellipse cx="525" cy="282" rx="20" ry="30" fill="#A4D4E4" stroke="#1D2E3B" stroke-width="7"/>
+  
+  <!-- Arms -->
+  <path d="M300 418 Q240 428 190 388" fill="none" stroke="#1D2E3B" stroke-width="9" stroke-linecap="round"/>
+  <path d="M500 418 Q550 458 580 453" fill="none" stroke="#1D2E3B" stroke-width="9" stroke-linecap="round"/>
+  
+  <!-- Left hand with fingers -->
+  <circle cx="190" cy="388" r="22" fill="#1D2E3B" stroke="none"/>
+  <path d="M180 373 L165 368 M190 368 L175 363 M200 373 L190 363" fill="none" stroke="#A4D4E4" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Right hand -->
+  <circle cx="580" cy="453" r="15" fill="#1D2E3B" stroke="none"/>
+  
+  <!-- Tablet/phone in right hand -->
+  <rect x="560" y="426" width="34" height="54" rx="4" ry="4" fill="#1D2E3B" stroke="none"/>
+  <rect x="564" y="431" width="26" height="40" rx="2" ry="2" fill="#162630" stroke="none"/>
+  <circle cx="577" cy="475" r="3" fill="#A4D4E4" stroke="none"/>
+  
+  <!-- Legs -->
+  <path d="M350 645 L350 702" fill="none" stroke="#1D2E3B" stroke-width="9" stroke-linecap="round"/>
+  <path d="M450 645 L450 702" fill="none" stroke="#1D2E3B" stroke-width="9" stroke-linecap="round"/>
+  
+  <!-- Feet -->
+  <ellipse cx="350" cy="716" rx="24" ry="14" fill="#A4D4E4" stroke="#1D2E3B" stroke-width="6"/>
+  <ellipse cx="450" cy="716" rx="24" ry="14" fill="#A4D4E4" stroke="#1D2E3B" stroke-width="6"/>
+  
+  <!-- Text -->
+  <text x="400" y="510" font-family="Arial Black, Gadget, sans-serif" font-size="52" font-weight="900" text-anchor="middle" fill="#1D2E3B">BYTE</text>
+  <text x="400" y="555" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#1D2E3B">DESKBUDDY</text>
+</svg> 

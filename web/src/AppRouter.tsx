@@ -1,16 +1,16 @@
-import React from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
-import { paths } from "./config/paths";
-import Dashboard from "./pages/Dashboard";
-import DeviceManagement from "./pages/DeviceManagement";
-import Alerts from "./pages/Alerts";
-import UserManagement from "./pages/UserManagement";
-import Landing from "./pages/Landing.tsx";
+import React from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { paths } from './config/paths';
+import Dashboard from './pages/Dashboard';
+import DeviceManagement from './pages/DeviceManagement';
+import Alerts from './pages/Alerts';
+import UserManagement from './pages/UserManagement';
+import Landing from './pages/Landing';
 
-import PersonViewer from "./pages/clients/Dela/PersonViewer";
-import MusicDashboard from "./pages/spotify/MusicDashboard";
-import SpotifyAuth from "./pages/spotify/SpotifyAuth";
-import BookingDashboard from "./pages/exchange/BookingDashboard";
+import PersonViewer from './pages/clients/Dela/PersonViewer';
+import MusicDashboard from './pages/spotify/MusicDashboard';
+import SpotifyAuth from './pages/spotify/SpotifyAuth';
+import BookingDashboard from './pages/exchange/BookingDashboard';
 
 export const AppRouter = () => {
   return (

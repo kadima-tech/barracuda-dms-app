@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { API_BASE_URL } from '../../utils/api/config';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import { paths } from '../../config/paths';
+import { useNavigate } from 'react-router-dom';
+import ClientOnly from '../../components/common/ClientOnly';
 
 const AuthContainer = styled.div`
   display: flex;
@@ -15,7 +18,23 @@ const AuthContainer = styled.div`
   font-weight: 600;
 `;
 
+// The main component with two parts: client-safe UI and client-only router logic
 const SpotifyAuth = () => {
+  return (
+    <ClientOnly
+      fallback={
+        <AuthContainer>
+          <h1>Loading Spotify authentication...</h1>
+        </AuthContainer>
+      }
+    >
+      <SpotifyAuthClient />
+    </ClientOnly>
+  );
+};
+
+// Client-side component that uses React Router
+const SpotifyAuthClient = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,5 +84,8 @@ const SpotifyAuth = () => {
     </AuthContainer>
   );
 };
+
+// Tell Next.js to always fetch this page fresh
+export const dynamic = 'force-dynamic';
 
 export default SpotifyAuth;
