@@ -1,6 +1,6 @@
-import { api } from "./instance";
+import { api } from './instance';
 
-export interface CacheRequest {
+export interface CacheRequest extends Record<string, unknown> {
   scheduleId: string;
   videoUrl: string;
   scheduleTime: string;
@@ -16,7 +16,7 @@ export const cacheApi = {
   cacheContent: (request: CacheRequest) => {
     return api.post(`/cache/${request.scheduleId}`, request, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   },

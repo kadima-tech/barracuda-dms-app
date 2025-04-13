@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import dela from "../../../assets/dela.png";
+import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import dela from '../../../assets/dela.png';
 
 // Types
 interface Person {
@@ -69,7 +69,7 @@ const PersonName = styled.h2`
 `;
 
 const StatusIndicator = styled.div<{ isPresent?: boolean }>`
-  background-color: ${(props) => (props.isPresent ? "#F37021" : "#2E7D32")};
+  background-color: ${(props) => (props.isPresent ? '#F37021' : '#2E7D32')};
   color: white;
   width: 100%;
   height: 80px;
@@ -85,15 +85,15 @@ const StatusIndicator = styled.div<{ isPresent?: boolean }>`
   transition: all 0.3s ease;
   box-shadow: 0 8px 24px
     ${(props) =>
-      props.isPresent ? "rgba(243, 112, 33, 0.15)" : "rgba(46, 125, 50, 0.15)"};
+      props.isPresent ? 'rgba(243, 112, 33, 0.15)' : 'rgba(46, 125, 50, 0.15)'};
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px
       ${(props) =>
         props.isPresent
-          ? "rgba(243, 112, 33, 0.25)"
-          : "rgba(46, 125, 50, 0.25)"};
+          ? 'rgba(243, 112, 33, 0.25)'
+          : 'rgba(46, 125, 50, 0.25)'};
   }
 
   @media (max-width: 1024px) {
@@ -116,18 +116,18 @@ const PersonViewer: React.FC<PersonViewerProps> = ({ deviceId }) => {
         // Replace this with your actual API endpoint
         const response = await fetch(`/api/devices/${deviceId}/person`);
         if (!response.ok) {
-          throw new Error("Failed to fetch person data");
+          throw new Error('Failed to fetch person data');
         }
         const data = await response.json();
         setPerson(data);
       } catch (error) {
-        console.error("Error fetching person data:", error);
+        console.error('Error fetching person data:', error);
         // Fallback data for development/testing
         setPerson({
-          id: "1",
-          name: "Marie-Antoinette van Leeuwenhoven",
-          roomNumber: "Kamer 02",
-          imageUrl: dela,
+          id: '1',
+          name: 'Marie-Antoinette van Leeuwenhoven',
+          roomNumber: 'Kamer 02',
+          imageUrl: dela.src,
         });
       } finally {
         setLoading(false);
@@ -159,7 +159,7 @@ const PersonViewer: React.FC<PersonViewerProps> = ({ deviceId }) => {
             <PersonName>{person.name}</PersonName>
           </InfoContent>
           <StatusIndicator isPresent={isPresent} onClick={togglePresence}>
-            {isPresent ? "Familie aanwezig" : "Niemand aanwezig"}
+            {isPresent ? 'Familie aanwezig' : 'Niemand aanwezig'}
           </StatusIndicator>
         </PersonInfo>
       </PersonCard>

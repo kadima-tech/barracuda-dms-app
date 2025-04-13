@@ -1,6 +1,9 @@
+'use client';
+
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { GitHub, Mail } from 'react-feather';
+import ClientOnly from './ClientOnly';
 
 const FooterContainer = styled.footer`
   background: white;
@@ -76,36 +79,41 @@ const Copyright = styled.div`
   color: ${({ theme }) => theme.colors.grey};
   font-size: 0.9rem;
 `;
+
 export const Footer = () => {
   return (
-    <FooterContainer>
-      <FooterContent>
-        <LeftSection>
-          <BrandName to="/dashboard">BarracudaDMS</BrandName>
+    <ClientOnly
+      fallback={<div style={{ height: '3rem' }}>Loading footer...</div>}
+    >
+      <FooterContainer>
+        <FooterContent>
+          <LeftSection>
+            <BrandName to="/dashboard">BarracudaDMS</BrandName>
 
-          <Copyright>
-            © {new Date().getFullYear()} BarracudaDMS. All rights reserved.
-          </Copyright>
-          <FooterLinks>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/terms">Terms</Link>
-            <Link to="/contact">Contact</Link>
-          </FooterLinks>
-        </LeftSection>
+            <Copyright>
+              © {new Date().getFullYear()} BarracudaDMS. All rights reserved.
+            </Copyright>
+            <FooterLinks>
+              <Link to="/privacy">Privacy</Link>
+              <Link to="/terms">Terms</Link>
+              <Link to="/contact">Contact</Link>
+            </FooterLinks>
+          </LeftSection>
 
-        <SocialLinks>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <GitHub size={16} />
-          </a>
-          <a href="mailto:maurice@dvpd.nl">
-            <Mail size={16} />
-          </a>
-        </SocialLinks>
-      </FooterContent>
-    </FooterContainer>
+          <SocialLinks>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GitHub size={16} />
+            </a>
+            <a href="mailto:maurice@dvpd.nl">
+              <Mail size={16} />
+            </a>
+          </SocialLinks>
+        </FooterContent>
+      </FooterContainer>
+    </ClientOnly>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { MessageCircle, X, Send } from 'react-feather';
 
@@ -155,24 +155,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Create a session when the component mounts
-  useEffect(() => {
-    if (isOpen && !sessionId) {
-      createSession();
-    }
-  }, [isOpen]);
-
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   // Create a new session with the agent via the Next.js API
-  const createSession = async () => {
+  const createSession = useCallback(async () => {
     try {
       // Add welcome message immediately
       setMessages([
@@ -199,6 +183,22 @@ const ChatBox: React.FC<ChatBoxProps> = ({
     } catch (error) {
       console.error('Error creating session:', error);
     }
+  }, [agentName, userId]);
+
+  // Create a session when the component mounts
+  useEffect(() => {
+    if (isOpen && !sessionId) {
+      createSession();
+    }
+  }, [isOpen, sessionId, createSession]);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // Send a message to the agent via the Next.js API

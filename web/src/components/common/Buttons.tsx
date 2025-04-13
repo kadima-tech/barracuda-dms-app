@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Icon from './Icon';
+import Icon, { IconVariant } from './Icon';
 
 interface ButtonProps {
   color?: string;
-  icon?: string;
+  icon?: IconVariant;
   children?: React.ReactNode;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   style?: object;

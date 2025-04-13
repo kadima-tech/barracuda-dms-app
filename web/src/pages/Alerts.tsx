@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Header } from "../components/common/Header";
-import { Wrapper } from "../components/layout/Wrapper";
+'use client';
+
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Header } from '../components/common/Header';
+import { Wrapper } from '../components/layout/Wrapper';
+import ClientOnly from '../components/common/ClientOnly';
 
 interface Alert {
   id: string;
   deviceId: string;
-  type: "warning" | "critical" | "info";
+  type: 'warning' | 'critical' | 'info';
   message: string;
   timestamp: number;
-  status: "new" | "acknowledged" | "resolved";
+  status: 'new' | 'acknowledged' | 'resolved';
   metrics?: {
     [key: string]: number;
   };
@@ -60,14 +63,14 @@ const AlertCard = styled.div<{ type: string }>`
   &:hover {
     border-color: ${(props) => {
       switch (props.type) {
-        case "critical":
-          return "#EF4444";
-        case "warning":
-          return "#F59E0B";
-        case "info":
-          return "#3B82F6";
+        case 'critical':
+          return '#EF4444';
+        case 'warning':
+          return '#F59E0B';
+        case 'info':
+          return '#3B82F6';
         default:
-          return "#0CBAB1";
+          return '#0CBAB1';
       }
     }};
   }
@@ -84,26 +87,26 @@ const AlertType = styled.span<{ type: string }>`
   border-radius: 1rem;
   background: ${(props) => {
     switch (props.type) {
-      case "critical":
-        return "#FEE2E2";
-      case "warning":
-        return "#FEF3C7";
-      case "info":
-        return "#DBEAFE";
+      case 'critical':
+        return '#FEE2E2';
+      case 'warning':
+        return '#FEF3C7';
+      case 'info':
+        return '#DBEAFE';
       default:
-        return "#E7F7F6";
+        return '#E7F7F6';
     }
   }};
   color: ${(props) => {
     switch (props.type) {
-      case "critical":
-        return "#DC2626";
-      case "warning":
-        return "#D97706";
-      case "info":
-        return "#2563EB";
+      case 'critical':
+        return '#DC2626';
+      case 'warning':
+        return '#D97706';
+      case 'info':
+        return '#2563EB';
       default:
-        return "#0CBAB1";
+        return '#0CBAB1';
     }
   }};
   transform: rotate(-2deg);
@@ -159,30 +162,30 @@ const Alerts = () => {
     // Mock data - replace with actual API call
     const mockAlerts: Alert[] = [
       {
-        id: "1",
-        deviceId: "DEV001",
-        type: "critical",
-        message: "Device temperature exceeding critical threshold (85°C)",
+        id: '1',
+        deviceId: 'DEV001',
+        type: 'critical',
+        message: 'Device temperature exceeding critical threshold (85°C)',
         timestamp: Date.now(),
-        status: "new",
+        status: 'new',
         metrics: { temperature: 85 },
       },
       {
-        id: "2",
-        deviceId: "DEV002",
-        type: "warning",
-        message: "Device uptime exceeding recommended maintenance interval",
+        id: '2',
+        deviceId: 'DEV002',
+        type: 'warning',
+        message: 'Device uptime exceeding recommended maintenance interval',
         timestamp: Date.now() - 86400000,
-        status: "acknowledged",
+        status: 'acknowledged',
         metrics: { uptime: 8760 },
       },
       {
-        id: "3",
-        deviceId: "DEV003",
-        type: "info",
-        message: "Device memory usage approaching 80% capacity",
+        id: '3',
+        deviceId: 'DEV003',
+        type: 'info',
+        message: 'Device memory usage approaching 80% capacity',
         timestamp: Date.now() - 172800000,
-        status: "new",
+        status: 'new',
         metrics: { memoryUsage: 80 },
       },
     ];
@@ -193,7 +196,7 @@ const Alerts = () => {
     setAlerts(
       alerts.map((alert) =>
         alert.id === alertId
-          ? { ...alert, status: "acknowledged" as const }
+          ? { ...alert, status: 'acknowledged' as const }
           : alert
       )
     );
@@ -202,57 +205,59 @@ const Alerts = () => {
   const handleResolve = (alertId: string) => {
     setAlerts(
       alerts.map((alert) =>
-        alert.id === alertId ? { ...alert, status: "resolved" as const } : alert
+        alert.id === alertId ? { ...alert, status: 'resolved' as const } : alert
       )
     );
   };
 
   return (
-    <Wrapper
-      header={<Header />}
-      contentBoxPrimary={[
-        <Banner>
-          <div>
-            <BannerTitle>System Alerts</BannerTitle>
-            <BannerText>
-              Monitor and manage system alerts, warnings, and critical
-              notifications for your devices.
-            </BannerText>
-          </div>
-        </Banner>,
-        <AlertsContainer>
-          {alerts.map((alert) => (
-            <AlertCard key={alert.id} type={alert.type}>
-              <AlertInfo>
-                <AlertType type={alert.type}>
-                  {alert.type.toUpperCase()}
-                </AlertType>
-                <AlertMessage>{alert.message}</AlertMessage>
-                <AlertMeta>
-                  <span>Device: {alert.deviceId}</span>
-                  <span>•</span>
-                  <span>{new Date(alert.timestamp).toLocaleString()}</span>
-                  <span>•</span>
-                  <span>Status: {alert.status}</span>
-                </AlertMeta>
-              </AlertInfo>
-              <div>
-                {alert.status === "new" && (
-                  <ActionButton onClick={() => handleAcknowledge(alert.id)}>
-                    Acknowledge
-                  </ActionButton>
-                )}
-                {alert.status === "acknowledged" && (
-                  <ActionButton onClick={() => handleResolve(alert.id)}>
-                    Resolve
-                  </ActionButton>
-                )}
-              </div>
-            </AlertCard>
-          ))}
-        </AlertsContainer>,
-      ]}
-    />
+    <ClientOnly fallback={<div>Loading alerts...</div>}>
+      <Wrapper
+        header={<Header />}
+        contentBoxPrimary={[
+          <Banner key="banner">
+            <div>
+              <BannerTitle>System Alerts</BannerTitle>
+              <BannerText>
+                Monitor and manage system alerts, warnings, and critical
+                notifications for your devices.
+              </BannerText>
+            </div>
+          </Banner>,
+          <AlertsContainer key="alerts">
+            {alerts.map((alert) => (
+              <AlertCard key={alert.id} type={alert.type}>
+                <AlertInfo>
+                  <AlertType type={alert.type}>
+                    {alert.type.toUpperCase()}
+                  </AlertType>
+                  <AlertMessage>{alert.message}</AlertMessage>
+                  <AlertMeta>
+                    <span>Device: {alert.deviceId}</span>
+                    <span>•</span>
+                    <span>{new Date(alert.timestamp).toLocaleString()}</span>
+                    <span>•</span>
+                    <span>Status: {alert.status}</span>
+                  </AlertMeta>
+                </AlertInfo>
+                <div>
+                  {alert.status === 'new' && (
+                    <ActionButton onClick={() => handleAcknowledge(alert.id)}>
+                      Acknowledge
+                    </ActionButton>
+                  )}
+                  {alert.status === 'acknowledged' && (
+                    <ActionButton onClick={() => handleResolve(alert.id)}>
+                      Resolve
+                    </ActionButton>
+                  )}
+                </div>
+              </AlertCard>
+            ))}
+          </AlertsContainer>,
+        ]}
+      />
+    </ClientOnly>
   );
 };
 

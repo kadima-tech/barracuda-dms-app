@@ -1,33 +1,33 @@
-import React from "react";
+import React from 'react';
 import {
   LoadingContainer,
   ErrorContainer,
   ErrorIcon,
-} from "./StyledComponents.ts";
+} from './StyledComponents';
 
 interface LoadingProps {
   message?: string;
 }
 
 export const Loading: React.FC<LoadingProps> = ({
-  message = "Loading room information",
+  message = 'Loading room information',
 }) => {
   return (
     <LoadingContainer>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "16px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
         }}
       >
-        <div style={{ width: "60px", height: "60px" }}>
+        <div style={{ width: '60px', height: '60px' }}>
           <svg
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: '100%', height: '100%' }}
           >
             <circle
               cx="12"
@@ -43,8 +43,8 @@ export const Loading: React.FC<LoadingProps> = ({
               strokeWidth="2"
               strokeLinecap="round"
               style={{
-                transformOrigin: "center",
-                animation: "spin 1s linear infinite",
+                transformOrigin: 'center',
+                animation: 'spin 1s linear infinite',
               }}
             />
           </svg>
@@ -75,15 +75,15 @@ export const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
         <button
           onClick={onRetry}
           style={{
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            padding: "12px 16px",
-            fontWeight: "600",
-            cursor: "pointer",
-            marginTop: "16px",
-            boxShadow: "0 4px 6px rgba(59, 130, 246, 0.25)",
+            background: '#3b82f6',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            marginTop: '16px',
+            boxShadow: '0 4px 6px rgba(59, 130, 246, 0.25)',
           }}
         >
           Request Admin Consent
@@ -105,18 +105,18 @@ export const BookingStatusNotification: React.FC<
   return (
     <div
       style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        backgroundColor: isError ? "#fee2e2" : "#dcfce7",
-        color: isError ? "#b91c1c" : "#166534",
-        padding: "12px 20px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        backgroundColor: isError ? '#fee2e2' : '#dcfce7',
+        color: isError ? '#b91c1c' : '#166534',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
       }}
     >
       {isError ? (
@@ -173,14 +173,14 @@ export const BookingStatusNotification: React.FC<
         <button
           onClick={onClose}
           style={{
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            marginLeft: "8px",
-            padding: "0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            marginLeft: '8px',
+            padding: '0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <svg
@@ -192,14 +192,14 @@ export const BookingStatusNotification: React.FC<
           >
             <path
               d="M18 6L6 18"
-              stroke={isError ? "#b91c1c" : "#166534"}
+              stroke={isError ? '#b91c1c' : '#166534'}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M6 6L18 18"
-              stroke={isError ? "#b91c1c" : "#166534"}
+              stroke={isError ? '#b91c1c' : '#166534'}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

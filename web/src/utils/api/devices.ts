@@ -1,6 +1,20 @@
 import { api } from './instance';
 import { API_BASE_URL } from './config';
 
+interface Download {
+  id: string;
+  url: string;
+  progress: number;
+  status: 'pending' | 'in-progress' | 'completed' | 'error';
+}
+
+interface Schedule {
+  id: string;
+  startTime: string;
+  endTime: string;
+  status: 'pending' | 'active' | 'completed';
+}
+
 export interface DeviceMetrics {
   temperature?: number;
   uptime?: number;
@@ -8,8 +22,8 @@ export interface DeviceMetrics {
   memoryUsage?: number;
   diskUsage?: number;
   currentUrl?: string;
-  activeDownloads?: any[];
-  activeSchedules?: any[];
+  activeDownloads?: Download[];
+  activeSchedules?: Schedule[];
 }
 
 export interface Device {

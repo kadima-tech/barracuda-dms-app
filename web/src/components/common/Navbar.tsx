@@ -1,9 +1,12 @@
-import styled from "styled-components";
+'use client';
 
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import styled from 'styled-components';
 
-import { paths } from "../../config/paths";
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import { paths } from '../../config/paths';
+import ClientOnly from './ClientOnly';
 
 interface navProps {
   isMobile: boolean;
@@ -14,7 +17,7 @@ interface navProps {
 const NavItem = styled(Link)<{ mobile: number; isActive?: boolean }>`
   display: flex;
   align-items: center;
-  color: ${(props) => (props.isActive ? "#0CBAB1" : "#4a5568")};
+  color: ${(props) => (props.isActive ? '#0CBAB1' : '#4a5568')};
   font-weight: 500;
   text-decoration: none;
   font-size: 0.95rem;
@@ -24,12 +27,12 @@ const NavItem = styled(Link)<{ mobile: number; isActive?: boolean }>`
   position: relative;
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
-    width: ${(props) => (props.isActive ? "80%" : "0")};
+    width: ${(props) => (props.isActive ? '80%' : '0')};
     height: 2px;
     background-color: #0cbab1;
     transition: all 0.2s ease-in-out;
@@ -47,15 +50,15 @@ const NavItem = styled(Link)<{ mobile: number; isActive?: boolean }>`
       display: none;
     }
   `
-      : ""}
+      : ''}
 
   &:hover {
     color: #0cbab1;
     background-color: ${(props) =>
-      props.isActive ? "transparent" : "rgba(12, 186, 177, 0.05)"};
+      props.isActive ? 'transparent' : 'rgba(12, 186, 177, 0.05)'};
 
     &:after {
-      width: ${(props) => (props.mobile === 0 ? "80%" : "0")};
+      width: ${(props) => (props.mobile === 0 ? '80%' : '0')};
     }
   }
 `;
@@ -75,7 +78,7 @@ const NavItemWrapper = styled.div<navProps>`
   @media (max-width: 991px) {
     position: fixed;
     top: 4.5rem;
-    right: ${(props) => (props.drawerState ? "0" : "-100%")};
+    right: ${(props) => (props.drawerState ? '0' : '-100%')};
     width: 250px;
     height: calc(100vh - 4.5rem);
     background-color: white;
@@ -116,11 +119,11 @@ export const Navbar = () => {
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     handleResize();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -169,16 +172,18 @@ export const Navbar = () => {
   );
 
   return (
-    <StyledNav>
-      {isMobile && (
-        <MobileMenuButton onClick={toggleDrawer}>
-          {isDrawerOpen ? "✕" : "☰"}
-        </MobileMenuButton>
-      )}
-      <NavItemWrapper isMobile={isMobile} drawerState={isDrawerOpen}>
-        {NavItems(isMobile ? 1 : 0)}
-      </NavItemWrapper>
-    </StyledNav>
+    <ClientOnly fallback={<div>Loading navigation...</div>}>
+      <StyledNav>
+        {isMobile && (
+          <MobileMenuButton onClick={toggleDrawer}>
+            {isDrawerOpen ? '✕' : '☰'}
+          </MobileMenuButton>
+        )}
+        <NavItemWrapper isMobile={isMobile} drawerState={isDrawerOpen}>
+          {NavItems(isMobile ? 1 : 0)}
+        </NavItemWrapper>
+      </StyledNav>
+    </ClientOnly>
   );
 };
 
