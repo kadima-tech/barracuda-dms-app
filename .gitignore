@@ -143,6 +143,8 @@ dist
 .pnp.*
 
 lib
+# But not svelte5 libs
+!*/**/src/lib
 
 # Python cache files
 __pycache__/
