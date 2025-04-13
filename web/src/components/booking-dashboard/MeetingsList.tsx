@@ -3,7 +3,7 @@ import { RoomInfo } from './types';
 import { useTheme } from './ThemeContext';
 import { parseTime, formatTimeForDisplay } from './utils';
 import {
-  MeetingsList as MeetingsListContainer,
+  MeetingsListContainer,
   MeetingItem,
   MeetingTime,
   MeetingTimeText,
@@ -230,8 +230,8 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                 }`,
               }}
             >
-              <MeetingTime>
-                <MeetingTimeText>
+              <MeetingTime $isDark={isDark}>
+                <MeetingTimeText $isDark={isDark}>
                   {formatTimeForDisplay(meeting.startTime)}
                 </MeetingTimeText>
                 <div
@@ -242,12 +242,12 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                     margin: '4px 0',
                   }}
                 ></div>
-                <MeetingTimeText>
+                <MeetingTimeText $isDark={isDark}>
                   {formatTimeForDisplay(meeting.endTime)}
                 </MeetingTimeText>
               </MeetingTime>
-              <MeetingDetails>
-                <MeetingTitle>
+              <MeetingDetails $isDark={isDark}>
+                <MeetingTitle $isDark={isDark}>
                   {meeting.title}
                   {isActive && (
                     <span
@@ -294,7 +294,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                     </CancelButton>
                   )}
                 </MeetingTitle>
-                <MeetingInfo>
+                <MeetingInfo $isDark={isDark}>
                   {meeting.organizer && (
                     <span style={{ display: 'flex', alignItems: 'center' }}>
                       <svg
@@ -369,14 +369,15 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
         {roomInfo.upcomingMeetings?.length > 0 &&
           roomInfo.availabilityStatus !== 'busy' && (
             <MeetingItem
+              $isDark={isDark}
               style={{
                 marginTop: '16px',
                 background: '#ecfdf5',
                 borderLeft: '4px solid #10b981',
               }}
             >
-              <MeetingTime>
-                <MeetingTimeText>Now</MeetingTimeText>
+              <MeetingTime $isDark={isDark}>
+                <MeetingTimeText $isDark={isDark}>Now</MeetingTimeText>
                 <div
                   style={{
                     height: '1px',
@@ -385,10 +386,11 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                     margin: '4px 0',
                   }}
                 ></div>
-                <MeetingTimeText>EOD</MeetingTimeText>
+                <MeetingTimeText $isDark={isDark}>EOD</MeetingTimeText>
               </MeetingTime>
-              <MeetingDetails>
+              <MeetingDetails $isDark={isDark}>
                 <MeetingTitle
+                  $isDark={isDark}
                   style={{
                     color: '#10b981',
                     display: 'flex',
@@ -410,7 +412,7 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
                   </svg>
                   Available for booking
                 </MeetingTitle>
-                <MeetingInfo style={{ color: '#10b981' }}>
+                <MeetingInfo $isDark={isDark} style={{ color: '#10b981' }}>
                   Room is free for the rest of the day
                 </MeetingInfo>
               </MeetingDetails>
@@ -418,8 +420,8 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
           )}
       </MeetingsListContainer>
 
-      <TimelineContainer>
-        <TimelineLine />
+      <TimelineContainer $isDark={isDark}>
+        <TimelineLine $isDark={isDark} />
         {/* Position current time indicator based on business hours (9am-5pm) */}
         {(() => {
           const now = new Date();
@@ -434,7 +436,10 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
             const percentageOfDay = (minutesSince9am / 480) * 100;
 
             return (
-              <CurrentTimeIndicator style={{ left: `${percentageOfDay}%` }} />
+              <CurrentTimeIndicator
+                $isDark={isDark}
+                style={{ left: `${percentageOfDay}%` }}
+              />
             );
           }
           // If outside business hours, don't show the indicator
@@ -534,9 +539,11 @@ const MeetingsListComponent: React.FC<MeetingsListProps> = ({ roomInfo }) => {
             }
 
             return (
-              <TimeSlot key={hour}>
-                <TimeMarker type={markerType} />
-                <TimeLabel>{`${hour < 10 ? '0' : ''}${hour}:00`}</TimeLabel>
+              <TimeSlot key={hour} $isDark={isDark}>
+                <TimeMarker $isDark={isDark} type={markerType} />
+                <TimeLabel $isDark={isDark}>{`${
+                  hour < 10 ? '0' : ''
+                }${hour}:00`}</TimeLabel>
               </TimeSlot>
             );
           });

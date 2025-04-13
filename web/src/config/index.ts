@@ -1,3 +1,3 @@
-// Export all configuration modules
-export * from './paths';
-export * from './environments';
+// API configuration
+export const API_BASE_URL =
+  import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:3001/api';

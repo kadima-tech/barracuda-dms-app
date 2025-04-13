@@ -77,19 +77,20 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
 // Theme toggle component
 export const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   return (
-    <ThemeToggleContainer>
+    <ThemeToggleContainer $isDark={isDark}>
       <span role="img" aria-label="Light mode">
         ☀️
       </span>
-      <ToggleLabel>
+      <ToggleLabel $isDark={isDark}>
         <ToggleInput
           type="checkbox"
           checked={theme === 'dark'}
           onChange={toggleTheme}
         />
-        <ToggleSlider />
+        <ToggleSlider $isDark={isDark} />
       </ToggleLabel>
       <span role="img" aria-label="Dark mode">
         🌙
