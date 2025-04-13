@@ -43,6 +43,7 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
+		"@google-cloud/speech": "^7.0.1",
 		"@inlang/paraglide-js": "^2.0.0"
 	},
 	"pnpm": {

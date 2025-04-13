@@ -32,3 +32,12 @@ declare global {
 		webkitSpeechRecognition?: new () => SpeechRecognition;
 	}
 }
+
+// Speaker types
+export interface Speaker {
+	id: string;
+	name: string;
+	color: string;
+	isActive: boolean;
+	voiceProfile?: { features: number[] };
+}
