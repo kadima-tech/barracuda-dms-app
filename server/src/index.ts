@@ -46,10 +46,13 @@ const setup = async () => {
         'http://localhost:3000',
         'http://192.168.2.128',
         'http://localhost',
+        'https://web-564151515476.europe-west1.run.app',
+        'https://server-564151515476.europe-west1.run.app',
       ],
       methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
       credentials: true,
-      allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
+      exposedHeaders: ['Access-Control-Allow-Origin'],
     });
 
     logger.info('CORS configuration added.');
@@ -74,10 +77,13 @@ const setup = async () => {
           'http://localhost:8080',
           'http://192.168.2.128',
           'http://localhost',
+          'https://web-564151515476.europe-west1.run.app',
+          'https://server-564151515476.europe-west1.run.app',
         ],
         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
         credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
+        exposedHeaders: ['Access-Control-Allow-Origin'],
       },
     });
 
