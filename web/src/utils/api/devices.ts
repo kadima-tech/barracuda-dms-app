@@ -35,8 +35,9 @@ export interface Device {
 
 export const deviceApi = {
   // Get all connected devices
-  getDevices: () => {
-    return api.get('/devices');
+  async getDevices() {
+    const response = await fetch(`${API_BASE_URL}/devices`);
+    return response.json();
   },
 
   // Send reboot command to a specific device
@@ -123,8 +124,14 @@ export const deviceApi = {
   },
 
   async assignClient(deviceId: string, clientId: string | null) {
-    const response = await api.put(`/devices/${deviceId}/client`, { clientId });
-    return response;
+    const response = await fetch(`${API_BASE_URL}/devices/${deviceId}/client`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ clientId }),
+    });
+    return response.json();
   },
 
   // Function to upload images

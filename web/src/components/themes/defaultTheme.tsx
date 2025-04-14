@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
+import { defaultTheme } from './constants';
 
 type Props = {
   children?: React.ReactNode;

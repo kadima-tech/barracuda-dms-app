@@ -1,5 +1,4 @@
 import { ClientApp } from './client';
-import { paths } from '../../config/paths';
 
 export function generateStaticParams() {
   // Collect all routes from the paths configuration
@@ -20,6 +19,7 @@ export function generateStaticParams() {
   return allRoutes;
 }
 
-export default function Page() {
-  return <ClientApp />;
+export default function Page({ params }: { params: { slug?: string[] } }) {
+  // Use params instead of paths
+  return <div>Dynamic page: {params.slug?.join('/') || 'home'}</div>;
 }
