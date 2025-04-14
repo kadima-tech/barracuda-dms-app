@@ -19,7 +19,12 @@ export default [
         project: './tsconfig.json',
       },
     },
-    extends: [...tseslint.configs.recommended, 'next/core-web-vitals'],
+    extends: [
+      'eslint:recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:react-hooks/recommended',
+      'next/core-web-vitals',
+    ],
     rules: {
       'react-refresh/only-export-components': [
         'warn',

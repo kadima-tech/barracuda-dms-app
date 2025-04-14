@@ -2,12 +2,13 @@ import { generateStaticParams } from './staticParams';
 
 export { generateStaticParams };
 
-interface PageProps {
+type PageProps = {
   params: {
-    slug: string[] | undefined;
+    slug: string[];
   };
-}
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-export default function Page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   return <div>Dynamic page: {params.slug?.join('/') || 'home'}</div>;
 }
