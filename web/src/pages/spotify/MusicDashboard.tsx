@@ -698,7 +698,7 @@ const SpotifyDashboard: React.FC<SpotifyDashboardProps> = () => {
         clearInterval(pollingTimeoutRef.current);
       }
     };
-  }, [fetchNowPlaying, track]);
+  }, [fetchNowPlaying]);
 
   // Add debounce check for control actions
   const isControlDebounced = () => {

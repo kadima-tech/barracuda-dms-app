@@ -1,5 +1,3 @@
-import { NextRequest, NextResponse } from 'next/server';
-
 // Configure the route to be dynamic
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
