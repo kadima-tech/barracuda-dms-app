@@ -12,18 +12,15 @@ export interface EnvironmentConfig {
 // Environment configurations
 export const environments: Record<Environment, EnvironmentConfig> = {
   local: {
-    apiBaseUrl: 'http://localhost:8080',
+    apiBaseUrl: '/api',
     // Add other local environment configurations
   },
   development: {
-    apiBaseUrl:
-      process.env.NEXT_PUBLIC_DEV_API_URL || 'http://192.168.2.128:8080',
+    apiBaseUrl: '/api',
     // Add other development environment configurations
   },
   production: {
-    apiBaseUrl:
-      process.env.NEXT_PUBLIC_PROD_API_URL ||
-      'https://server-564151515476.europe-west1.run.app',
+    apiBaseUrl: '/api',
     // Add other production environment configurations
   },
 };

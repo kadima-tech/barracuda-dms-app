@@ -123,19 +123,8 @@ export const deviceApi = {
   },
 
   async assignClient(deviceId: string, clientId: string | null) {
-    const response = await fetch(`/api/devices/${deviceId}/client`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ clientId }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to assign client to device');
-    }
-
-    return response.json();
+    const response = await api.put(`/devices/${deviceId}/client`, { clientId });
+    return response;
   },
 
   // Function to upload images
@@ -143,19 +132,10 @@ export const deviceApi = {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
 
-    const response = await fetch(
-      `${API_BASE_URL}/devices/${deviceId}/images/upload`,
-      {
-        method: 'POST',
-        body: formData,
-        // No need for default headers as FormData sets its own
-      }
+    const response = await api.post(
+      `/devices/${deviceId}/images/upload`,
+      formData
     );
-
-    if (!response.ok) {
-      throw new Error('Failed to upload images');
-    }
-
-    return response.json();
+    return response;
   },
 };

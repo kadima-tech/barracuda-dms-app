@@ -488,9 +488,11 @@ const DeviceOverview = () => {
   const fetchDevices = useCallback(async () => {
     try {
       const response = await deviceApi.getDevices();
+      // Extract the devices array from the response data
+      const devicesArray = response.data || [];
 
       setDevices((prev) => {
-        const updated = mergeDeviceData(prev, response);
+        const updated = mergeDeviceData(prev, devicesArray);
         prevDevicesRef.current = updated;
         return updated;
       });
