@@ -487,13 +487,26 @@ const DeviceOverview = () => {
 
   const fetchDevices = useCallback(async () => {
     try {
+      // Assuming the API returns an object like { data: Device[], links: ... }
       const response = await deviceApi.getDevices();
 
-      setDevices((prev) => {
-        const updated = mergeDeviceData(prev, response);
-        prevDevicesRef.current = updated;
-        return updated;
-      });
+      // Check if response and response.data exist and response.data is an array
+      if (response && Array.isArray(response.data)) {
+        setDevices((prev) => {
+          // Pass the actual device array (response.data) to the merge function
+          const updated = mergeDeviceData(prev, response.data);
+          prevDevicesRef.current = updated;
+          return updated;
+        });
+      } else {
+        // Log an error if the response structure is not as expected
+        console.error(
+          'Invalid response structure received from getDevices:',
+          response
+        );
+        // Optionally set devices to an empty array or handle the error appropriately
+        setDevices([]);
+      }
 
       if (loading) setLoading(false);
     } catch (error) {
