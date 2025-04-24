@@ -375,12 +375,12 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   const presetUrls = [
     {
       name: 'Room Booking',
-      url: 'http://192.168.2.128:5173/room-booking/booking-dashboard',
+      url: 'http://https://web-564151515476.europe-west1.run.app/room-booking/booking-dashboard',
     },
     { name: 'NOS', url: 'https://www.nos.nl' },
     {
       name: 'DELA Person Viewer',
-      url: 'http://192.168.2.128:5173/clients/dela/person-viewer',
+      url: 'http://https://web-564151515476.europe-west1.run.app/clients/dela/person-viewer',
     },
     {
       name: 'Kiwa Screen',
@@ -388,13 +388,13 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     },
     {
       name: 'Spotify',
-      url: 'http://192.168.2.128:5173/spotify',
+      url: 'http://https://web-564151515476.europe-west1.run.app/spotify',
     },
     {
       name: 'BarracudaDMS',
-      url: 'http://192.168.2.128:5173/public/index.html',
+      url: 'http://https://web-564151515476.europe-west1.run.app/public/index.html',
     },
-    { name: 'Dashboard', url: 'http://192.168.2.128:5173/dashboard' },
+    { name: 'Dashboard', url: 'http://https://web-564151515476.europe-west1.run.app/dashboard' },
   ];
 
   // Use useCallback to memorize function references
