@@ -10,7 +10,7 @@ const envSchema = z.object({
   EXCHANGE_REDIRECT_URI: z
     .string()
     .default('http://localhost:8080/exchange/callback'),
-  APP_URL: z.string().default('http://192.168.2.128:5173'),
+  APP_URL: z.string().default('https://web-564151515476.europe-west1.run.app'),
 
   SPOTIFY_CLIENT_ID: z.string().min(1, 'SPOTIFY_CLIENT_ID is required'),
   SPOTIFY_CLIENT_SECRET: z.string().min(1, 'SPOTIFY_CLIENT_SECRET is required'),
