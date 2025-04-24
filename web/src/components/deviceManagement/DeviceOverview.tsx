@@ -447,38 +447,54 @@ const DeviceOverview = () => {
 
   // Memoized merge function to prevent unnecessary re-renders
   const mergeDeviceData = useCallback(
-    (oldDevices: Device[], newDevices: Device[]) => {
+    (oldDevices: Device[], newDevices: Device[] | { data: Device[] }) => {
       const mergedDevices = [...oldDevices];
 
-      // Check if newDevices is actually an array before using forEach
-      if (Array.isArray(newDevices)) {
-        newDevices.forEach((newDevice) => {
-          const existingIndex = mergedDevices.findIndex(
-            (device) => device.deviceId === newDevice.deviceId
-          );
+      // Handle case where newDevices is an object with a data property
+      let devicesArray: Device[] = [];
 
-          if (existingIndex >= 0) {
-            // Only update if there are actual changes to prevent re-renders
-            if (
-              JSON.stringify(mergedDevices[existingIndex]) !==
-              JSON.stringify(newDevice)
-            ) {
-              mergedDevices[existingIndex] = {
-                ...mergedDevices[existingIndex],
-                ...newDevice,
-                metrics: {
-                  ...mergedDevices[existingIndex].metrics,
-                  ...newDevice.metrics,
-                },
-              };
-            }
-          } else {
-            mergedDevices.push(newDevice);
-          }
-        });
+      if (Array.isArray(newDevices)) {
+        devicesArray = newDevices;
+      } else if (
+        newDevices &&
+        typeof newDevices === 'object' &&
+        Array.isArray(newDevices.data)
+      ) {
+        devicesArray = newDevices.data;
       } else {
-        console.error('newDevices is not an array:', newDevices);
+        // Use JSON.stringify to ensure arrays and objects are fully logged
+        console.error(
+          'newDevices is not an array or object with data array:',
+          JSON.stringify(newDevices, null, 2) // null, 2 for pretty printing
+        );
+        return mergedDevices; // Return original devices without changes
       }
+
+      // Process the devices array
+      devicesArray.forEach((newDevice) => {
+        const existingIndex = mergedDevices.findIndex(
+          (device) => device.deviceId === newDevice.deviceId
+        );
+
+        if (existingIndex >= 0) {
+          // Only update if there are actual changes to prevent re-renders
+          if (
+            JSON.stringify(mergedDevices[existingIndex]) !==
+            JSON.stringify(newDevice)
+          ) {
+            mergedDevices[existingIndex] = {
+              ...mergedDevices[existingIndex],
+              ...newDevice,
+              metrics: {
+                ...mergedDevices[existingIndex].metrics,
+                ...newDevice.metrics,
+              },
+            };
+          }
+        } else {
+          mergedDevices.push(newDevice);
+        }
+      });
 
       return mergedDevices;
     },
@@ -487,26 +503,13 @@ const DeviceOverview = () => {
 
   const fetchDevices = useCallback(async () => {
     try {
-      // Assuming the API returns an object like { data: Device[], links: ... }
       const response = await deviceApi.getDevices();
 
-      // Check if response and response.data exist and response.data is an array
-      if (response && Array.isArray(response.data)) {
-        setDevices((prev) => {
-          // Pass the actual device array (response.data) to the merge function
-          const updated = mergeDeviceData(prev, response.data);
-          prevDevicesRef.current = updated;
-          return updated;
-        });
-      } else {
-        // Log an error if the response structure is not as expected
-        console.error(
-          'Invalid response structure received from getDevices:',
-          response
-        );
-        // Optionally set devices to an empty array or handle the error appropriately
-        setDevices([]);
-      }
+      setDevices((prev) => {
+        const updated = mergeDeviceData(prev, response);
+        prevDevicesRef.current = updated;
+        return updated;
+      });
 
       if (loading) setLoading(false);
     } catch (error) {
