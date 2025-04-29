@@ -28,11 +28,13 @@ export default async function exchangeRoutes(fastify: FastifyInstance) {
   // Update the REDIRECT_URI to use localhost but redirect to our proxy
   const actualAppUrl = config.APP_URL; // Store the actual app URL for redirects
   // This is a hack to make Azure AD happy while still working with IP addresses
-  if (!process.env.EXCHANGE_REDIRECT_URI) {
-    // Only override if not explicitly set
-    process.env.EXCHANGE_REDIRECT_URI =
-      'http://localhost:8080/exchange/callback';
-  }
+  // if (!process.env.EXCHANGE_REDIRECT_URI) {
+  //   // Only override if not explicitly set
+  //   process.env.EXCHANGE_REDIRECT_URI =
+  //     'https://web-564151515476.europe-west1.run.app/exchange/callback';
+  // }
+  process.env.EXCHANGE_REDIRECT_URI =
+    'https://server-564151515476.europe-west1.run.app/exchange/callback';
 
   // Endpoint to initiate OAuth flow
   fastify.get(
