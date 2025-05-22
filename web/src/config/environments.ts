@@ -17,7 +17,8 @@ export const environments: Record<Environment, EnvironmentConfig> = {
   },
   development: {
     apiBaseUrl:
-      process.env.NEXT_PUBLIC_DEV_API_URL || 'http://192.168.2.128:8080',
+      process.env.NEXT_PUBLIC_DEV_API_URL ||
+      'https://server-564151515476.europe-west1.run.app',
     // Add other development environment configurations
   },
   production: {

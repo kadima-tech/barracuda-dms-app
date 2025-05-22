@@ -417,13 +417,14 @@ interface Device {
     memoryUsage?: number;
     diskUsage?: number;
     currentUrl?: string;
+    powerStatus?: string;
+    ipAddress?: string;
   };
 }
 
-const DeviceOverview = () => {
+const DeviceOverview = ({ searchQuery }: { searchQuery: string }) => {
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const prevDevicesRef = useRef<Device[]>([]);
 
@@ -598,6 +599,108 @@ const DeviceOverview = () => {
       device.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Add icon SVGs for metrics
+  const CpuIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="3"
+        stroke="#0CBAB1"
+        strokeWidth="2"
+      />
+      <path d="M9 9h6v6H9z" stroke="#0CBAB1" strokeWidth="2" />
+    </svg>
+  );
+  const MemoryIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <rect
+        x="3"
+        y="7"
+        width="18"
+        height="10"
+        rx="2"
+        stroke="#0CBAB1"
+        strokeWidth="2"
+      />
+      <rect
+        x="7"
+        y="3"
+        width="10"
+        height="4"
+        rx="1"
+        stroke="#0CBAB1"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+  const TempIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 9V13M12 17H12.01M8.464 4.464A6 6 0 0 1 17 8v8a6 6 0 1 1-12 0V8a6 6 0 0 1 3.464-3.536z"
+        stroke="#0CBAB1"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+  const PowerIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2v10" stroke="#0CBAB1" strokeWidth="2" />
+      <circle cx="12" cy="16" r="6" stroke="#0CBAB1" strokeWidth="2" />
+    </svg>
+  );
+  const UptimeIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="#0CBAB1" strokeWidth="2" />
+      <path d="M12 6v6l4 2" stroke="#0CBAB1" strokeWidth="2" />
+    </svg>
+  );
+  const IpIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <rect
+        x="3"
+        y="7"
+        width="18"
+        height="10"
+        rx="2"
+        stroke="#0CBAB1"
+        strokeWidth="2"
+      />
+      <circle cx="7.5" cy="12" r="1.5" fill="#0CBAB1" />
+      <circle cx="12" cy="12" r="1.5" fill="#0CBAB1" />
+      <circle cx="16.5" cy="12" r="1.5" fill="#0CBAB1" />
+    </svg>
+  );
+
+  // Tooltip for power status
+  const PowerStatusWrapper = styled.div`
+    position: relative;
+    display: inline-block;
+  `;
+  const PowerTooltip = styled.div`
+    visibility: hidden;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 4px 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    ${PowerStatusWrapper}:hover & {
+      visibility: visible;
+      opacity: 1;
+    }
+  `;
+
   return (
     <>
       <Banner>
@@ -610,32 +713,6 @@ const DeviceOverview = () => {
           </BannerText>
         </BannerContent>
       </Banner>
-
-      <SearchBar>
-        <SearchInput
-          placeholder="Search devices by ID or status..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <FilterButton>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 6H21M6 12H18M10 18H14"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Filter
-        </FilterButton>
-      </SearchBar>
 
       <OverviewContainer>
         <DevicesGrid>
@@ -661,184 +738,234 @@ const DeviceOverview = () => {
               key={device.deviceId}
               isSelected={selectedDevice === device.deviceId}
               isExpanded={selectedDevice === device.deviceId}
+              style={{
+                minHeight: '110px',
+                marginBottom: '1.2rem',
+                boxShadow: '0 2px 8px rgba(12,186,177,0.06)',
+                border: '1.5px solid #e1e1e1',
+                padding: '1.1rem 1.2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                position: 'relative',
+                transition: 'box-shadow 0.2s',
+                cursor: 'pointer',
+              }}
               onClick={() => {
-                if (selectedDevice !== device.deviceId) {
-                  setSelectedDevice(device.deviceId);
-                }
+                setSelectedDevice(
+                  selectedDevice === device.deviceId ? null : device.deviceId
+                );
               }}
             >
-              <CardHeader>
-                <Title>
-                  <DeviceIcon>
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9 17H15M12 17V13M7 3H17C18.1046 3 19 3.89543 19 5V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </DeviceIcon>
+              {/* Reboot button (only on hover) */}
+              <button
+                className="reboot-btn"
+                title="Reboot"
+                aria-label="Reboot device"
+                style={{
+                  position: 'absolute',
+                  top: 12,
+                  right: 12,
+                  background: 'white',
+                  border: '1px solid #e1e1e1',
+                  borderRadius: '50%',
+                  width: 32,
+                  height: 32,
+                  display: 'none',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  transition: 'all 0.2s',
+                  zIndex: 2,
+                }}
+                onClick={(e) => {
+                  e.stopPropagation(); /* TODO: call reboot */
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M4.93 4.93a10 10 0 1 1-1.41 1.41"
+                    stroke="#0CBAB1"
+                    strokeWidth="2"
+                  />
+                  <path d="M8 2v6h6" stroke="#0CBAB1" strokeWidth="2" />
+                </svg>
+              </button>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  marginBottom: 8,
+                  cursor: 'default',
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: 600,
+                    fontSize: '1.05rem',
+                    color: '#1e293b',
+                    maxWidth: 120,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
                   {formatDeviceId(device.deviceId)}
-                </Title>
-                <CardHeaderActions>
-                  <StatusBadge status={device.status}>
-                    {device.status}
-                  </StatusBadge>
-                  {selectedDevice === device.deviceId && (
-                    <CloseButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedDevice(null);
-                      }}
-                      aria-label="Close device details"
-                    >
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="8"
+                      fill={
+                        device.status === 'connected' ? '#22C55E' : '#EF4444'
+                      }
+                    />
+                  </svg>
+                  <span
+                    style={{
+                      color:
+                        device.status === 'connected' ? '#22C55E' : '#EF4444',
+                      fontWeight: 500,
+                      fontSize: '0.92rem',
+                    }}
+                  >
+                    {device.status.toUpperCase()}
+                  </span>
+                </span>
+              </div>
+              {/* Metrics row */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1.5rem',
+                  flexWrap: 'wrap',
+                  cursor: 'default',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    fontSize: '0.97rem',
+                    color: '#334155',
+                  }}
+                >
+                  <CpuIcon />
+                  {device.metrics.cpuLoad !== undefined
+                    ? formatMetricValue(Math.round(device.metrics.cpuLoad)) +
+                      '%'
+                    : '—'}
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    fontSize: '0.97rem',
+                    color: '#334155',
+                  }}
+                >
+                  <MemoryIcon />
+                  {device.metrics.memoryUsage !== undefined
+                    ? formatMetricValue(
+                        Number(device.metrics.memoryUsage.toFixed(2)),
+                        '%'
+                      )
+                    : '—'}
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    fontSize: '0.97rem',
+                    color: '#334155',
+                  }}
+                >
+                  <TempIcon />
+                  {device.metrics.temperature !== undefined
+                    ? formatMetricValue(device.metrics.temperature, '°C')
+                    : '—'}
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    fontSize: '0.97rem',
+                    color: '#334155',
+                  }}
+                >
+                  <PowerIcon />
+                  {device.metrics.powerStatus ? (
+                    <PowerStatusWrapper>
                       <svg
-                        width="16"
-                        height="16"
+                        width="10"
+                        height="10"
                         viewBox="0 0 24 24"
                         fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M6 18L18 6M6 6l12 12"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="8"
+                          fill={
+                            device.metrics.powerStatus === 'throttled=0x0'
+                              ? '#22C55E'
+                              : '#EF4444'
+                          }
                         />
                       </svg>
-                    </CloseButton>
+                      <PowerTooltip>{device.metrics.powerStatus}</PowerTooltip>
+                    </PowerStatusWrapper>
+                  ) : (
+                    '—'
                   )}
-                </CardHeaderActions>
-              </CardHeader>
-
-              <CompactInfo>
-                {device.metrics.cpuLoad !== undefined && (
-                  <CompactMetric>
-                    <MetricIcon>
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9 17H15M12 17V13M7 3H17C18.1046 3 19 3.89543 19 5V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </MetricIcon>
-                    <MetricText>
-                      CPU:{' '}
-                      {formatMetricValue(Math.round(device.metrics.cpuLoad))}%
-                    </MetricText>
-                  </CompactMetric>
-                )}
-
-                {device.metrics.temperature !== undefined && (
-                  <CompactMetric>
-                    <MetricIcon>
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M12 9V13M12 17H12.01M8.46447 4.46447C9.40215 3.52678 10.6739 3 12 3C13.3261 3 14.5979 3.52678 15.5355 4.46447C16.4732 5.40215 17 6.67392 17 8V16C17 17.3261 16.4732 18.5979 15.5355 19.5355C14.5979 20.4732 13.3261 21 12 21C10.6739 21 9.40215 20.4732 8.46447 19.5355C7.52678 18.5979 7 17.3261 7 16V8C7 6.67392 7.52678 5.40215 8.46447 4.46447Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </MetricIcon>
-                    <MetricText>
-                      {formatMetricValue(device.metrics.temperature)}°C
-                    </MetricText>
-                  </CompactMetric>
-                )}
-              </CompactInfo>
-
-              <CardBody isExpanded={selectedDevice === device.deviceId}>
-                <MetricsSection>
-                  <SectionHeader>
-                    <SectionDot />
-                    Performance Metrics
-                  </SectionHeader>
-
-                  {device.metrics.cpuLoad !== undefined && (
-                    <div style={{ textAlign: 'center' }}>
-                      <MainMetric>
-                        {formatMetricValue(Math.round(device.metrics.cpuLoad))}
-                      </MainMetric>
-                      <MetricLabel>CPU Load (%)</MetricLabel>
-                    </div>
-                  )}
-
-                  <MetricsGrid>
-                    {device.metrics.temperature !== undefined && (
-                      <MetricCard>
-                        <MetricValue>
-                          {formatMetricValue(device.metrics.temperature, '°C')}
-                        </MetricValue>
-                        <MetricLabel>Temperature</MetricLabel>
-                      </MetricCard>
-                    )}
-
-                    {device.metrics.memoryUsage !== undefined && (
-                      <MetricCard>
-                        <MetricValue>
-                          {formatMetricValue(
-                            parseFloat(device.metrics.memoryUsage.toFixed(1)),
-                            '%'
-                          )}
-                        </MetricValue>
-                        <MetricLabel>Memory Usage</MetricLabel>
-                      </MetricCard>
-                    )}
-
-                    {device.metrics.uptime !== undefined && (
-                      <MetricCard>
-                        <MetricValue
-                          style={{
-                            fontSize:
-                              device.metrics.uptime > 0 ? '1.8rem' : '2.5rem',
-                          }}
-                        >
-                          {formatUptimeValue(device.metrics.uptime)}
-                        </MetricValue>
-                        <MetricLabel>Uptime</MetricLabel>
-                      </MetricCard>
-                    )}
-
-                    {device.metrics.diskUsage !== undefined && (
-                      <MetricCard>
-                        <MetricValue>
-                          {formatMetricValue(
-                            parseFloat(device.metrics.diskUsage.toFixed(1)),
-                            '%'
-                          )}
-                        </MetricValue>
-                        <MetricLabel>Disk Usage</MetricLabel>
-                      </MetricCard>
-                    )}
-                  </MetricsGrid>
-                </MetricsSection>
-
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    fontSize: '0.97rem',
+                    color: '#334155',
+                  }}
+                >
+                  <UptimeIcon />
+                  {device.metrics.uptime !== undefined
+                    ? formatUptimeValue(device.metrics.uptime)
+                    : '—'}
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    fontSize: '0.97rem',
+                    color: '#334155',
+                  }}
+                >
+                  <IpIcon />
+                  {device.metrics.ipAddress || '—'}
+                </span>
+              </div>
+              {/* Expanded details (reuse existing CardBody) */}
+              <CardBody
+                isExpanded={selectedDevice === device.deviceId}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div
                   style={{
                     marginTop: '2rem',

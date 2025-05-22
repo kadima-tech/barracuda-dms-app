@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"; // Import useEffect and useState
-import styled from "styled-components"; // Import styled-components
-import { deviceApi } from "../../utils/api/devices";
+import { useEffect, useState } from 'react'; // Import useEffect and useState
+import styled from 'styled-components'; // Import styled-components
+import { deviceApi } from '../../utils/api/devices';
 
 export const Container = styled.div`
   display: flex;
@@ -70,17 +70,17 @@ export const SystemStatus = styled.div`
   }
 `;
 
-export const StatusDot = styled.span<{ status?: "online" | "offline" }>`
+export const StatusDot = styled.span<{ status?: 'online' | 'offline' }>`
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background-color: ${(props) =>
-    props.status === "offline" ? "#ef4444" : "#22c55e"};
+    props.status === 'offline' ? '#ef4444' : '#22c55e'};
   box-shadow: 0 0 0 4px
     ${(props) =>
-      props.status === "offline"
-        ? "rgba(239, 68, 68, 0.2)"
-        : "rgba(34, 197, 94, 0.2)"};
+      props.status === 'offline'
+        ? 'rgba(239, 68, 68, 0.2)'
+        : 'rgba(34, 197, 94, 0.2)'};
 `;
 
 interface ClientSearchAndStatusProps {
@@ -99,30 +99,27 @@ const ClientSearchAndStatus: React.FC<ClientSearchAndStatusProps> = ({
     const fetchDevices = async () => {
       try {
         const response = await deviceApi.getDevices();
-        console.log("Response:", response);
-        const devices = response;
-        console.log("Devices:", devices);
-        setConnectedCount(devices?.length || 0);
+        const devices = response?.data || [];
+        const connected = devices.filter(
+          (d: any) => d.status === 'connected'
+        ).length;
+        setConnectedCount(connected);
         setError(false);
       } catch (error) {
-        console.error("Failed to fetch devices:", error);
+        console.error('Failed to fetch devices:', error);
         setError(true);
         setConnectedCount(0);
       }
     };
     fetchDevices();
-  });
+  }, []);
 
   return (
     <Container>
       <Stats>
         <Stat>
-          <span>Total Devices</span>
-          <span>{error ? "?" : "1"}</span>
-        </Stat>
-        <Stat>
-          <span>Connected</span>
-          <span>{error ? "?" : connectedCount}</span>
+          <span>Connected Devices</span>
+          <span>{error ? '?' : connectedCount}</span>
         </Stat>
       </Stats>
       <SearchInput
@@ -134,7 +131,7 @@ const ClientSearchAndStatus: React.FC<ClientSearchAndStatusProps> = ({
 
       <SystemStatus>
         <span>System status:</span>
-        <StatusDot status={error ? "offline" : "online"}></StatusDot>
+        <StatusDot status={error ? 'offline' : 'online'}></StatusDot>
       </SystemStatus>
     </Container>
   );

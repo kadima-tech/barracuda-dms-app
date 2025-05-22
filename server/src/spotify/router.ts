@@ -1,10 +1,10 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { logger } from "@kadima-tech/micro-service-base";
-import { SpotifyService } from "./service";
-import { parseString } from "xml2js";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { logger } from '@kadima-tech/micro-service-base';
+import { SpotifyService } from './service';
+import { parseString } from 'xml2js';
 
 const config = {
-  APP_URL: "http://192.168.2.128:5173", // Updated IP
+  APP_URL: 'http://192.168.3.1:5173', // Updated IP
 };
 
 const spotifyRouter = async (
@@ -14,7 +14,7 @@ const spotifyRouter = async (
   const spotifyService = SpotifyService.getInstance();
 
   // Move this to the top of the router function
-  fastify.get("/", async (request, reply) => {
+  fastify.get('/', async (request, reply) => {
     try {
       // Check if we have valid credentials
       if (!(await spotifyService.hasValidCredentials())) {
@@ -24,15 +24,14 @@ const spotifyRouter = async (
       }
       return reply.redirect(`${config.APP_URL}/spotify/music-dashboard`);
     } catch (error) {
-      logger.error("Error in root spotify route:", error);
-      return reply.status(500).send({ error: "Internal server error" });
+      logger.error('Error in root spotify route:', error);
+      return reply.status(500).send({ error: 'Internal server error' });
     }
   });
-
   // Get currently playing track
-  fastify.get("/currently-playing", async (request, reply) => {
+  fastify.get('/currently-playing', async (request, reply) => {
     try {
-      logger.info("Fetching currently playing track");
+      logger.info('Fetching currently playing track');
       const track = await spotifyService.getCurrentlyPlaying();
 
       if (!track) {
@@ -42,32 +41,32 @@ const spotifyRouter = async (
           return reply.redirect(authUrl);
         }
         // If we have credentials but no track playing
-        logger.info("No track currently playing");
+        logger.info('No track currently playing');
         return reply.status(204).send();
       }
 
-      logger.info("Returning track:", track);
+      logger.info('Returning track:', track);
       return reply.send(track);
     } catch (error) {
-      logger.error("Error fetching currently playing track:", error);
-      return reply.status(500).send({ error: "Failed to fetch current track" });
+      logger.error('Error fetching currently playing track:', error);
+      return reply.status(500).send({ error: 'Failed to fetch current track' });
     }
   });
 
   // Spotify authorization endpoint
-  fastify.get("/authorize", async (request, reply) => {
+  fastify.get('/authorize', async (request, reply) => {
     try {
       const authUrl = await spotifyService.getAuthorizationUrl();
       logger.info(`Redirecting to Spotify auth: ${authUrl}`);
       return reply.redirect(authUrl);
     } catch (error) {
-      logger.error("Error during Spotify authorization:", error);
-      return reply.status(500).send({ error: "Authorization failed" });
+      logger.error('Error during Spotify authorization:', error);
+      return reply.status(500).send({ error: 'Authorization failed' });
     }
   });
 
   // Spotify callback endpoint
-  fastify.get("/callback", async (request, reply) => {
+  fastify.get('/callback', async (request, reply) => {
     try {
       const { code, error } = request.query as {
         code?: string;
@@ -75,14 +74,14 @@ const spotifyRouter = async (
       };
 
       if (error) {
-        logger.error("Spotify auth error:", error);
+        logger.error('Spotify auth error:', error);
         return reply.redirect(
           `${config.APP_URL}/spotify/music-dashboard?error=${error}`
         );
       }
 
       if (!code) {
-        logger.error("No authorization code received");
+        logger.error('No authorization code received');
         return reply.redirect(
           `${config.APP_URL}/spotify/music-dashboard?error=no_code`
         );
@@ -98,7 +97,7 @@ const spotifyRouter = async (
       // Successfully authenticated, redirect to dashboard
       return reply.redirect(`${config.APP_URL}/spotify/music-dashboard`);
     } catch (error) {
-      logger.error("Error in callback:", error);
+      logger.error('Error in callback:', error);
       return reply.redirect(
         `${config.APP_URL}/spotify/music-dashboard?error=callback_failed`
       );
@@ -106,53 +105,53 @@ const spotifyRouter = async (
   });
 
   // Play endpoint
-  fastify.put("/player/play", async (request, reply) => {
+  fastify.put('/player/play', async (request, reply) => {
     try {
       // Check if we have valid credentials
       if (!(await spotifyService.hasValidCredentials())) {
-        return reply.status(401).send({ error: "Unauthorized" });
+        return reply.status(401).send({ error: 'Unauthorized' });
       }
 
       const success = await spotifyService.playTrack();
 
       if (!success) {
-        return reply.status(500).send({ error: "Failed to play track" });
+        return reply.status(500).send({ error: 'Failed to play track' });
       }
 
       return reply.status(204).send();
     } catch (error) {
-      logger.error("Error playing track:", error);
-      return reply.status(500).send({ error: "Failed to play track" });
+      logger.error('Error playing track:', error);
+      return reply.status(500).send({ error: 'Failed to play track' });
     }
   });
 
   // Pause endpoint
-  fastify.put("/player/pause", async (request, reply) => {
+  fastify.put('/player/pause', async (request, reply) => {
     try {
       // Check if we have valid credentials
       if (!(await spotifyService.hasValidCredentials())) {
-        return reply.status(401).send({ error: "Unauthorized" });
+        return reply.status(401).send({ error: 'Unauthorized' });
       }
 
       const success = await spotifyService.pauseTrack();
 
       if (!success) {
-        return reply.status(500).send({ error: "Failed to pause track" });
+        return reply.status(500).send({ error: 'Failed to pause track' });
       }
 
       return reply.status(204).send();
     } catch (error) {
-      logger.error("Error pausing track:", error);
-      return reply.status(500).send({ error: "Failed to pause track" });
+      logger.error('Error pausing track:', error);
+      return reply.status(500).send({ error: 'Failed to pause track' });
     }
   });
 
   // Next track endpoint
-  fastify.post("/player/next", async (request, reply) => {
+  fastify.post('/player/next', async (request, reply) => {
     try {
       // Check if we have valid credentials
       if (!(await spotifyService.hasValidCredentials())) {
-        return reply.status(401).send({ error: "Unauthorized" });
+        return reply.status(401).send({ error: 'Unauthorized' });
       }
 
       const success = await spotifyService.skipToNext();
@@ -160,22 +159,22 @@ const spotifyRouter = async (
       if (!success) {
         return reply
           .status(500)
-          .send({ error: "Failed to skip to next track" });
+          .send({ error: 'Failed to skip to next track' });
       }
 
       return reply.status(204).send();
     } catch (error) {
-      logger.error("Error skipping to next track:", error);
-      return reply.status(500).send({ error: "Failed to skip to next track" });
+      logger.error('Error skipping to next track:', error);
+      return reply.status(500).send({ error: 'Failed to skip to next track' });
     }
   });
 
   // Previous track endpoint
-  fastify.post("/player/previous", async (request, reply) => {
+  fastify.post('/player/previous', async (request, reply) => {
     try {
       // Check if we have valid credentials
       if (!(await spotifyService.hasValidCredentials())) {
-        return reply.status(401).send({ error: "Unauthorized" });
+        return reply.status(401).send({ error: 'Unauthorized' });
       }
 
       const success = await spotifyService.skipToPrevious();
@@ -183,15 +182,15 @@ const spotifyRouter = async (
       if (!success) {
         return reply
           .status(500)
-          .send({ error: "Failed to skip to previous track" });
+          .send({ error: 'Failed to skip to previous track' });
       }
 
       return reply.status(204).send();
     } catch (error) {
-      logger.error("Error skipping to previous track:", error);
+      logger.error('Error skipping to previous track:', error);
       return reply
         .status(500)
-        .send({ error: "Failed to skip to previous track" });
+        .send({ error: 'Failed to skip to previous track' });
     }
   });
 };
