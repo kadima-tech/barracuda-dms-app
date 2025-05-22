@@ -42,47 +42,6 @@ const DeviceCard = styled.div<{ isSelected?: boolean; isExpanded?: boolean }>`
   }
 `;
 
-const CardHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background-color: white;
-`;
-
-const CompactInfo = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  gap: 1.5rem;
-  background-color: #f9fafb;
-  border-top: 1px solid #f1f5f9;
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-`;
-
-const CompactMetric = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-  color: #4b5563;
-`;
-
-const MetricIcon = styled.div`
-  color: #0cbab1;
-  display: flex;
-  align-items: center;
-`;
-
-const MetricText = styled.span`
-  font-weight: 500;
-`;
-
 const CardBody = styled.div<{ isExpanded: boolean }>`
   height: ${(props) => (props.isExpanded ? 'auto' : '0')};
   max-height: ${(props) => (props.isExpanded ? 'none' : '0')};
@@ -94,67 +53,6 @@ const CardBody = styled.div<{ isExpanded: boolean }>`
   display: ${(props) => (props.isExpanded ? 'block' : 'none')};
   background-color: ${(props) =>
     props.isExpanded ? '#f9fafb' : 'transparent'};
-`;
-
-const MetricsSection = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  color: #334155;
-  font-size: 0.95rem;
-  font-weight: 600;
-`;
-
-const SectionDot = styled.div`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #0cbab1;
-  flex-shrink: 0;
-`;
-
-const MetricsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin: 1.5rem 0;
-`;
-
-const MetricCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 0.75rem;
-  border-radius: 8px;
-  background-color: #f8fafc;
-  transition: all 0.2s ease;
-`;
-
-const MetricValue = styled.div`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1e293b;
-  line-height: 1;
-  margin: 0.25rem 0;
-`;
-
-const MetricLabel = styled.div`
-  font-size: 0.9rem;
-  color: #64748b;
-  text-align: center;
-  margin-top: 0.25rem;
-`;
-
-const MainMetric = styled(MetricValue)`
-  font-size: 3.5rem;
-  text-align: center;
-  margin: 1rem 0 0.5rem;
 `;
 
 const PreviewSection = styled.div`
@@ -203,205 +101,22 @@ const ClientSection = styled.div`
   border-top: 1px solid #f1f5f9;
 `;
 
-const Title = styled.h3`
-  margin: 0;
-  font-size: 1rem;
+const SectionHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
   color: #334155;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const StatusBadge = styled.span<{ status: string }>`
-  padding: 0.25rem 0.75rem;
-  border-radius: 50rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background-color: ${(props) => {
-    switch (props.status.toLowerCase()) {
-      case 'online':
-      case 'connected':
-        return '#e8f5e9';
-      case 'offline':
-      case 'disconnected':
-        return '#ffebee';
-      default:
-        return '#fff3e0';
-    }
-  }};
-  color: ${(props) => {
-    switch (props.status.toLowerCase()) {
-      case 'online':
-      case 'connected':
-        return '#2e7d32';
-      case 'offline':
-      case 'disconnected':
-        return '#c62828';
-      default:
-        return '#ef6c00';
-    }
-  }};
-`;
-
-const SearchBar = styled.div`
-  margin: 1rem 2rem;
-  display: flex;
-  gap: 1rem;
-`;
-
-const SearchInput = styled.input`
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
   font-size: 0.95rem;
-
-  &:focus {
-    outline: none;
-    border-color: #0cbab1;
-    box-shadow: 0 0 0 3px rgba(12, 186, 177, 0.1);
-  }
-`;
-
-const FilterButton = styled.button`
-  padding: 0.75rem 1rem;
-  background: white;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  color: #4b5563;
-  font-weight: 500;
-
-  &:hover {
-    background-color: #f8fafc;
-    border-color: #0cbab1;
-  }
-`;
-
-const Banner = styled.div`
-  background: linear-gradient(135deg, #e7f7f6 0%, #f5fbfb 100%);
-  padding: 2rem;
-  margin: 1rem 2rem;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 16px rgba(12, 186, 177, 0.08);
-  border: 1px solid rgba(12, 186, 177, 0.15);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-        circle at 50% 50%,
-        rgba(12, 186, 177, 0.08) 0,
-        transparent 8px
-      ),
-      radial-gradient(
-        circle at 50% 50%,
-        rgba(12, 186, 177, 0.05) 0,
-        transparent 12px
-      );
-    background-size: 60px 60px, 120px 120px;
-    background-position: 0 0;
-    opacity: 0.1;
-    animation: floatingDots 180s ease-in-out infinite;
-  }
-
-  @keyframes floatingDots {
-    0% {
-      background-position: 0% 0%, 0% 0%;
-    }
-    50% {
-      background-position: 100% 100%, 100% 100%;
-    }
-    100% {
-      background-position: 0% 0%, 0% 0%;
-    }
-  }
-`;
-
-const BannerContent = styled.div`
-  flex: 1;
-`;
-
-const BannerTitle = styled.h1`
-  font-size: 1.8rem;
-  margin: 0 0 0.5rem 0;
-  color: #4a5568;
   font-weight: 600;
-  letter-spacing: -0.5px;
 `;
 
-const BannerText = styled.p`
-  font-size: 1rem;
-  color: #4a5568;
-  margin: 0;
-  max-width: 600px;
-  line-height: 1.5;
-`;
-
-const DeviceIcon = styled.div`
-  color: #0cbab1;
-  display: flex;
-  align-items: center;
-`;
-
-const EmptyState = styled.div`
-  grid-column: 1 / -1;
-  padding: 3rem;
-  text-align: center;
-  background: white;
-  border-radius: 12px;
-  border: 2px dashed #e2e8f0;
-
-  h3 {
-    color: #334155;
-    margin-bottom: 1rem;
-    font-weight: 600;
-  }
-
-  p {
-    color: #64748b;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-`;
-
-const CardHeaderActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const SectionDot = styled.div`
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: #f1f5f9;
-    color: #ef4444;
-  }
+  background: #0cbab1;
+  flex-shrink: 0;
 `;
 
 interface Device {
@@ -703,34 +418,12 @@ const DeviceOverview = ({ searchQuery }: { searchQuery: string }) => {
 
   return (
     <>
-      <Banner>
-        <BannerContent>
-          <BannerTitle>Device Management</BannerTitle>
-          <BannerText>
-            Monitor and control your connected devices in real-time. Assign
-            clients, track performance metrics, and manage content distribution
-            from a single dashboard.
-          </BannerText>
-        </BannerContent>
-      </Banner>
-
       <OverviewContainer>
         <DevicesGrid>
-          {loading && (
-            <EmptyState>
-              <h3>Loading devices...</h3>
-              <p>Retrieving device information from the system...</p>
-            </EmptyState>
-          )}
+          {loading && <div>Loading devices...</div>}
 
           {!loading && filteredDevices.length === 0 && (
-            <EmptyState>
-              <h3>No devices found</h3>
-              <p>
-                There are currently no devices matching your criteria. Try
-                adjusting your search or check back later.
-              </p>
-            </EmptyState>
+            <div>No devices found</div>
           )}
 
           {filteredDevices.map((device) => (

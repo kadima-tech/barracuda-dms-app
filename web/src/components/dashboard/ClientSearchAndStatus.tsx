@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'; // Import useEffect and useState
 import styled from 'styled-components'; // Import styled-components
 import { deviceApi } from '../../utils/api/devices';
+import type { Device } from '../../utils/api/devices';
 
 export const Container = styled.div`
   display: flex;
@@ -99,9 +100,9 @@ const ClientSearchAndStatus: React.FC<ClientSearchAndStatusProps> = ({
     const fetchDevices = async () => {
       try {
         const response = await deviceApi.getDevices();
-        const devices = response?.data || [];
+        const devices = (response?.data as Device[]) || [];
         const connected = devices.filter(
-          (d: any) => d.status === 'connected'
+          (d) => d.status === 'connected'
         ).length;
         setConnectedCount(connected);
         setError(false);

@@ -8,6 +8,7 @@ import {
   StatusDot,
   SearchInput,
 } from '../dashboard/ClientSearchAndStatus';
+import type { Device } from '../../utils/api/devices';
 
 interface DeviceSearchAndStatusProps {
   searchQuery: string;
@@ -25,9 +26,9 @@ const DeviceSearchAndStatus = ({
     const fetchDevices = async () => {
       try {
         const response = await deviceApi.getDevices();
-        const devices = response?.data || [];
+        const devices = (response?.data as Device[]) || [];
         const connected = devices.filter(
-          (d: any) => d.status === 'connected'
+          (d) => d.status === 'connected'
         ).length;
         setConnectedCount(connected);
         setError(false);
